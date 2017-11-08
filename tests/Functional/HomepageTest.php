@@ -16,23 +16,22 @@ class HomepageTest extends BaseTestCase
         $this->assertNotContains('SlimFramework', (string)$response->getBody());
     }
 
-    /**
-     * Test that the index route won't accept a post request
-     */
-    public function testPostHomepageNotAllowed()
-    {
-        $response = $this->runApp('POST', '/', ['test']);
-
-        $this->assertEquals(405, $response->getStatusCode());
-        $this->assertContains('Method not allowed', (string)$response->getBody());
-    }
-
     public function testResetCSSをリンク()
     {
         $response = $this->runApp('GET', '/');
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('<link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">', (string)$response->getBody());
+    }
+
+    public function test投稿()
+    {
+        // *注: CSRF(middleware)を切ってテストしています。
+        $response = $this->runApp('POST', '/', ['body' => 'aaaa']);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertContains('Slimbbs', (string)$response->getBody());
+        $this->assertContains('aaaa', (string)$response->getBody());
     }
 
 }

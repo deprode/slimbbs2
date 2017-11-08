@@ -6,5 +6,12 @@
         <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
     </head>
     <body>
+        <form action="./" method="post">
+            <label>テキスト：<input type="text" name="body"></label>
+            <input type="submit" value="送信">
+            <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
+            <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
+        </form>
+        {{ body }}
     </body>
 </html>
