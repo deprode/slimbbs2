@@ -3,3 +3,4 @@
 !/logs/README.md
 /db/
 .env
+/cache/

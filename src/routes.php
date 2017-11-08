@@ -9,6 +9,12 @@ $app->get('/[{name}]', function (Request $request, Response $response, array $ar
     // Sample log message
     $this->logger->info("Slimbbs '/' route");
 
+    $nameKey = $this->csrf->getTokenNameKey();
+    $valueKey = $this->csrf->getTokenValueKey();
+
+    $args['name'] = $request->getAttribute($nameKey);
+    $args['value'] = $request->getAttribute($valueKey);
+
     // Render index view
-    return $this->renderer->render($response, 'index.phtml', $args);
+    return $this->view->render($response, 'index.twig', $args);
 });
