@@ -13,6 +13,12 @@ require __DIR__ . '/../vendor/autoload.php';
 
 session_start();
 
+$env_file = __DIR__. '/../.env';
+if (is_readable($env_file)) {
+    $dot_env = new Dotenv\Dotenv(__DIR__ . '/../');
+    $dot_env->load();
+}
+
 // Instantiate the app
 $settings = require __DIR__ . '/../src/settings.php';
 $app = new \Slim\App($settings);
