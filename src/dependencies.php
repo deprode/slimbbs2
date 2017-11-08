@@ -28,3 +28,8 @@ $container['db'] = function ($container) {
 
     return $capsule;
 };
+
+// csrf
+$container['csrf'] = function ($c) {
+    return new \Slim\Csrf\Guard;
+};
