@@ -7,7 +7,8 @@ $container = $app->getContainer();
 $container['view'] = function ($container) {
     $cache = (getenv('TWIG_CACHE') == "false") ? false : getenv('TWIG_CACHE');
 
-    $view = new \Slim\Views\Twig('templates', [
+    $settings = $container->get('settings')['renderer'];
+    $view = new \Slim\Views\Twig($settings['template_path'], [
         'cache' => $cache
     ]);
 
