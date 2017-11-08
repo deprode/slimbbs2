@@ -12,6 +12,8 @@ $app->get('/[{name}]', function (Request $request, Response $response, array $ar
     $nameKey = $this->csrf->getTokenNameKey();
     $valueKey = $this->csrf->getTokenValueKey();
 
+    $args['nameKey'] = $nameKey;
+    $args['valueKey'] = $valueKey;
     $args['name'] = $request->getAttribute($nameKey);
     $args['value'] = $request->getAttribute($valueKey);
 

@@ -40,5 +40,10 @@ $container['db'] = function ($container) {
 
 // csrf
 $container['csrf'] = function ($c) {
-    return new \Slim\Csrf\Guard;
+    $guard = new \Slim\Csrf\Guard();
+    $guard->setFailureCallable(function (\Slim\Http\Request $request, \Slim\Http\Response $response, $next) {
+        $request = $request->withAttribute("csrf_status", "bad_request");
+        return $next($request, $response);
+    });
+    return $guard;
 };
