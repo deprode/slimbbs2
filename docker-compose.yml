@@ -16,6 +16,8 @@ services:
         volumes:
             - .:/var/www
             - logs:/var/www/logs
+        links:
+            - db
     db:
         image: mysql:5
         env_file: .env
