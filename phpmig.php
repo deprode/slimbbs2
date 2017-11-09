@@ -12,9 +12,7 @@ if (is_readable($env_file)) {
 $container = new Container();
 
 $container['db'] = function () {
-    echo getenv('MYSQL_DATABASE') . PHP_EOL;
-
-    $dbh = new PDO('mysql:dbname='.getenv('MYSQL_DATABASE').';host='.getenv('MYSQL_HOST'),getenv('MYSQL_USER'),getenv('MYSQL_PASSWORD'));
+    $dbh = new PDO('mysql:dbname='.getenv('MYSQL_DATABASE').';host='.getenv('MYSQL_LOCAL_HOST'),getenv('MYSQL_USER'),getenv('MYSQL_PASSWORD'));
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     return $dbh;
 };
