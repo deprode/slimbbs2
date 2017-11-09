@@ -59,7 +59,7 @@ $container['validate'] = function ($c) {
 // Action factories
 // -----------------------------------------------------------------------------
 $container['App\Action\HomeAction'] = function ($c) {
-    return new App\Action\HomeAction($c->get('logger'), $c->get('csrf'), $c->get('view'));
+    return new App\Action\HomeAction($c->get('logger'), $c->get('csrf'), $c->get('view'), $c->get('db')->table('comments'));
 };
 
 $container['App\Action\SaveAction'] = function ($c) {

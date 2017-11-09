@@ -7,6 +7,8 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Http\Environment;
 
+use Dotenv\Dotenv;
+
 /**
  * This is an example class that shows how you could set up a method that
  * runs the application. Note that it doesn't cover all use-cases and is
@@ -39,6 +41,13 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
                 'REQUEST_URI' => $requestUri
             ]
         );
+
+        $env_file = __DIR__. '/../../.env';
+        if (is_readable($env_file)) {
+            $dot_env = new Dotenv(__DIR__ . '/../../');
+            $dot_env->load();
+        }
+        putenv('MYSQL_HOST=127.0.0.1');
 
         // Set up a request object based on the environment
         $request = Request::createFromEnvironment($environment);
