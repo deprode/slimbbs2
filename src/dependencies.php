@@ -54,16 +54,29 @@ $container['validate'] = function ($c) {
     return new \Respect\Validation\Validator();
 };
 
-
 // -----------------------------------------------------------------------------
 // Action factories
 // -----------------------------------------------------------------------------
 $container['App\Action\HomeAction'] = function ($c) {
-    return new App\Action\HomeAction($c->get('logger'), $c->get('csrf'), $c->get('view'), $c->get('db')->table('comments'));
+    return new App\Action\HomeAction($c->get('logger'), $c->get('csrf'), $c->get('CommentService'), $c->get('HomeResponder'));
 };
 
 $container['App\Action\SaveAction'] = function ($c) {
     return new App\Action\SaveAction($c->get('logger'), $c->get('view'));
+};
+
+// -----------------------------------------------------------------------------
+// Domain factories
+// -----------------------------------------------------------------------------
+$container['CommentService'] = function($c) {
+    return new App\Domain\CommentService($c->get('db')->table('comments'));
+};
+
+// -----------------------------------------------------------------------------
+// Responder factories
+// -----------------------------------------------------------------------------
+$container['HomeResponder'] = function($c) {
+    return new App\Responder\HomeResponder($c->get('view'));
 };
 
 // -----------------------------------------------------------------------------
