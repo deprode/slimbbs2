@@ -62,7 +62,7 @@ $container['App\Action\HomeAction'] = function ($c) {
 };
 
 $container['App\Action\SaveAction'] = function ($c) {
-    return new App\Action\SaveAction($c->get('logger'), $c->get('view'));
+    return new App\Action\SaveAction($c->get('logger'), $c->get('SaveResponder'));
 };
 
 // -----------------------------------------------------------------------------
@@ -79,6 +79,9 @@ $container['HomeResponder'] = function($c) {
     return new App\Responder\HomeResponder($c->get('view'));
 };
 
+$container['SaveResponder'] = function($c) {
+    return new App\Responder\SaveResponder($c->get('view'));
+};
 // -----------------------------------------------------------------------------
 // Validation factories
 // -----------------------------------------------------------------------------

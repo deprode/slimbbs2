@@ -2,6 +2,7 @@
 
 namespace App\Action;
 
+use App\Responder\SaveResponder;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Psr\Log\LoggerInterface;
@@ -9,34 +10,30 @@ use Psr\Log\LoggerInterface;
 class SaveAction
 {
     private $logger;
+    private $responder;
 
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, SaveResponder $responder)
     {
         $this->logger = $logger;
+        $this->responder = $responder;
     }
 
     public function index(Request $request, Response $response)
     {
         // Sample log message
         $this->logger->info("Slimbbs '/' route save");
-        $args = [];
 
         if ($request->getAttribute('csrf_status') === "bad_request") {
-            $response = $response->withStatus(400);
-            return $response->withRedirect('/');
+            return $this->responder->csrf_invalid($response);
         }
 
         // Validation
         if($request->getAttribute('has_errors')){
-            $response = $response->withStatus(400);
-            return $response->withRedirect('/');
+            return $this->responder->invalid($response);
         }
 
         $data = $request->getParsedBody();
 
-        $args['body'] = $data['body'];
-
-        $response = $response->withStatus(303);
-        return $response->withRedirect('/');
+        return $this->responder->saved($response, $data);
     }
 }
