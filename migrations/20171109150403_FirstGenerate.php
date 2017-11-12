@@ -10,7 +10,7 @@ class FirstGenerate extends Migration
     public function up()
     {
         $query = "CREATE TABLE IF NOT EXISTS `comments` (
-          `comment_id` int(11) NOT NULL,
+          `comment_id` int(11) NOT NULL AUTO_INCREMENT,
           `thread_id` int(11) NOT NULL,
           `user_id` int(11) NOT NULL,
           `like_count` int(6) NOT NULL DEFAULT 0,
