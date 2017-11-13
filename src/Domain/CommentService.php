@@ -2,19 +2,21 @@
 
 namespace App\Domain;
 
-use Illuminate\Database\Query\Builder;
-
 class CommentService
 {
-    private $table;
+    private $db;
 
-    public function __construct(Builder $table)
+    public function __construct(\PDO $db)
     {
-        $this->table = $table;
+        $this->db = $db;
     }
 
     public function getComments()
     {
-        return $this->table->get();
+        $sql = 'SELECT * FROM `comments`';
+        $prepare = $this->db->prepare($sql);
+        $prepare->execute();
+
+        return $prepare->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

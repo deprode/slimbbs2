@@ -29,14 +29,17 @@ $container['logger'] = function ($c) {
 };
 
 // database
-$container['db'] = function ($container) {
-    $capsule = new \Illuminate\Database\Capsule\Manager;
-    $capsule->addConnection($container['settings']['db']);
+$container['db'] = function ($c) {
+    $db = $c['settings']['db'];
+    $dns = $db['driver'].':host='.$db['host'].';dbname='.$db['database'];
+    try {
+        $db_connection = new PDO($dns, $db['username'], $db['password']);
+        $db_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
 
-    $capsule->setAsGlobal();
-    $capsule->bootEloquent();
-
-    return $capsule;
+    return $db_connection;
 };
 
 // csrf
@@ -69,7 +72,7 @@ $container['App\Action\SaveAction'] = function ($c) {
 // Domain factories
 // -----------------------------------------------------------------------------
 $container['CommentService'] = function($c) {
-    return new App\Domain\CommentService($c->get('db')->table('comments'));
+    return new App\Domain\CommentService($c->get('db'));
 };
 
 // -----------------------------------------------------------------------------
