@@ -2,6 +2,8 @@
 
 namespace App\Domain;
 
+use App\Model\Comment;
+
 class CommentService
 {
     private $db;
@@ -17,6 +19,8 @@ class CommentService
         $prepare = $this->db->prepare($sql);
         $prepare->execute();
 
-        return $prepare->fetchAll(\PDO::FETCH_ASSOC);
+        $prepare->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Comment::class);
+        $comments = $prepare->fetchAll();
+        return $comments;
     }
 }
