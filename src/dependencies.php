@@ -35,6 +35,7 @@ $container['db'] = function ($c) {
     try {
         $db_connection = new PDO($dns, $db['username'], $db['password']);
         $db_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $db_connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
     } catch (PDOException $e) {
         echo $e->getMessage();
     }
