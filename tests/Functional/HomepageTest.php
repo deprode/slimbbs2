@@ -2,8 +2,29 @@
 
 namespace Tests\Functional;
 
+use Dotenv\Dotenv;
+
 class HomepageTest extends BaseTestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+
+        $dns = 'mysql:host='.getenv('MYSQL_HOST').';port='.getenv('MYSQL_PORT').';dbname='.getenv('MYSQL_DATABASE');
+        try {
+            $db_connection = new \PDO($dns, getenv('MYSQL_USER'), getenv('MYSQL_PASSWORD'));
+            $db_connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            $db_connection->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+            $sql = 'TRUNCATE TABLE `comments`';
+            $prepare = $db_connection->prepare($sql);
+            $prepare->execute();
+
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
+            exit(-1);
+        }
+    }
+
     /**
      * Test that the index route returns a rendered response containing the text 'SlimFramework' but not a greeting
      */

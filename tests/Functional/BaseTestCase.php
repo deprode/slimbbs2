@@ -42,12 +42,12 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $env_file = __DIR__. '/../../.env';
+        $env_file = __DIR__. '/../.env';
         if (is_readable($env_file)) {
-            $dot_env = new Dotenv(__DIR__ . '/../../');
+            $dot_env = new Dotenv(__DIR__ . '/../');
             $dot_env->load();
         }
-        putenv('MYSQL_HOST=127.0.0.1');
+        putenv('MYSQL_HOST='.getenv('MYSQL_LOCAL_HOST'));
 
         // Set up a request object based on the environment
         $request = Request::createFromEnvironment($environment);
@@ -82,5 +82,17 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
 
         // Return the response
         return $response;
+    }
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $env_file = __DIR__. '/../.env';
+        if (is_readable($env_file)) {
+            $dot_env = new Dotenv(__DIR__ . '/../');
+            $dot_env->load();
+        }
+        putenv('MYSQL_HOST='.getenv('MYSQL_LOCAL_HOST'));
     }
 }

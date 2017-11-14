@@ -2,5 +2,5 @@
 /logs/*
 !/logs/README.md
 /db/
-/.env
 /cache/
+.env
