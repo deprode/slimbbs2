@@ -48,11 +48,15 @@ class HomepageTest extends BaseTestCase
     public function test投稿()
     {
         // *注: CSRF(middleware)を切ってテストしています。
-        $response = $this->runApp('POST', '/', ['body' => 'aaaa']);
+        $response = $this->runApp('POST', '/', ['comment' => 'aaaa']);
 
         $this->assertEquals(303, $response->getStatusCode());
         // リダイレクトされるので何も表示されない
         $this->assertNotContains('Slimbbs', (string)$response->getBody());
+
+        $response = $this->runApp('GET', '/');
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertContains('aaaa', (string)$response->getBody());
     }
 
     public function test通らない投稿()

@@ -65,7 +65,7 @@ $container['App\Action\HomeAction'] = function ($c) {
 };
 
 $container['App\Action\SaveAction'] = function ($c) {
-    return new App\Action\SaveAction($c->get('logger'), $c->get('SaveResponder'));
+    return new App\Action\SaveAction($c->get('logger'), $c->get('CommentService'), $c->get('SaveResponder'));
 };
 
 // -----------------------------------------------------------------------------
@@ -116,7 +116,7 @@ $container['App\Validation\Translator'] = function($c){
 $container['App\Validation\SaveValidation'] = function($c) {
     $translator = $c->get('App\Validation\Translator');
     $saveValidators = [
-        'body'     => \Respect\Validation\Validator::stringType()->notEmpty()->length(null, 400)->setName('本文'),
+        'comment'     => \Respect\Validation\Validator::stringType()->notEmpty()->length(null, 400)->setName('本文'),
     ];
     return new \DavidePastore\Slim\Validation\Validation($saveValidators, $translator);
 };
