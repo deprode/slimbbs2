@@ -2,6 +2,7 @@
 
 namespace App\Action;
 
+use App\Domain\AuthService;
 use App\Domain\CommentService;
 use App\Responder\HomeResponder;
 use Slim\Http\Request;
@@ -14,19 +15,23 @@ final class HomeAction
     private $logger;
     private $csrf;
     private $comments;
+    private $auth;
     private $responder;
 
-    public function __construct(LoggerInterface $logger, Csrf $csrf, CommentService $comments, HomeResponder $responder)
+    public function __construct(LoggerInterface $logger, Csrf $csrf, CommentService $comments, AuthService $auth, HomeResponder $responder)
     {
         $this->logger = $logger;
         $this->csrf = $csrf;
         $this->comments = $comments;
+        $this->auth = $auth;
         $this->responder = $responder;
     }
 
     public function index(Request $request, Response $response)
     {
         $this->logger->info("Slimbbs '/' route");
+
+        $data['loggedIn'] = $this->auth->isLoggedIn();
 
         $data['comments'] = $this->comments->getComments();
 

@@ -58,15 +58,27 @@ $container['validate'] = function ($c) {
     return new \Respect\Validation\Validator();
 };
 
+$container['twitter'] = function($c) {
+    return new Abraham\TwitterOAuth\TwitterOAuth(getenv('TWITTER_CONSUMER_KEY'), getenv('TWITTER_CONSUMER_SECRET'));
+};
+
+$container['session'] = function($c) {
+    return new \RKA\Session();
+};
+
 // -----------------------------------------------------------------------------
 // Action factories
 // -----------------------------------------------------------------------------
 $container['App\Action\HomeAction'] = function ($c) {
-    return new App\Action\HomeAction($c->get('logger'), $c->get('csrf'), $c->get('CommentService'), $c->get('HomeResponder'));
+    return new App\Action\HomeAction($c->get('logger'), $c->get('csrf'), $c->get('CommentService'), $c->get('AuthService'), $c->get('HomeResponder'));
 };
 
 $container['App\Action\SaveAction'] = function ($c) {
     return new App\Action\SaveAction($c->get('logger'), $c->get('CommentService'), $c->get('SaveResponder'));
+};
+
+$container['App\Action\LoginAction'] = function ($c) {
+    return new App\Action\LoginAction($c->get('logger'), $c->get('twitter'), $c->get('UserService'), $c->get('AuthService'));
 };
 
 // -----------------------------------------------------------------------------
@@ -76,6 +88,13 @@ $container['CommentService'] = function($c) {
     return new App\Domain\CommentService($c->get('db'));
 };
 
+$container['UserService'] = function($c) {
+    return new App\Domain\UserService($c->get('db'));
+};
+
+$container['AuthService'] = function($c) {
+    return new App\Domain\AuthService($c->get('session'));
+};
 // -----------------------------------------------------------------------------
 // Responder factories
 // -----------------------------------------------------------------------------
