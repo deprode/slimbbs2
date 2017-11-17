@@ -56,4 +56,9 @@ class AuthService
     {
         $this->session->regenerate();
     }
+
+    public function logout()
+    {
+        $this->session->destroy();
+    }
 }

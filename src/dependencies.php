@@ -81,6 +81,9 @@ $container['App\Action\LoginAction'] = function ($c) {
     return new App\Action\LoginAction($c->get('logger'), $c->get('twitter'), $c->get('UserService'), $c->get('AuthService'), $c->get('LoginResponder'));
 };
 
+$container['App\Action\LogoutAction'] = function ($c) {
+    return new App\Action\LogoutAction($c->get('logger'), $c->get('AuthService'));
+};
 // -----------------------------------------------------------------------------
 // Domain factories
 // -----------------------------------------------------------------------------
