@@ -23,6 +23,8 @@ class HomepageTest extends BaseTestCase
             echo $e->getMessage();
             exit(-1);
         }
+
+        $_SESSION = [];
     }
 
     /**
