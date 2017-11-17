@@ -6,6 +6,7 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 use Abraham\TwitterOAuth\TwitterOAuthException;
 use App\Domain\AuthService;
 use App\Domain\UserService;
+use App\Responder\LoginResponder;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Psr\Log\LoggerInterface;
@@ -16,13 +17,15 @@ class LoginAction
     private $twitter;
     private $user;
     private $auth;
+    private $responder;
 
-    public function __construct(LoggerInterface $logger, TwitterOAuth $twitter, UserService $user, AuthService $auth)
+    public function __construct(LoggerInterface $logger, TwitterOAuth $twitter, UserService $user, AuthService $auth, LoginResponder $responder)
     {
         $this->logger = $logger;
         $this->twitter = $twitter;
         $this->user = $user;
         $this->auth = $auth;
+        $this->responder = $responder;
     }
 
     public function index(Request $request, Response $response)
@@ -51,7 +54,7 @@ class LoginAction
             try {
                 $access_token = $connection->oauth('oauth/access_token', ['oauth_verifier' => $oauth_verifier, 'oauth_token'=> $token['token']]);
             } catch (TwitterOAuthException $e) {
-                return $response->withRedirect('/', 403);
+                $this->responder->oAuthFailed($response);
             }
 
             // ユーザー情報の取得
@@ -63,14 +66,16 @@ class LoginAction
                 $user = $this->user->convertUser($user_info, $access_token);
                 $this->user->saveUser($user);
             } catch (\PDOException $e) {
-                return $response->withRedirect('/', 400);
+                $this->responder->saveFailed($response);
             }
 
             $this->auth->regenerate();
             $this->auth->setUserInfo($user);
+
+            return $this->responder->success($response);
         }
 
-        return $response->withRedirect('/', 303);
+        $this->responder->oAuthFailed($response);
     }
 
 }

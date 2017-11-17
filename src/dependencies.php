@@ -78,7 +78,7 @@ $container['App\Action\SaveAction'] = function ($c) {
 };
 
 $container['App\Action\LoginAction'] = function ($c) {
-    return new App\Action\LoginAction($c->get('logger'), $c->get('twitter'), $c->get('UserService'), $c->get('AuthService'));
+    return new App\Action\LoginAction($c->get('logger'), $c->get('twitter'), $c->get('UserService'), $c->get('AuthService'), $c->get('LoginResponder'));
 };
 
 // -----------------------------------------------------------------------------
@@ -104,6 +104,10 @@ $container['HomeResponder'] = function($c) {
 
 $container['SaveResponder'] = function($c) {
     return new App\Responder\SaveResponder($c->get('view'));
+};
+
+$container['LoginResponder'] = function($c) {
+    return new App\Responder\LoginResponder();
 };
 // -----------------------------------------------------------------------------
 // Validation factories
