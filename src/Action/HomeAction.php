@@ -3,7 +3,7 @@
 namespace App\Action;
 
 use App\Domain\AuthService;
-use App\Domain\CommentService;
+use App\Domain\ThreadService;
 use App\Responder\HomeResponder;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -14,15 +14,15 @@ final class HomeAction
 {
     private $logger;
     private $csrf;
-    private $comments;
+    private $thread;
     private $auth;
     private $responder;
 
-    public function __construct(LoggerInterface $logger, Csrf $csrf, CommentService $comments, AuthService $auth, HomeResponder $responder)
+    public function __construct(LoggerInterface $logger, Csrf $csrf, ThreadService $thread, AuthService $auth, HomeResponder $responder)
     {
         $this->logger = $logger;
         $this->csrf = $csrf;
-        $this->comments = $comments;
+        $this->thread = $thread;
         $this->auth = $auth;
         $this->responder = $responder;
     }
@@ -33,7 +33,7 @@ final class HomeAction
 
         $data['loggedIn'] = $this->auth->isLoggedIn();
 
-        $data['comments'] = $this->comments->getComments();
+        $data['threads'] = $this->thread->getThreads();
 
         $nameKey = $this->csrf->getTokenNameKey();
         $valueKey = $this->csrf->getTokenValueKey();

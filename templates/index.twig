@@ -17,8 +17,8 @@
             <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
             <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
         </form>
-        {% for comment in comments %}
-            {{ comment.comment }}   {{ comment.created_at }}
+        {% for thread in threads %}
+            {{ thread.comment }}   {{ thread.created_at }}
         {% endfor %}
     </body>
 </html>

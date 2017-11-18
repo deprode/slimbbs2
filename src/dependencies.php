@@ -70,7 +70,7 @@ $container['session'] = function($c) {
 // Action factories
 // -----------------------------------------------------------------------------
 $container['App\Action\HomeAction'] = function ($c) {
-    return new App\Action\HomeAction($c->get('logger'), $c->get('csrf'), $c->get('CommentService'), $c->get('AuthService'), $c->get('HomeResponder'));
+    return new App\Action\HomeAction($c->get('logger'), $c->get('csrf'), $c->get('ThreadService'), $c->get('AuthService'), $c->get('HomeResponder'));
 };
 
 $container['App\Action\SaveAction'] = function ($c) {
@@ -89,6 +89,10 @@ $container['App\Action\LogoutAction'] = function ($c) {
 // -----------------------------------------------------------------------------
 $container['CommentService'] = function($c) {
     return new App\Domain\CommentService($c->get('db'));
+};
+
+$container['ThreadService'] = function($c) {
+    return new App\Domain\ThreadService($c->get('db'));
 };
 
 $container['UserService'] = function($c) {

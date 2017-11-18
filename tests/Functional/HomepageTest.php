@@ -18,6 +18,9 @@ class HomepageTest extends BaseTestCase
             $sql = 'TRUNCATE TABLE `comments`';
             $prepare = $db_connection->prepare($sql);
             $prepare->execute();
+            $sql = 'TRUNCATE TABLE `threads`';
+            $prepare = $db_connection->prepare($sql);
+            $prepare->execute();
 
         } catch (\PDOException $e) {
             echo $e->getMessage();
