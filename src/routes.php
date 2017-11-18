@@ -19,3 +19,6 @@ $app->get('/login/callback', 'App\Action\LoginAction:callback')
 
 $app->get('/logout', 'App\Action\LogoutAction:index')
     ->setName('logout');
+
+$app->get('/thread', 'App\Action\ThreadAction:index')
+    ->setName('thread');

@@ -13,10 +13,11 @@ class CommentService
         $this->db = $db;
     }
 
-    public function getComments()
+    public function getComments($thread_id = null)
     {
-        $sql = 'SELECT * FROM `comments`';
+        $sql = 'SELECT * FROM `comments` WHERE `thread_id` = :thread_id';
         $prepare = $this->db->prepare($sql);
+        $prepare->bindValue(':thread_id', $thread_id);
         $prepare->execute();
 
         $prepare->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Comment::class);

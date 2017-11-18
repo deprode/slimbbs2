@@ -1,0 +1,8 @@
+{% extends "base.twig" %}
+
+{% block title %}Thread{% endblock %}
+{% block contents %}
+    {% for comment in comments %}
+        {{ comment.comment }} {{ comment.created_at }}
+    {% endfor %}
+{% endblock %}

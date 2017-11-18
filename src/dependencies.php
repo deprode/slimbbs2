@@ -84,6 +84,10 @@ $container['App\Action\LoginAction'] = function ($c) {
 $container['App\Action\LogoutAction'] = function ($c) {
     return new App\Action\LogoutAction($c->get('logger'), $c->get('AuthService'));
 };
+
+$container['App\Action\ThreadAction'] = function ($c) {
+    return new App\Action\ThreadAction($c->get('logger'), $c->get('csrf'), $c->get('CommentService'), $c->get('ThreadResponder'));
+};
 // -----------------------------------------------------------------------------
 // Domain factories
 // -----------------------------------------------------------------------------
@@ -115,6 +119,10 @@ $container['SaveResponder'] = function($c) {
 
 $container['LoginResponder'] = function($c) {
     return new App\Responder\LoginResponder();
+};
+
+$container['ThreadResponder'] = function($c) {
+    return new App\Responder\ThreadResponder($c->get('view'));
 };
 // -----------------------------------------------------------------------------
 // Validation factories
