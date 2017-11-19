@@ -41,7 +41,7 @@ class SaveAction
         try {
             $comment = new Comment();
             $comment->comment = $data['comment'];
-            $this->comment->saveComment($comment);
+            $this->comment->saveThread($comment);
         } catch (\PDOException $e) {
             echo $e->getMessage();
         }

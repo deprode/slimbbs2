@@ -25,18 +25,18 @@ class CommentService
         return $comments;
     }
 
-    public function saveComment(Comment $comment)
+    public function saveThread(Comment $comment)
     {
         $sql = <<<SAVE
 INSERT INTO `comments` (`thread_id`, `user_id`, `like_count`, `comment`, `photo_url`, `created_at`, `updated_at`)
 SELECT
-	CASE 
-		WHEN MAX(`thread_id`) IS NULL THEN 1
-		ELSE MAX(`thread_id`) + 1
-	END,
-	0, 0, :comment, '', :created_at, NULL
+    CASE 
+        WHEN MAX(`thread_id`) IS NULL THEN 1
+        ELSE MAX(`thread_id`) + 1
+    END,
+    0, 0, :comment, '', :created_at, NULL
 FROM
-	`comments`;
+    `comments`;
 SAVE;
         $prepare = $this->db->prepare($sql);
         $prepare->bindValue(':comment', $comment->comment);
