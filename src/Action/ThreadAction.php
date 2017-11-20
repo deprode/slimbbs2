@@ -30,7 +30,7 @@ class ThreadAction
 
         $thread_id = $request->getParam('thread_id');
         if (empty($thread_id) || !is_numeric($thread_id)) {
-            return $this->responder->invalid($response);
+            return $this->responder->invalid($response, '/');
         }
 
         $data['comments'] = $this->comment->getComments($thread_id);

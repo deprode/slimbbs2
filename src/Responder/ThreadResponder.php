@@ -19,8 +19,8 @@ class ThreadResponder
         return $this->view->render($response, 'thread.twig', $data);
     }
 
-    public function invalid(Response $response)
+    public function invalid(Response $response, string $redirect)
     {
-        return $response->withRedirect('/', 300);
+        return $response->withRedirect($redirect, 300);
     }
 }

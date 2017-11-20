@@ -14,18 +14,18 @@ class SaveResponder
         $this->view = $view;
     }
 
-    public function csrf_invalid(Response $response)
+    public function csrf_invalid(Response $response, string $redirect)
     {
-        return $response->withRedirect('/', 400);
+        return $response->withRedirect($redirect, 400);
     }
 
-    public function invalid(Response $response)
+    public function invalid(Response $response, string $redirect)
     {
-        return $response->withRedirect('/', 200);
+        return $response->withRedirect($redirect, 200);
     }
 
-    public function saved(Response $response, array $data)
+    public function saved(Response $response, string $redirect)
     {
-        return $response->withRedirect('/', 303);
+        return $response->withRedirect($redirect, 303);
     }
 }

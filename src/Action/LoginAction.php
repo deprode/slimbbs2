@@ -54,7 +54,7 @@ class LoginAction
             try {
                 $access_token = $connection->oauth('oauth/access_token', ['oauth_verifier' => $oauth_verifier, 'oauth_token'=> $token['token']]);
             } catch (TwitterOAuthException $e) {
-                $this->responder->oAuthFailed($response);
+                $this->responder->oAuthFailed($response, '/');
             }
 
             // ユーザー情報の取得
@@ -66,16 +66,16 @@ class LoginAction
                 $user = $this->user->convertUser($user_info, $access_token);
                 $this->user->saveUser($user);
             } catch (\PDOException $e) {
-                $this->responder->saveFailed($response);
+                $this->responder->saveFailed($response, '/');
             }
 
             $this->auth->regenerate();
             $this->auth->setUserInfo($user);
 
-            return $this->responder->success($response);
+            return $this->responder->success($response, '/');
         }
 
-        $this->responder->oAuthFailed($response);
+        $this->responder->oAuthFailed($response, '/');
     }
 
 }

@@ -7,18 +7,18 @@ use Slim\Http\Response;
 
 class LoginResponder
 {
-    public function success(Response $response)
+    public function success(Response $response, string $url)
     {
-        return $response->withRedirect('/', 303);
+        return $response->withRedirect($url, 303);
     }
 
-    public function oAuthFailed(Response $response)
+    public function oAuthFailed(Response $response, string $url)
     {
-        return $response->withRedirect('/', 403);
+        return $response->withRedirect($url, 403);
     }
 
-    public function saveFailed(Response $response)
+    public function saveFailed(Response $response, string $url)
     {
-        return $response->withRedirect('/', 400);
+        return $response->withRedirect($url, 400);
     }
 }
