@@ -22,3 +22,7 @@ $app->get('/logout', 'App\Action\LogoutAction:index')
 
 $app->get('/thread', 'App\Action\ThreadAction:index')
     ->setName('thread');
+
+$app->post('/thread', 'App\Action\ThreadSaveAction:save')
+    ->setName('thread')
+    ->add($container->get('App\Validation\ThreadSaveValidation'));

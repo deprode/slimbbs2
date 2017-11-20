@@ -47,6 +47,11 @@ class AuthService
         $this->session->set('user_img', $user->user_image_url);
     }
 
+    public function getUserId()
+    {
+        return $this->session->get('user_id') ?? 0;
+    }
+
     public function isLoggedIn()
     {
         return $this->session->get('user_id') !== null;

@@ -42,6 +42,7 @@ class ThreadAction
         $data['valueKey'] = $valueKey;
         $data['name'] = $request->getAttribute($nameKey);
         $data['value'] = $request->getAttribute($valueKey);
+        $data['thread_id'] = $thread_id;
 
         // Render index view
         return $this->responder->index($response, $data);

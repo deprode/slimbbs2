@@ -43,4 +43,21 @@ SAVE;
         $prepare->bindValue(':created_at', date_create()->format('Y-m-d H:i:s'));
         $prepare->execute();
     }
+
+    public function saveComment(Comment $comment)
+    {
+        $sql = <<<SAVE
+INSERT INTO
+    `comments`
+    (`thread_id`, `user_id`, `like_count`, `comment`, `photo_url`, `created_at`, `updated_at`)
+VALUES
+    (:thread_id, :user_id, 0, :comment, '', :created_at, NULL);
+SAVE;
+        $prepare = $this->db->prepare($sql);
+        $prepare->bindValue(':thread_id', $comment->thread_id);
+        $prepare->bindValue(':user_id', $comment->user_id);
+        $prepare->bindValue(':comment', $comment->comment);
+        $prepare->bindValue(':created_at', date_create()->format('Y-m-d H:i:s'));
+        $prepare->execute();
+    }
 }

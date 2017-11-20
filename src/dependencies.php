@@ -88,6 +88,10 @@ $container['App\Action\LogoutAction'] = function ($c) {
 $container['App\Action\ThreadAction'] = function ($c) {
     return new App\Action\ThreadAction($c->get('logger'), $c->get('csrf'), $c->get('CommentService'), $c->get('ThreadResponder'));
 };
+
+$container['App\Action\ThreadSaveAction'] = function ($c) {
+    return new App\Action\ThreadSaveAction($c->get('logger'), $c->get('CommentService'), $c->get('SaveResponder'), $c->get('AuthService'));
+};
 // -----------------------------------------------------------------------------
 // Domain factories
 // -----------------------------------------------------------------------------
@@ -155,6 +159,15 @@ $container['App\Validation\Translator'] = function($c){
 $container['App\Validation\SaveValidation'] = function($c) {
     $translator = $c->get('App\Validation\Translator');
     $saveValidators = [
+        'comment'     => \Respect\Validation\Validator::stringType()->notEmpty()->length(null, 400)->setName('本文'),
+    ];
+    return new \DavidePastore\Slim\Validation\Validation($saveValidators, $translator);
+};
+
+$container['App\Validation\ThreadSaveValidation'] = function($c) {
+    $translator = $c->get('App\Validation\Translator');
+    $saveValidators = [
+        'thread_id' => \Respect\Validation\Validator::stringType()->notEmpty()->setName('スレッドID'),
         'comment'     => \Respect\Validation\Validator::stringType()->notEmpty()->length(null, 400)->setName('本文'),
     ];
     return new \DavidePastore\Slim\Validation\Validation($saveValidators, $translator);
