@@ -27,7 +27,7 @@ SQL;
      */
     public function down()
     {
-        $query = "DROP TABLE IF EXISTS `add_thread`";
+        $query = "DROP TRIGGER IF EXISTS `add_thread`";
 
         $c = $this->getContainer();
         $c['db']->query($query);
