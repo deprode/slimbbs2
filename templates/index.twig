@@ -3,11 +3,11 @@
 {% block title %}Toppage{% endblock %}
 {% block contents %}
     {% if not loggedIn %}
-        <a href="./login">ログイン</a>
+        <a href="{{ path_for('login') }}">ログイン</a>
     {% else %}
-        <a href="./logout">ログアウト</a>
+        <a href="{{ path_for('logout') }}">ログアウト</a>
     {% endif %}
-    <form action="./" method="post">
+    <form action="{{ path_for('home') }}" method="post">
         <label>テキスト：<input type="text" name="comment"></label>
         <input type="submit" value="送信">
         <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
