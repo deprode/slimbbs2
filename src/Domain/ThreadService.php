@@ -15,7 +15,7 @@ class ThreadService
 
     public function getThreads()
     {
-        $sql = "SELECT * FROM `threads` LEFT JOIN `comments` ON `threads`.`comment_id` = `comments`.`comment_id`";
+        $sql = "SELECT `comment`, `created_at` FROM `threads` LEFT JOIN `comments` ON `threads`.`comment_id` = `comments`.`comment_id`";
         $prepare = $this->db->prepare($sql);
         $prepare->execute();
 

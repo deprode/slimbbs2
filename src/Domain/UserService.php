@@ -30,7 +30,7 @@ class UserService
     public function existUser(string $user_id)
     {
         $sql = <<<EXIST
-SELECT COUNT(*) FROM `users` WHERE `user_id` = :user_id
+SELECT COUNT(`user_id`) FROM `users` WHERE `user_id` = :user_id
 EXIST;
         $prepare = $this->db->prepare($sql);
         $prepare->bindValue(':user_id', $user_id);

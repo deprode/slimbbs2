@@ -15,7 +15,7 @@ class CommentService
 
     public function getComments($thread_id = null)
     {
-        $sql = 'SELECT * FROM `comments` WHERE `thread_id` = :thread_id';
+        $sql = 'SELECT `comment`, `created_at` FROM `comments` WHERE `thread_id` = :thread_id';
         $prepare = $this->db->prepare($sql);
         $prepare->bindValue(':thread_id', $thread_id);
         $prepare->execute();
