@@ -24,7 +24,6 @@ class SaveAction
 
     public function index(Request $request, Response $response)
     {
-        // Sample log message
         $this->logger->info("Slimbbs '/' route save");
 
         if ($request->getAttribute('csrf_status') === "bad_request") {

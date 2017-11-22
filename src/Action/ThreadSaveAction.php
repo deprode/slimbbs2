@@ -28,7 +28,6 @@ class ThreadSaveAction
 
     public function save(Request $request, Response $response)
     {
-        // Sample log message
         $this->logger->info("Slimbbs '/' route comment save");
 
         if ($request->getAttribute('csrf_status') === "bad_request") {
