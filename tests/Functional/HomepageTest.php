@@ -2,8 +2,6 @@
 
 namespace Tests\Functional;
 
-use Dotenv\Dotenv;
-
 class HomepageTest extends BaseTestCase
 {
     public function setUp()
@@ -30,7 +28,7 @@ class HomepageTest extends BaseTestCase
         $_SESSION = [];
     }
 
-    public function testGetHomepageWithoutName()
+    public function testトップページの表示()
     {
         $response = $this->runApp('GET', '/');
 
