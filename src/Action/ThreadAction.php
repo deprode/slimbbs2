@@ -34,6 +34,9 @@ class ThreadAction
         }
 
         $data['comments'] = $this->comment->getComments($thread_id);
+        if (empty($data['comments'])) {
+            return $this->responder->invalid($response, '/');
+        }
 
         $nameKey = $this->csrf->getTokenNameKey();
         $valueKey = $this->csrf->getTokenValueKey();
