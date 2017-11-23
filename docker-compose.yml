@@ -18,7 +18,6 @@ services:
             - logs:/var/www/logs
         links:
             - db
-            - db_test
     db:
         image: mysql:5
         env_file: .env
@@ -26,10 +25,3 @@ services:
             - 3306:3306
         volumes:
             - ./db/mysql_data:/var/lib/mysql
-    db_test:
-        image: mysql:5
-        env_file: tests/.env
-        ports:
-            - 3307:3306
-        volumes:
-            - ./db/mysql_test_data:/var/lib/mysql
