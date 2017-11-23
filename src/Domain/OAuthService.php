@@ -1,0 +1,63 @@
+<?php
+
+namespace App\Domain;
+
+
+use Abraham\TwitterOAuth\TwitterOAuth;
+use App\Model\User;
+
+class OAuthService
+{
+    private $twitter;
+    private $auth;
+    private $callback_url;
+
+    public function __construct(TwitterOAuth $twitter, AuthService $auth, string $callback_url)
+    {
+        $this->twitter = $twitter;
+        $this->auth = $auth;
+        $this->callback_url = $callback_url;
+    }
+
+    public function getLoginUrl(string $basepath)
+    {
+        $request_token = $this->twitter->oauth('oauth/request_token', ['oauth_callback' => $basepath . $this->callback_url]);
+        $this->auth->setOAuthToken($request_token);
+
+        return $this->twitter->url('oauth/authorize', ['oauth_token' => $request_token['oauth_token']]);
+    }
+
+    public function verifyToken(string $oauth_token, string $oauth_verifier)
+    {
+        return ($this->auth->verifyToken($oauth_token) && $oauth_verifier);
+    }
+
+    public function oAuth(string $oauth_verifier)
+    {
+        $connection = $this->twitter;
+        $token = $this->auth->getOAuthToken();
+        $connection->setOauthToken($token['token'], $token['secret']);
+        $access_token = $connection->oauth('oauth/access_token', ['oauth_verifier' => $oauth_verifier, 'oauth_token'=> $token['token']]);
+        $this->auth->setOAuthToken($access_token);
+    }
+
+    public function getUserInfo()
+    {
+        $access_token = $this->auth->getOAuthToken();
+        $user_connection = $this->twitter;
+        $user_connection->setOauthToken($access_token['token'], $access_token['secret']);
+
+        return $user_connection->get('account/verify_credentials');
+    }
+
+    public function getToken()
+    {
+        return $this->auth->getOAuthToken();
+    }
+
+    public function loginUser(User $user)
+    {
+        $this->auth->regenerate();
+        $this->auth->setUserInfo($user);
+    }
+}

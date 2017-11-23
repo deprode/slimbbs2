@@ -78,7 +78,7 @@ $container['App\Action\SaveAction'] = function ($c) {
 };
 
 $container['App\Action\LoginAction'] = function ($c) {
-    return new App\Action\LoginAction($c->get('logger'), $c->get('twitter'), $c->get('UserService'), $c->get('AuthService'), $c->get('LoginResponder'));
+    return new App\Action\LoginAction($c->get('logger'), $c->get('UserService'), $c->get('OAuthService'), $c->get('LoginResponder'));
 };
 
 $container['App\Action\LogoutAction'] = function ($c) {
@@ -109,6 +109,10 @@ $container['UserService'] = function($c) {
 
 $container['AuthService'] = function($c) {
     return new App\Domain\AuthService($c->get('session'));
+};
+
+$container['OAuthService'] = function($c) {
+    return new App\Domain\OAuthService($c->get('twitter'), $c->get('AuthService'), $c->get('router')->pathFor('callback'));
 };
 // -----------------------------------------------------------------------------
 // Responder factories
