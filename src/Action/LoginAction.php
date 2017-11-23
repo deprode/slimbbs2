@@ -13,7 +13,6 @@ use Psr\Log\LoggerInterface;
 class LoginAction
 {
     private $logger;
-    private $twitter;
     private $user;
     private $oauth;
     private $responder;
