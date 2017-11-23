@@ -3,7 +3,7 @@
 namespace Tests\Functional;
 
 
-class LoginTest
+class LoginTest extends BaseTestCase
 {
     public function setUp()
     {
