@@ -22,7 +22,7 @@ class ThreadTest extends BaseTestCase
 
         } catch (\PDOException $e) {
             echo $e->getMessage();
-            exit(-1);
+            exit(1);
         }
 
         $_SESSION = [];
