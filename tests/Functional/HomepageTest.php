@@ -57,6 +57,7 @@ class HomepageTest extends BaseTestCase
         $response = $this->runApp('GET', '/');
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('aaaa', (string)$response->getBody());
+        $this->assertContains('<a href="/thread?thread_id=1">', (string)$response->getBody());
     }
 
     public function test通らない投稿()
