@@ -24,5 +24,5 @@ $app->get('/thread', 'App\Action\ThreadAction:index')
     ->setName('thread');
 
 $app->post('/thread', 'App\Action\ThreadSaveAction:save')
-    ->setName('thread')
+    ->setName('thread_save')
     ->add($container->get('App\Validation\ThreadSaveValidation'));
