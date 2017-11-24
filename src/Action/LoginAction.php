@@ -43,7 +43,7 @@ class LoginAction
             try {
                 $this->oauth->oAuth($oauth_verifier);
             } catch (OAuthException $e) {
-                return $this->responder->oAuthFailed($response, '/');
+                return $this->responder->oAuthFailed($response);
             }
 
             // ユーザー情報の取得
@@ -54,7 +54,7 @@ class LoginAction
                 $user = $this->user->convertUser($user_info, $access_token);
                 $this->user->saveUser($user);
             } catch (\PDOException $e) {
-                return $this->responder->saveFailed($response, '/');
+                return $this->responder->saveFailed($response);
             }
 
             $this->oauth->loginUser($user);
@@ -62,7 +62,7 @@ class LoginAction
             return $this->responder->success($response, '/');
         }
 
-        return $this->responder->oAuthFailed($response, '/');
+        return $this->responder->oAuthFailed($response);
     }
 
 }
