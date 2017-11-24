@@ -29,12 +29,13 @@ class ThreadSaveAction
     public function save(Request $request, Response $response)
     {
         $this->logger->info("Slimbbs '/' route comment save");
-        $data = $request->getParsedBody();
-        $url = $request->getUri()->getPath() . empty($data['thread_id']) ? '' : '?thread_id=' . intval($data['thread_id']);
 
         if ($request->getAttribute('csrf_status') === "bad_request") {
-            return $this->responder->csrf_invalid($response, $url);
+            return $this->responder->csrf_invalid($response);
         }
+
+        $data = $request->getParsedBody();
+        $url = $request->getUri()->getPath() . empty($data['thread_id']) ? '' : '?thread_id=' . intval($data['thread_id']);
 
         // Validation
         if($request->getAttribute('has_errors')){
