@@ -38,6 +38,7 @@ $container['db'] = function ($c) {
         $db_connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
     } catch (PDOException $e) {
         echo $e->getMessage();
+        exit();
     }
 
     return $db_connection;

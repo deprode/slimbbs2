@@ -42,7 +42,7 @@ class SaveAction
             $comment->comment = $data['comment'];
             $this->comment->saveThread($comment);
         } catch (\PDOException $e) {
-            echo $e->getMessage();
+            return $this->responder->saveFailed($response);
         }
 
         return $this->responder->saved($response, '/');
