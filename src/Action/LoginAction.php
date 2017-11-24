@@ -2,9 +2,9 @@
 
 namespace App\Action;
 
-use Abraham\TwitterOAuth\TwitterOAuthException;
 use App\Domain\OAuthService;
 use App\Domain\UserService;
+use App\Exception\OAuthException;
 use App\Responder\LoginResponder;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -42,7 +42,7 @@ class LoginAction
 
             try {
                 $this->oauth->oAuth($oauth_verifier);
-            } catch (TwitterOAuthException $e) {
+            } catch (OAuthException $e) {
                 return $this->responder->oAuthFailed($response, '/');
             }
 

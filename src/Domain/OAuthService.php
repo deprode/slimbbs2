@@ -4,6 +4,8 @@ namespace App\Domain;
 
 
 use Abraham\TwitterOAuth\TwitterOAuth;
+use Abraham\TwitterOAuth\TwitterOAuthException;
+use App\Exception\OAuthException;
 use App\Model\User;
 
 class OAuthService
@@ -36,8 +38,14 @@ class OAuthService
     {
         $connection = $this->twitter;
         $token = $this->auth->getOAuthToken();
+
         $connection->setOauthToken($token['token'], $token['secret']);
-        $access_token = $connection->oauth('oauth/access_token', ['oauth_verifier' => $oauth_verifier, 'oauth_token'=> $token['token']]);
+        try {
+            $access_token = $connection->oauth('oauth/access_token', ['oauth_verifier' => $oauth_verifier, 'oauth_token'=> $token['token']]);
+        } catch (TwitterOAuthException $e) {
+            throw new OAuthException();
+        }
+
         $this->auth->setOAuthToken($access_token);
     }
 
