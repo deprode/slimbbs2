@@ -21,8 +21,8 @@ class UserService
         $user->user_id = $user_info->id_str;
         $user->user_name = $user_info->screen_name;
         $user->user_image_url = $user_info->profile_image_url;
-        $user->access_token = $access_token['oauth_token'];
-        $user->access_secret = $access_token['oauth_token_secret'];
+        $user->access_token = $access_token['token'];
+        $user->access_secret = $access_token['secret'];
 
         return $user;
     }
