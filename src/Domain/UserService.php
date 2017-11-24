@@ -33,7 +33,7 @@ class UserService
 SELECT COUNT(`user_id`) FROM `users` WHERE `user_id` = :user_id
 EXIST;
         $prepare = $this->db->prepare($sql);
-        $prepare->bindValue(':user_id', $user_id);
+        $prepare->bindValue(':user_id', $user_id, \PDO::PARAM_STR);
         $count = $prepare->fetchColumn();
 
         return $count > 0;
@@ -57,11 +57,11 @@ VALUES (:user_id, :user_name, :user_image_url, :access_token, :access_secret);
 SAVE;
         }
         $prepare = $this->db->prepare($sql);
-        $prepare->bindValue(':user_id', $user->user_id);
-        $prepare->bindValue(':user_name', $user->user_name);
-        $prepare->bindValue(':user_image_url', $user->user_image_url);
-        $prepare->bindValue(':access_token', $user->access_token);
-        $prepare->bindValue(':access_secret', $user->access_secret);
+        $prepare->bindValue(':user_id', $user->user_id, \PDO::PARAM_STR);
+        $prepare->bindValue(':user_name', $user->user_name, \PDO::PARAM_STR);
+        $prepare->bindValue(':user_image_url', $user->user_image_url, \PDO::PARAM_STR);
+        $prepare->bindValue(':access_token', $user->access_token, \PDO::PARAM_STR);
+        $prepare->bindValue(':access_secret', $user->access_secret, \PDO::PARAM_STR);
         $prepare->execute();
     }
 }
