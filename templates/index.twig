@@ -7,13 +7,17 @@
     {% else %}
         <a href="{{ path_for('logout') }}">ログアウト</a>
     {% endif %}
-    <form action="{{ path_for('home') }}" method="post">
+    <form action="{{ path_for('home') }}" method="post" class="pure-form">
         <label>テキスト：<input type="text" name="comment"></label>
-        <input type="submit" value="送信">
+        <input type="submit" value="送信" class="pure-button pure-button-primary">
         <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
         <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
     </form>
-    {% for thread in threads %}
-        <a href="{{ path_for('thread', {}, {'thread_id': thread.thread_id}) }}">{{ thread.comment }}</a>   {{ thread.created_at }}
-    {% endfor %}
+    <article class="threads">
+        {% for thread in threads %}
+            <section class="thread">
+                <a href="{{ path_for('thread', {}, {'thread_id': thread.thread_id}) }}">{{ thread.comment }}</a>   {{ thread.created_at }}
+            </section>
+        {% endfor %}
+    </article>
 {% endblock %}

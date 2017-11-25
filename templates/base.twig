@@ -4,9 +4,16 @@
     <meta charset="utf-8"/>
     <title>{% block title %}{% endblock %} - Slimbbs</title>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+    <style>
+        .container {
+            margin: 2rem;
+        }
+    </style>
 </head>
 <body>
-    {% block contents %}
-    {% endblock %}
+    <div class="container">
+        {% block contents %}
+        {% endblock %}
+    </div>
 </body>
 </html>
