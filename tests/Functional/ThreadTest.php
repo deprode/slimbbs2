@@ -27,7 +27,7 @@ class ThreadTest extends BaseTestCase
 
         $_SESSION = [];
 
-        $this->runApp('POST', '/', ['comment' => 'thread_test']);
+        $this->runApp('POST', '/', ['comment' => 'thread_test', 'user_id' => '1']);
     }
 
     public function testスレッドの表示()
@@ -53,8 +53,9 @@ class ThreadTest extends BaseTestCase
 
     public function testスレッドに返信()
     {
-        $response = $this->runApp('POST', '/thread', ['comment' => 'comment_test', 'thread_id' => "1"]);
+        $response = $this->runApp('POST', '/thread', ['comment' => 'comment_test', 'thread_id' => "1", 'user_id' => '1']);
         $this->assertEquals(303, $response->getStatusCode());
+        $this->assertContains('/thread?thread_id=1', (string)$response->getHeader('location')[0]);
         $this->assertNotContains('Slimbbs', (string)$response->getBody());
 
         $response = $this->runApp('GET', '/thread?thread_id=1');

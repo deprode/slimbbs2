@@ -87,7 +87,7 @@ $container['App\Action\LogoutAction'] = function ($c) {
 };
 
 $container['App\Action\ThreadAction'] = function ($c) {
-    return new App\Action\ThreadAction($c->get('logger'), $c->get('csrf'), $c->get('CommentService'), $c->get('ThreadResponder'));
+    return new App\Action\ThreadAction($c->get('logger'), $c->get('csrf'), $c->get('CommentService'), $c->get('AuthService'), $c->get('ThreadResponder'));
 };
 
 $container['App\Action\ThreadSaveAction'] = function ($c) {
@@ -173,8 +173,9 @@ $container['App\Validation\SaveValidation'] = function($c) {
 $container['App\Validation\ThreadSaveValidation'] = function($c) {
     $translator = $c->get('App\Validation\Translator');
     $saveValidators = [
+        'user_id' => \Respect\Validation\Validator::stringType()->notEmpty()->setName('ユーザーID'),
         'thread_id' => \Respect\Validation\Validator::stringType()->notEmpty()->setName('スレッドID'),
-        'comment'     => \Respect\Validation\Validator::stringType()->notEmpty()->length(null, 400)->setName('本文'),
+        'comment'     => \Respect\Validation\Validator::stringType()->notEmpty()->length(1, 400)->setName('本文'),
     ];
     return new \DavidePastore\Slim\Validation\Validation($saveValidators, $translator);
 };

@@ -5,6 +5,7 @@
     <form action="{{ path_for('thread_save') }}" method="post" class="pure-form">
         <label for="comment"><input type="text" name="comment"></label>
         <input type="hidden" name="thread_id" value="{{ thread_id }}">
+        <input type="hidden" name="user_id" value="{{ user_id }}">
         <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
         <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
         <input type="submit" value="送信" class="pure-button pure-button-primary">

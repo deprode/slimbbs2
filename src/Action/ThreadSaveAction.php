@@ -34,13 +34,13 @@ class ThreadSaveAction
             return $this->responder->csrf_invalid($response);
         }
 
-        $data = $request->getParsedBody();
-        $url = $request->getUri()->getPath() . empty($data['thread_id']) ? '' : '?thread_id=' . intval($data['thread_id']);
-
         // Validation
         if($request->getAttribute('has_errors')){
-            return $this->responder->invalid($response, $url);
+            return $this->responder->invalid($response, $request->getUri()->getPath());
         }
+
+        $data = $request->getParsedBody();
+        $url = $request->getUri()->getPath() . (empty(intval($data['thread_id'])) ? '' : '?thread_id=' . intval($data['thread_id']));
 
         try {
             $comment = new Comment();
