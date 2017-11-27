@@ -42,6 +42,7 @@ final class HomeAction
         $data['valueKey'] = $valueKey;
         $data['name'] = $request->getAttribute($nameKey);
         $data['value'] = $request->getAttribute($valueKey);
+        $data['user_id'] = $this->auth->getUserId();
 
         // Render index view
         return $this->responder->index($response, $data);

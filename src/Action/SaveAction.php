@@ -40,6 +40,7 @@ class SaveAction
         try {
             $comment = new Comment();
             $comment->comment = $data['comment'];
+            $comment->user_id = $data['user_id'];
             $this->comment->saveThread($comment);
         } catch (\PDOException $e) {
             return $this->responder->saveFailed($response);

@@ -48,11 +48,11 @@ class HomepageTest extends BaseTestCase
     public function test投稿()
     {
         // *注: CSRF(middleware)を切ってテストしています。
-        $response = $this->runApp('POST', '/', ['comment' => 'aaaa']);
+        $response = $this->runApp('POST', '/', ['comment' => 'aaaa', 'user_id' => '1']);
 
         $this->assertEquals(303, $response->getStatusCode());
+        $this->assertNotContains('Error', (string)$response->getBody());
         // リダイレクトされるので何も表示されない
-        $this->assertNotContains('Slimbbs', (string)$response->getBody());
 
         $response = $this->runApp('GET', '/');
         $this->assertEquals(200, $response->getStatusCode());
@@ -63,7 +63,15 @@ class HomepageTest extends BaseTestCase
     public function test通らない投稿()
     {
         // *注: CSRF(middleware)を切ってテストしています。
-        $response = $this->runApp('POST', '/', ['body' => 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1']);
+        $response = $this->runApp('POST', '/', ['comment' => 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1', 'user_id' => '1']);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertNotContains('Slimbbs', (string)$response->getBody());
+    }
+
+    public function test匿名投稿()
+    {
+        $response = $this->runApp('POST', '/', ['comment' => 'aa1']);
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertNotContains('Slimbbs', (string)$response->getBody());
