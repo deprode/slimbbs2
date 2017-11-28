@@ -21,6 +21,6 @@ class ThreadResponder
 
     public function invalid(Response $response, string $redirect)
     {
-        return $response->withRedirect($redirect, 300);
+        return $response->withRedirect($redirect, 302);
     }
 }

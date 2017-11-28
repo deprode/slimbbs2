@@ -40,14 +40,14 @@ class ThreadTest extends BaseTestCase
     public function testスレッドの表示失敗()
     {
         $response = $this->runApp('GET', '/thread?thread_id=a');
-        $this->assertEquals(300, $response->getStatusCode());
+        $this->assertEquals(302, $response->getStatusCode());
         $this->assertNotContains('thread_test', (string)$response->getBody());
     }
 
     public function test存在しないスレッド()
     {
         $response = $this->runApp('GET', '/thread?thread_id=0');
-        $this->assertEquals(300, $response->getStatusCode());
+        $this->assertEquals(302, $response->getStatusCode());
         $this->assertNotContains('thread_test', (string)$response->getBody());
     }
 
