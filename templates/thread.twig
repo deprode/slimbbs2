@@ -2,6 +2,9 @@
 
 {% block title %}Thread{% endblock %}
 {% block contents %}
+    <nav>
+        <a href="{{ path_for('home') }}">トップページに戻る</a>
+    </nav>
     <form action="{{ path_for('thread_save') }}" method="post" class="pure-form">
         <label for="comment"><input type="text" name="comment"></label>
         <input type="hidden" name="thread_id" value="{{ thread_id }}">
