@@ -2,6 +2,7 @@
 
 namespace App\Action;
 
+use App\Domain\AuthService;
 use App\Model\Comment;
 use App\Responder\SaveResponder;
 use Slim\Http\Request;
@@ -14,11 +15,13 @@ class SaveAction
     private $logger;
     private $responder;
     private $comment;
+    private $auth;
 
-    public function __construct(LoggerInterface $logger, CommentService $comment, SaveResponder $responder)
+    public function __construct(LoggerInterface $logger, CommentService $comment, AuthService $auth, SaveResponder $responder)
     {
         $this->logger = $logger;
         $this->responder = $responder;
+        $this->auth = $auth;
         $this->comment = $comment;
     }
 
@@ -31,11 +34,11 @@ class SaveAction
         }
 
         // Validation
-        if($request->getAttribute('has_errors')){
+        $data = $request->getParsedBody();
+        $user_id = $data['user_id'] ?? 0;
+        if($request->getAttribute('has_errors') && $this->auth->equalUser((int)$user_id)){
             return $this->responder->invalid($response, '/');
         }
-
-        $data = $request->getParsedBody();
 
         try {
             $comment = new Comment();

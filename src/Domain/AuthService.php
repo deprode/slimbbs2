@@ -46,6 +46,11 @@ class AuthService
         return $this->session->get('user_id') ?? 0;
     }
 
+    public function equalUser(int $user_id)
+    {
+        return $this->getUserId() === $user_id;
+    }
+
     public function isLoggedIn()
     {
         return $this->session->get('user_id') !== null;

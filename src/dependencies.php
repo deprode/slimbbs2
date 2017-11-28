@@ -75,7 +75,7 @@ $container['App\Action\HomeAction'] = function ($c) {
 };
 
 $container['App\Action\SaveAction'] = function ($c) {
-    return new App\Action\SaveAction($c->get('logger'), $c->get('CommentService'), $c->get('SaveResponder'));
+    return new App\Action\SaveAction($c->get('logger'), $c->get('CommentService'), $c->get('AuthService'), $c->get('SaveResponder'));
 };
 
 $container['App\Action\LoginAction'] = function ($c) {

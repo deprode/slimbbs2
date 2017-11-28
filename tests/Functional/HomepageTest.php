@@ -26,6 +26,7 @@ class HomepageTest extends BaseTestCase
         }
 
         $_SESSION = [];
+        $_SESSION['user_id'] = 1;
     }
 
     public function testトップページの表示()
@@ -71,6 +72,7 @@ class HomepageTest extends BaseTestCase
 
     public function test匿名投稿()
     {
+        $_SESSION['user_id'] = 0;
         $response = $this->runApp('POST', '/', ['comment' => 'aa1']);
 
         $this->assertEquals(200, $response->getStatusCode());
