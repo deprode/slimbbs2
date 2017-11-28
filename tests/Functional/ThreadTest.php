@@ -26,6 +26,7 @@ class ThreadTest extends BaseTestCase
         }
 
         $_SESSION = [];
+        $_SESSION['user_id'] = 1;
 
         $this->runApp('POST', '/', ['comment' => 'thread_test', 'user_id' => '1']);
     }
@@ -51,9 +52,14 @@ class ThreadTest extends BaseTestCase
         $this->assertNotContains('thread_test', (string)$response->getBody());
     }
 
+    public function postReply()
+    {
+        return $this->runApp('POST', '/thread', ['comment' => 'comment_test', 'thread_id' => "1", 'user_id' => '1']);
+    }
+
     public function testスレッドに返信()
     {
-        $response = $this->runApp('POST', '/thread', ['comment' => 'comment_test', 'thread_id' => "1", 'user_id' => '1']);
+        $response = $this->postReply();
         $this->assertEquals(303, $response->getStatusCode());
         $this->assertContains('/thread?thread_id=1', (string)$response->getHeader('location')[0]);
         $this->assertNotContains('Slimbbs', (string)$response->getBody());
@@ -74,4 +80,39 @@ class ThreadTest extends BaseTestCase
         $this->assertNotContains('comment_test', (string)$response->getBody());
     }
 
+    public function test投稿の削除()
+    {
+        $this->postReply();
+
+        $response = $this->runApp('DELETE', '/thread', ['thread_id' => '1', 'comment_id' => '2']);
+        $this->assertEquals(303, $response->getStatusCode());
+
+        $response = $this->runApp('GET', '/thread?thread_id=1');
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertNotContains('comment_test', (string)$response->getBody());
+    }
+
+    public function testスレッドの削除()
+    {
+        $response = $this->runApp('DELETE', '/thread', ['thread_id' => '1', 'comment_id' => '1']);
+        $this->assertEquals(303, $response->getStatusCode());
+        $this->assertContains('/thread?thread_id=1', (string)$response->getHeader('location')[0]);
+
+        $response = $this->runApp('GET', '/thread?thread_id=1');
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('/', (string)$response->getHeader('location')[0]);
+    }
+
+    public function test投稿の削除の失敗()
+    {
+        $this->postReply();
+
+        $response = $this->runApp('DELETE', '/thread', ['thread_id' => '1', 'comment_id' => '0']);
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertContains('Error', (string)$response->getBody());
+
+        $response = $this->runApp('GET', '/thread?thread_id=1');
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertContains('comment_test', (string)$response->getBody());
+    }
 }

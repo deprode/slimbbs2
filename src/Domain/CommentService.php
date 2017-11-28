@@ -61,4 +61,17 @@ SAVE;
         $prepare->bindValue(':created_at', date_create()->format('Y-m-d H:i:s'), \PDO::PARAM_STR);
         $prepare->execute();
     }
+
+    public function deleteComment(int $comment_id, int $user_id)
+    {
+        $sql = <<<DELETE
+DELETE FROM `comments` WHERE `comments`.`comment_id` = :comment_id AND `comments`.`user_id` = :user_id;
+DELETE;
+        $delete = $this->db->prepare($sql);
+        $delete->bindValue(':comment_id', $comment_id, \PDO::PARAM_INT);
+        $delete->bindValue(':user_id', $user_id, \PDO::PARAM_INT);
+        $delete->execute();
+
+        return ($delete->rowCount() === 1);
+    }
 }

@@ -26,3 +26,7 @@ $app->get('/thread', 'App\Action\ThreadAction:index')
 $app->post('/thread', 'App\Action\ThreadSaveAction:save')
     ->setName('thread_save')
     ->add($container->get('App\Validation\ThreadSaveValidation'));
+
+$app->delete('/thread', 'App\Action\DeleteAction:delete')
+    ->setName('delete_comment')
+    ->add($container->get('App\Validation\DeleteValidation'));

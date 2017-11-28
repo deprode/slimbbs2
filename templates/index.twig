@@ -17,7 +17,9 @@
     <article class="threads">
         {% for thread in threads %}
             <section class="thread">
-                <a href="{{ path_for('thread', {}, {'thread_id': thread.thread_id}) }}">{{ thread.comment }}</a>   {{ thread.created_at }}
+                <a href="{{ path_for('thread', {}, {'thread_id': thread.thread_id}) }}">
+            {% if thread.comment %}{{ thread.comment }}{% else %}[削除済み]{% endif %}
+                </a>   {{ thread.created_at }}
             </section>
         {% endfor %}
     </article>
