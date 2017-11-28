@@ -31,7 +31,7 @@ class ThreadSaveAction
         $this->logger->info("Slimbbs '/' route comment save");
 
         if ($request->getAttribute('csrf_status') === "bad_request") {
-            return $this->responder->csrf_invalid($response);
+            return $this->responder->csrfInvalid($response);
         }
 
         // Validation

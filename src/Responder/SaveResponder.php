@@ -14,7 +14,7 @@ class SaveResponder
         $this->view = $view;
     }
 
-    public function csrf_invalid(Response $response)
+    public function csrfInvalid(Response $response)
     {
         $error_msg = "投稿に失敗しました。元の画面から、もう一度やり直してください。";
         $response = $response->withStatus(400);
