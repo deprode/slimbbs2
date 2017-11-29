@@ -19,6 +19,12 @@ class ThreadTest extends BaseTestCase
             $sql = 'TRUNCATE TABLE `threads`';
             $prepare = $db_connection->prepare($sql);
             $prepare->execute();
+            $sql = 'TRUNCATE TABLE `users`';
+            $prepare = $db_connection->prepare($sql);
+            $prepare->execute();
+            $sql = 'INSERT INTO `users` (`user_id`, `user_name`, `user_image_url`, `access_token`, `access_secret`) VALUES (1, "testuser", "http://via.placeholder.com/64x64", "dummy_token", "dummy_secret")';
+            $prepare = $db_connection->prepare($sql);
+            $prepare->execute();
 
         } catch (\PDOException $e) {
             echo $e->getMessage();
@@ -36,6 +42,8 @@ class ThreadTest extends BaseTestCase
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('thread_test', (string)$response->getBody());
+        $this->assertContains('testuser', (string)$response->getBody());
+        $this->assertContains('<img src="http://via.placeholder.com/64x64" alt="anonymous">', (string)$response->getBody());
     }
 
     public function testスレッドの表示失敗()

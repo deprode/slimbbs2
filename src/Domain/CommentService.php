@@ -15,12 +15,20 @@ class CommentService
 
     public function getComments(int $thread_id = null)
     {
-        $sql = 'SELECT `comment_id`, `user_id`, `comment`, `created_at` FROM `comments` WHERE `thread_id` = :thread_id';
+        $sql = <<<COMMENTS
+SELECT
+  `comments`.`comment_id`, `comments`.`user_id`, `comments`.`comment`, `comments`.`created_at`, `users`.`user_name`, `users`.`user_image_url`
+FROM
+  `comments`
+LEFT JOIN
+  `users` ON `comments`.`user_id` = `users`.`user_id`
+WHERE `thread_id` = :thread_id;
+COMMENTS;
         $prepare = $this->db->prepare($sql);
         $prepare->bindValue(':thread_id', $thread_id, \PDO::PARAM_INT);
         $prepare->execute();
 
-        $prepare->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Comment::class);
+        $prepare->setFetchMode(\PDO::FETCH_ASSOC | \PDO::FETCH_PROPS_LATE);
         $comments = $prepare->fetchAll();
         return $comments;
     }
