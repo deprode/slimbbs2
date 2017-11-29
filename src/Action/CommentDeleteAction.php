@@ -10,7 +10,7 @@ use Psr\Log\LoggerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class DeleteAction
+class CommentDeleteAction
 {
     private $log;
     private $comment;

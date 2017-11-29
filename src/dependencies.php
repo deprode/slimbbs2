@@ -90,12 +90,12 @@ $container['App\Action\ThreadAction'] = function ($c) {
     return new App\Action\ThreadAction($c->get('logger'), $c->get('csrf'), $c->get('CommentService'), $c->get('AuthService'), $c->get('ThreadResponder'));
 };
 
-$container['App\Action\ThreadSaveAction'] = function ($c) {
-    return new App\Action\ThreadSaveAction($c->get('logger'), $c->get('CommentService'), $c->get('SaveResponder'), $c->get('AuthService'));
+$container['App\Action\CommentSaveAction'] = function ($c) {
+    return new App\Action\CommentSaveAction($c->get('logger'), $c->get('CommentService'), $c->get('SaveResponder'), $c->get('AuthService'));
 };
 
-$container['App\Action\DeleteAction'] = function ($c) {
-    return new App\Action\DeleteAction($c->get('logger'), $c->get('CommentService'), $c->get('AuthService'), $c->get('DeleteResponder'));
+$container['App\Action\CommentDeleteAction'] = function ($c) {
+    return new App\Action\CommentDeleteAction($c->get('logger'), $c->get('CommentService'), $c->get('AuthService'), $c->get('DeleteResponder'));
 };
 // -----------------------------------------------------------------------------
 // Domain factories
@@ -178,7 +178,7 @@ $container['App\Validation\SaveValidation'] = function($c) {
     return new \DavidePastore\Slim\Validation\Validation($saveValidators, $translator);
 };
 
-$container['App\Validation\ThreadSaveValidation'] = function($c) {
+$container['App\Validation\CommentSaveValidation'] = function($c) {
     $translator = $c->get('App\Validation\Translator');
     $saveValidators = [
         'user_id' => \Respect\Validation\Validator::stringType()->notEmpty()->setName('ユーザーID'),

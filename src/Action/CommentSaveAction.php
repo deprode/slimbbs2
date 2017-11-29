@@ -11,7 +11,7 @@ use App\Domain\CommentService;
 use App\Model\Comment;
 use App\Responder\SaveResponder;
 
-class ThreadSaveAction
+class CommentSaveAction
 {
     private $logger;
     private $responder;

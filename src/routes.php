@@ -23,10 +23,10 @@ $app->get('/logout', 'App\Action\LogoutAction:index')
 $app->get('/thread', 'App\Action\ThreadAction:index')
     ->setName('thread');
 
-$app->post('/thread', 'App\Action\ThreadSaveAction:save')
+$app->post('/thread', 'App\Action\CommentSaveAction:save')
     ->setName('thread_save')
-    ->add($container->get('App\Validation\ThreadSaveValidation'));
+    ->add($container->get('App\Validation\CommentSaveValidation'));
 
-$app->delete('/thread', 'App\Action\DeleteAction:delete')
+$app->delete('/thread', 'App\Action\CommentDeleteAction:delete')
     ->setName('delete_comment')
     ->add($container->get('App\Validation\DeleteValidation'));
