@@ -80,8 +80,8 @@ class ThreadTest extends BaseTestCase
     public function test返信のValidationエラー()
     {
         $response = $this->runApp('POST', '/thread', ['comment' => 'comment_test']);
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertNotContains('Slimbbs', (string)$response->getBody());
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertContains('Error', (string)$response->getBody());
 
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());

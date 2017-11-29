@@ -66,8 +66,8 @@ class HomepageTest extends BaseTestCase
         // *注: CSRF(middleware)を切ってテストしています。
         $response = $this->runApp('POST', '/', ['comment' => 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1', 'user_id' => '1']);
 
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertNotContains('Slimbbs', (string)$response->getBody());
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertContains('Error', (string)$response->getBody());
     }
 
     public function test匿名投稿()

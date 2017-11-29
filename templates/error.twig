@@ -3,7 +3,7 @@
 {% block title %}Error{% endblock %}
 {% block contents %}
     <div>
-        <a href="{{ path_for('home') }}">トップページへ戻る</a>
+        <a href="{{ redirect | default('/') }}">元のページへ戻る</a>
         <section class="error">
             <p>{{ error_message }}</p>
         </section>

@@ -11,11 +11,11 @@ class SaveResponderTest extends TestCase
 {
     public function testSaveFailed()
     {
-        $responder = new SaveResponder(new Twig(''));
+        $responder = new SaveResponder(new Twig(__DIR__ . '/../../templates'));
         $response = $responder->invalid(new Response(), '/invalid');
 
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains('/invalid', $response->getHeader('location'));
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertContains('/invalid', (string)$response->getBody());
     }
 
     public function testSaveSuccess()
