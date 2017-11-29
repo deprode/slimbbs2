@@ -163,7 +163,8 @@ $container['App\Validation\Translator'] = function($c){
             '{{name}} must not be in {{haystack}}'                              => '{{name}}にNGワードが含まれています',
             '{{name}} must be a valid date. Sample format: {{format}}'          => '{{name}}が日付の形式（{{format}}）ではありません',
             '{{name}} must be greater than or equal to {{interval}}'            => '{{name}}は{{interval}}より大きい値にしてください',
-            '{{name}} must contain only letters (a-z) and digits (0-9)'         => '{{name}}は半角英数字のみ入力してください'
+            '{{name}} must contain only letters (a-z) and digits (0-9)'         => '{{name}}は半角英数字のみ入力してください',
+            '{{name}} must contain only digits (0-9)'                           => '{{name}}は半角数字のみ入力してください'
         ];
         return $messages[$message];
     };
@@ -172,8 +173,8 @@ $container['App\Validation\Translator'] = function($c){
 $container['App\Validation\SaveValidation'] = function($c) {
     $translator = $c->get('App\Validation\Translator');
     $saveValidators = [
-        'user_id' => \Respect\Validation\Validator::stringType()->notEmpty()->setName('ユーザーID'),
-        'comment' => \Respect\Validation\Validator::stringType()->notEmpty()->length(1, 400)->setName('本文'),
+        'user_id' => \Respect\Validation\Validator::stringType()->digit()->setName('ユーザーID'),
+        'comment' => \Respect\Validation\Validator::stringType()->notEmpty()->length(null, 400)->setName('本文'),
     ];
     return new \DavidePastore\Slim\Validation\Validation($saveValidators, $translator);
 };
@@ -181,7 +182,7 @@ $container['App\Validation\SaveValidation'] = function($c) {
 $container['App\Validation\CommentSaveValidation'] = function($c) {
     $translator = $c->get('App\Validation\Translator');
     $saveValidators = [
-        'user_id' => \Respect\Validation\Validator::stringType()->notEmpty()->setName('ユーザーID'),
+        'user_id' => \Respect\Validation\Validator::stringType()->digit()->setName('ユーザーID'),
         'thread_id' => \Respect\Validation\Validator::stringType()->notEmpty()->setName('スレッドID'),
         'comment'     => \Respect\Validation\Validator::stringType()->notEmpty()->length(1, 400)->setName('本文'),
     ];

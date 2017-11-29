@@ -37,7 +37,7 @@ class CommentDeleteAction
         $url = $request->getUri()->getPath() . (empty(intval($data['thread_id'])) ? '' : '?thread_id=' . intval($data['thread_id']));
 
         // Validation
-        if($request->getAttribute('has_errors')){
+        if($request->getAttribute('has_errors') || $this->auth->getUserId() == 0){
             return $this->responder->invalid($response, $url);
         }
 

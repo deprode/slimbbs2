@@ -48,7 +48,7 @@ class AuthService
 
     public function equalUser(int $user_id)
     {
-        return $this->getUserId() === $user_id;
+        return (int)$this->getUserId() === $user_id;
     }
 
     public function isLoggedIn()

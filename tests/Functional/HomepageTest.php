@@ -72,10 +72,15 @@ class HomepageTest extends BaseTestCase
 
     public function test匿名投稿()
     {
-        $_SESSION['user_id'] = 0;
-        $response = $this->runApp('POST', '/', ['comment' => 'aa1']);
+        $_SESSION['user_id'] = "0";
+        $response = $this->runApp('POST', '/', ['comment' => 'aaaa', 'user_id' => '0']);
 
+        $this->assertNotContains('Error', (string)$response->getBody());
+        $this->assertEquals(303, $response->getStatusCode());
+        $this->assertEquals('/', (string)$response->getHeader('location')[0]);
+
+        $response = $this->runApp('GET', '/');
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertNotContains('Slimbbs', (string)$response->getBody());
+        $this->assertContains('aaaa', (string)$response->getBody());
     }
 }

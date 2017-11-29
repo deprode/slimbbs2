@@ -60,9 +60,9 @@ class ThreadTest extends BaseTestCase
         $this->assertNotContains('thread_test', (string)$response->getBody());
     }
 
-    public function postReply()
+    public function postReply($user_id = "1")
     {
-        return $this->runApp('POST', '/thread', ['comment' => 'comment_test', 'thread_id' => "1", 'user_id' => '1']);
+        return $this->runApp('POST', '/thread', ['comment' => 'comment_test', 'thread_id' => "1", 'user_id' => (string)$user_id]);
     }
 
     public function testスレッドに返信()
@@ -122,5 +122,20 @@ class ThreadTest extends BaseTestCase
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('comment_test', (string)$response->getBody());
+    }
+
+    public function test匿名で削除不可()
+    {
+        $_SESSION['user_id'] = 0;
+        $this->postReply("0");
+
+        $response = $this->runApp('DELETE', '/thread', ['thread_id' => '1', 'comment_id' => '1']);
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertContains('Error', (string)$response->getBody());
+
+        $response = $this->runApp('GET', '/thread?thread_id=1');
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertContains('comment_test', (string)$response->getBody());
+        $this->assertNotContains('削除', (string)$response->getBody());
     }
 }

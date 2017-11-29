@@ -33,10 +33,15 @@ class SaveAction
             return $this->responder->csrfInvalid($response);
         }
 
-        // Validation
         $data = $request->getParsedBody();
         $user_id = $data['user_id'] ?? 0;
-        if($request->getAttribute('has_errors') && $this->auth->equalUser((int)$user_id)){
+        // 認証されたユーザと違うIDが送信された
+        if (!$this->auth->equalUser((int)$user_id)) {
+            return $this->responder->invalid($response, '/');
+        }
+
+        // Validation
+        if(empty($request->getAttribute('has_errors')) === false){
             return $this->responder->invalid($response, '/');
         }
 
