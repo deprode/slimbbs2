@@ -138,4 +138,39 @@ class ThreadTest extends BaseTestCase
         $this->assertContains('comment_test', (string)$response->getBody());
         $this->assertNotContains('削除', (string)$response->getBody());
     }
+
+    public function test管理者で削除()
+    {
+        $this->postReply("0");
+        $_SESSION['user_id'] = 2;
+
+        $response = $this->runApp('GET', '/thread?thread_id=1');
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertContains('削除', (string)$response->getBody());
+
+        $response = $this->runApp('DELETE', '/thread', ['thread_id' => '1', 'comment_id' => '2']);
+        $this->assertEquals(303, $response->getStatusCode());
+        $this->assertNotContains('Error', (string)$response->getBody());
+
+        $response = $this->runApp('GET', '/thread?thread_id=1');
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertNotContains('comment_test', (string)$response->getBody());
+    }
+
+    public function test管理者でスレッド削除()
+    {
+        $_SESSION['user_id'] = 2;
+
+        $response = $this->runApp('DELETE', '/thread', ['thread_id' => '1', 'comment_id' => '1']);
+        $this->assertEquals(303, $response->getStatusCode());
+        $this->assertNotContains('Error', (string)$response->getBody());
+
+        $response = $this->runApp('GET', '/thread?thread_id=1');
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('/', (string)$response->getHeader('location')[0]);
+
+        $response = $this->runApp('GET', '/');
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertNotContains('削除済み', (string)$response->getBody());
+    }
 }

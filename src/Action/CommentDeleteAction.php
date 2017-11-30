@@ -41,7 +41,12 @@ class CommentDeleteAction
             return $this->responder->invalid($response, $url);
         }
 
-        $delete = $this->comment->deleteComment($data['comment_id'], $this->auth->getUserId());
+        if ($this->auth->isAdmin()) {
+            $delete = $this->comment->deleteCommentByAdmin($data['comment_id']);
+        } else {
+            $delete = $this->comment->deleteComment($data['comment_id'], $this->auth->getUserId());
+        }
+
         if ($delete) {
             return $this->responder->deleted($response, $url);
         }

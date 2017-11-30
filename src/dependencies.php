@@ -113,7 +113,7 @@ $container['UserService'] = function($c) {
 };
 
 $container['AuthService'] = function($c) {
-    return new App\Domain\AuthService($c->get('session'));
+    return new App\Domain\AuthService($c->get('session'), getenv('ADMIN_ID'));
 };
 
 $container['OAuthService'] = function($c) {

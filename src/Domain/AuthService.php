@@ -9,10 +9,12 @@ use RKA\Session;
 class AuthService
 {
     private $session;
+    private $admin_id;
 
-    public function __construct(Session $session)
+    public function __construct(Session $session, int $admin_id)
     {
         $this->session = $session;
+        $this->admin_id = $admin_id;
     }
 
     public function setOAuthToken(array $token)
@@ -49,6 +51,16 @@ class AuthService
     public function equalUser(int $user_id)
     {
         return (int)$this->getUserId() === $user_id;
+    }
+
+    public function getAdminId()
+    {
+        return $this->admin_id;
+    }
+
+    public function isAdmin()
+    {
+        return $this->admin_id === (int)$this->getUserId();
     }
 
     public function isLoggedIn()

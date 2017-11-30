@@ -82,4 +82,16 @@ DELETE;
 
         return ($delete->rowCount() === 1);
     }
+
+    public function deleteCommentByAdmin(int $comment_id)
+    {
+        $sql = <<<DELETE
+DELETE FROM `comments` WHERE `comments`.`comment_id` = :comment_id;
+DELETE;
+        $delete = $this->db->prepare($sql);
+        $delete->bindValue(':comment_id', $comment_id, \PDO::PARAM_INT);
+        $delete->execute();
+
+        return ($delete->rowCount() === 1);
+    }
 }

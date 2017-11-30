@@ -50,6 +50,7 @@ class ThreadAction
         $data['value'] = $request->getAttribute($valueKey);
         $data['thread_id'] = $thread_id;
         $data['user_id'] = $this->auth->getUserId();
+        $data['is_admin'] = $this->auth->isAdmin();
 
         // Render index view
         return $this->responder->index($response, $data);
