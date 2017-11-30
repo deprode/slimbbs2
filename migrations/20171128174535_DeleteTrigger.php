@@ -14,6 +14,7 @@ CREATE TRIGGER decrement_count AFTER DELETE ON `comments`
             FOR EACH ROW
             BEGIN
                 UPDATE `threads` SET `threads`.`count` = `threads`.`count`-1 WHERE `threads`.`thread_id` = OLD.`thread_id`;
+                DELETE FROM `threads` WHERE `thread_id` = OLD.`thread_id` AND count = 0;
             END;
 SQL;
         $c = $this->getContainer();
