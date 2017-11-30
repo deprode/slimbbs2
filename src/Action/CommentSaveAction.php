@@ -49,8 +49,7 @@ class CommentSaveAction
             $comment->comment = $data['comment'];
             $this->comment->saveComment($comment);
         } catch (\PDOException $e) {
-            echo $e->getMessage();
-            exit();
+            return $this->responder->saveFailed($response);
         }
 
         return $this->responder->saved($response, $url);
