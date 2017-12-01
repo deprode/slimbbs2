@@ -49,7 +49,7 @@ class HomepageTest extends BaseTestCase
     public function test投稿()
     {
         // *注: CSRF(middleware)を切ってテストしています。
-        $response = $this->runApp('POST', '/', ['comment' => 'aaaa', 'user_id' => '1']);
+        $response = $this->runApp('POST', '/', ['comment' => '¥骶𠮷🍢', 'user_id' => '1']);
 
         $this->assertEquals(303, $response->getStatusCode());
         $this->assertNotContains('Error', (string)$response->getBody());
@@ -57,7 +57,7 @@ class HomepageTest extends BaseTestCase
 
         $response = $this->runApp('GET', '/');
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains('aaaa', (string)$response->getBody());
+        $this->assertContains('¥骶𠮷🍢', (string)$response->getBody());
         $this->assertContains('<a href="/thread?thread_id=1">', (string)$response->getBody());
     }
 

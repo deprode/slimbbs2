@@ -31,7 +31,7 @@ $container['logger'] = function ($c) {
 // database
 $container['db'] = function ($c) {
     $db = $c['settings']['db'];
-    $dns = $db['driver'].':host='.$db['host'].';port='.$db['port'].';dbname='.$db['database'];
+    $dns = $db['driver'].':host='.$db['host'].';port='.$db['port'].';dbname='.$db['database'].';charset=utf8mb4;';
     try {
         $db_connection = new PDO($dns, $db['username'], $db['password']);
         $db_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
