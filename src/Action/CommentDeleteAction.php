@@ -5,6 +5,7 @@ namespace App\Action;
 
 use App\Domain\AuthService;
 use App\Domain\CommentService;
+use App\Domain\MessageService;
 use App\Responder\DeleteResponder;
 use Psr\Log\LoggerInterface;
 use Slim\Http\Request;
@@ -15,13 +16,15 @@ class CommentDeleteAction
     private $log;
     private $comment;
     private $auth;
+    private $message;
     private $responder;
 
-    public function __construct(LoggerInterface $log, CommentService $comment, AuthService $auth, DeleteResponder $responder)
+    public function __construct(LoggerInterface $log, CommentService $comment, AuthService $auth, MessageService $message, DeleteResponder $responder)
     {
         $this->log = $log;
         $this->comment = $comment;
         $this->auth = $auth;
+        $this->message = $message;
         $this->responder = $responder;
     }
 
@@ -48,6 +51,7 @@ class CommentDeleteAction
         }
 
         if ($delete) {
+            $this->message->setMessage('DeletedComment');
             return $this->responder->deleted($response, $url);
         }
 

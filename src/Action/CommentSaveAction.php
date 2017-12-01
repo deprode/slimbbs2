@@ -4,6 +4,7 @@ namespace App\Action;
 
 
 use App\Domain\AuthService;
+use App\Domain\MessageService;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Psr\Log\LoggerInterface;
@@ -17,13 +18,15 @@ class CommentSaveAction
     private $responder;
     private $comment;
     private $auth;
+    private $message;
 
-    public function __construct(LoggerInterface $logger, CommentService $comment, SaveResponder $responder, AuthService $auth)
+    public function __construct(LoggerInterface $logger, CommentService $comment, SaveResponder $responder, AuthService $auth, MessageService $message)
     {
         $this->logger = $logger;
         $this->responder = $responder;
         $this->comment = $comment;
         $this->auth = $auth;
+        $this->message = $message;
     }
 
     public function save(Request $request, Response $response)
@@ -53,6 +56,7 @@ class CommentSaveAction
             return $this->responder->saveFailed($response);
         }
 
+        $this->message->setMessage('SavedComment');
         return $this->responder->saved($response, $url);
     }
 }

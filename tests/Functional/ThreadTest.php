@@ -75,6 +75,7 @@ class ThreadTest extends BaseTestCase
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('comment_test', (string)$response->getBody());
+        $this->assertContains('コメントを保存しました。', (string)$response->getBody());
     }
 
     public function test返信のValidationエラー()
@@ -86,6 +87,7 @@ class ThreadTest extends BaseTestCase
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertNotContains('comment_test', (string)$response->getBody());
+        $this->assertNotContains('コメントを保存しました。', (string)$response->getBody());
     }
 
     public function test投稿の削除()
@@ -98,6 +100,7 @@ class ThreadTest extends BaseTestCase
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertNotContains('comment_test', (string)$response->getBody());
+        $this->assertContains('コメントを削除しました。', (string)$response->getBody());
     }
 
     public function testスレッドの削除()
@@ -109,6 +112,9 @@ class ThreadTest extends BaseTestCase
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals('/', (string)$response->getHeader('location')[0]);
+
+        $response = $this->runApp('GET', '/');
+        $this->assertContains('スレッドは削除されました。', (string)$response->getBody());
     }
 
     public function test投稿の削除の失敗()
@@ -122,6 +128,7 @@ class ThreadTest extends BaseTestCase
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('comment_test', (string)$response->getBody());
+        $this->assertNotContains('コメントを削除しました。', (string)$response->getBody());
     }
 
     public function test匿名で削除不可()
@@ -155,6 +162,7 @@ class ThreadTest extends BaseTestCase
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertNotContains('comment_test', (string)$response->getBody());
+        $this->assertContains('コメントを削除しました。', (string)$response->getBody());
     }
 
     public function test管理者でスレッド削除()
@@ -172,5 +180,6 @@ class ThreadTest extends BaseTestCase
         $response = $this->runApp('GET', '/');
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertNotContains('削除済み', (string)$response->getBody());
+        $this->assertContains('スレッドは削除されました。', (string)$response->getBody());
     }
 }

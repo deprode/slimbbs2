@@ -59,6 +59,7 @@ class HomepageTest extends BaseTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('¥骶𠮷🍢', (string)$response->getBody());
         $this->assertContains('<a href="/thread?thread_id=1">', (string)$response->getBody());
+        $this->assertContains('スレッドを作成しました。', (string)$response->getBody());
     }
 
     public function test通らない投稿()

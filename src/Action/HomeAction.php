@@ -3,6 +3,7 @@
 namespace App\Action;
 
 use App\Domain\AuthService;
+use App\Domain\MessageService;
 use App\Domain\ThreadService;
 use App\Responder\HomeResponder;
 use Slim\Http\Request;
@@ -16,14 +17,16 @@ final class HomeAction
     private $csrf;
     private $thread;
     private $auth;
+    private $message;
     private $responder;
 
-    public function __construct(LoggerInterface $logger, Csrf $csrf, ThreadService $thread, AuthService $auth, HomeResponder $responder)
+    public function __construct(LoggerInterface $logger, Csrf $csrf, ThreadService $thread, AuthService $auth, MessageService $message, HomeResponder $responder)
     {
         $this->logger = $logger;
         $this->csrf = $csrf;
         $this->thread = $thread;
         $this->auth = $auth;
+        $this->message = $message;
         $this->responder = $responder;
     }
 
@@ -43,6 +46,8 @@ final class HomeAction
         $data['name'] = $request->getAttribute($nameKey);
         $data['value'] = $request->getAttribute($valueKey);
         $data['user_id'] = $this->auth->getUserId();
+        $data['saved'] = $this->message->getMessage('SavedThread');
+        $data['deleted'] = $this->message->getMessage('DeletedThread') ?? $this->message->getMessage('DeletedComment');
 
         // Render index view
         return $this->responder->index($response, $data);

@@ -7,6 +7,14 @@
     {% else %}
         <a href="{{ path_for('logout') }}">ログアウト</a>
     {% endif %}
+    <div class="message">
+        {% if saved %}
+            <li>{{ saved }}</li>
+        {% endif %}
+        {% if deleted %}
+            <li>{{ deleted }}</li>
+        {% endif %}
+    </div>
     <form action="{{ path_for('home') }}" method="post" class="pure-form">
         <label>テキスト：<input type="text" name="comment"></label>
         <input type="hidden" name="{{ nameKey }}" value="{{ name }}">

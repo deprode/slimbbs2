@@ -67,15 +67,20 @@ $container['session'] = function($c) {
     return new \RKA\Session();
 };
 
+// Flash message
+$container['flash'] = function () {
+    return new \Slim\Flash\Messages();
+};
+
 // -----------------------------------------------------------------------------
 // Action factories
 // -----------------------------------------------------------------------------
 $container['App\Action\HomeAction'] = function ($c) {
-    return new App\Action\HomeAction($c->get('logger'), $c->get('csrf'), $c->get('ThreadService'), $c->get('AuthService'), $c->get('HomeResponder'));
+    return new App\Action\HomeAction($c->get('logger'), $c->get('csrf'), $c->get('ThreadService'), $c->get('AuthService'), $c->get('MessageService'), $c->get('HomeResponder'));
 };
 
 $container['App\Action\SaveAction'] = function ($c) {
-    return new App\Action\SaveAction($c->get('logger'), $c->get('CommentService'), $c->get('AuthService'), $c->get('SaveResponder'));
+    return new App\Action\SaveAction($c->get('logger'), $c->get('CommentService'), $c->get('AuthService'), $c->get('MessageService'), $c->get('SaveResponder'));
 };
 
 $container['App\Action\LoginAction'] = function ($c) {
@@ -87,15 +92,15 @@ $container['App\Action\LogoutAction'] = function ($c) {
 };
 
 $container['App\Action\ThreadAction'] = function ($c) {
-    return new App\Action\ThreadAction($c->get('logger'), $c->get('csrf'), $c->get('CommentService'), $c->get('AuthService'), $c->get('ThreadResponder'));
+    return new App\Action\ThreadAction($c->get('logger'), $c->get('csrf'), $c->get('CommentService'), $c->get('AuthService'), $c->get('MessageService'), $c->get('ThreadResponder'));
 };
 
 $container['App\Action\CommentSaveAction'] = function ($c) {
-    return new App\Action\CommentSaveAction($c->get('logger'), $c->get('CommentService'), $c->get('SaveResponder'), $c->get('AuthService'));
+    return new App\Action\CommentSaveAction($c->get('logger'), $c->get('CommentService'), $c->get('SaveResponder'), $c->get('AuthService'), $c->get('MessageService'));
 };
 
 $container['App\Action\CommentDeleteAction'] = function ($c) {
-    return new App\Action\CommentDeleteAction($c->get('logger'), $c->get('CommentService'), $c->get('AuthService'), $c->get('DeleteResponder'));
+    return new App\Action\CommentDeleteAction($c->get('logger'), $c->get('CommentService'), $c->get('AuthService'), $c->get('MessageService'), $c->get('DeleteResponder'));
 };
 // -----------------------------------------------------------------------------
 // Domain factories
@@ -118,6 +123,10 @@ $container['AuthService'] = function($c) {
 
 $container['OAuthService'] = function($c) {
     return new App\Domain\OAuthService($c->get('twitter'), $c->get('AuthService'), $c->get('router')->pathFor('callback'));
+};
+
+$container['MessageService'] = function($c) {
+    return new App\Domain\MessageService($c->get('flash'));
 };
 // -----------------------------------------------------------------------------
 // Responder factories

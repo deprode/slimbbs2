@@ -4,6 +4,7 @@ namespace App\Action;
 
 use App\Domain\AuthService;
 use App\Domain\CommentService;
+use App\Domain\MessageService;
 use App\Responder\ThreadResponder;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -15,16 +16,18 @@ class ThreadAction
     private $logger;
     private $csrf;
     private $comment;
-    private $responder;
     private $auth;
+    private $message;
+    private $responder;
 
-    public function __construct(LoggerInterface $logger, Csrf $csrf, CommentService $comment, AuthService $auth, ThreadResponder $responder)
+    public function __construct(LoggerInterface $logger, Csrf $csrf, CommentService $comment, AuthService $auth, MessageService $message, ThreadResponder $responder)
     {
         $this->logger = $logger;
         $this->csrf = $csrf;
         $this->comment = $comment;
-        $this->responder = $responder;
         $this->auth = $auth;
+        $this->message = $message;
+        $this->responder = $responder;
     }
 
     public function index(Request $request, Response $response)
@@ -38,6 +41,7 @@ class ThreadAction
 
         $data['comments'] = $this->comment->getComments($thread_id);
         if (empty($data['comments'])) {
+            $this->message->setMessage('DeletedThread');
             return $this->responder->invalid($response, '/');
         }
 
@@ -51,6 +55,8 @@ class ThreadAction
         $data['thread_id'] = $thread_id;
         $data['user_id'] = $this->auth->getUserId();
         $data['is_admin'] = $this->auth->isAdmin();
+        $data['saved'] = $this->message->getMessage('SavedComment');
+        $data['deleted'] = $this->message->getMessage('DeletedComment');
 
         // Render index view
         return $this->responder->index($response, $data);
