@@ -13,7 +13,7 @@ class CommentService
         $this->db = $db;
     }
 
-    public function getComments(int $thread_id = null)
+    public function getComments(int $thread_id = null): array
     {
         $sql = <<<COMMENTS
 SELECT
@@ -33,7 +33,7 @@ COMMENTS;
         return $comments;
     }
 
-    public function saveThread(Comment $comment)
+    public function saveThread(Comment $comment): void
     {
         $sql = <<<SAVE
 INSERT INTO `comments` (`thread_id`, `user_id`, `like_count`, `comment`, `photo_url`, `created_at`, `updated_at`)
@@ -53,7 +53,7 @@ SAVE;
         $prepare->execute();
     }
 
-    public function saveComment(Comment $comment)
+    public function saveComment(Comment $comment): void
     {
         $sql = <<<SAVE
 INSERT INTO
@@ -70,7 +70,7 @@ SAVE;
         $prepare->execute();
     }
 
-    public function deleteComment(int $comment_id, int $user_id)
+    public function deleteComment(int $comment_id, int $user_id): bool
     {
         $sql = <<<DELETE
 DELETE FROM `comments` WHERE `comments`.`comment_id` = :comment_id AND `comments`.`user_id` = :user_id;
@@ -83,7 +83,7 @@ DELETE;
         return ($delete->rowCount() === 1);
     }
 
-    public function deleteCommentByAdmin(int $comment_id)
+    public function deleteCommentByAdmin(int $comment_id): bool
     {
         $sql = <<<DELETE
 DELETE FROM `comments` WHERE `comments`.`comment_id` = :comment_id;

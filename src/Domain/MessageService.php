@@ -15,7 +15,7 @@ class MessageService
         $this->flash = $flash;
     }
 
-    private function message($key = self::DEFAULT_KEY)
+    private function message($key = self::DEFAULT_KEY): string
     {
         $messages = [
             'Message' => '',
@@ -27,7 +27,7 @@ class MessageService
         return isset($messages[$key]) ? $messages[$key] : '';
     }
 
-    public function getMessage($key = self::DEFAULT_KEY)
+    public function getMessage($key = self::DEFAULT_KEY): string
     {
         if ($this->flash->hasMessage($key)) {
             return $this->flash->getMessage($key)[0];
@@ -35,7 +35,7 @@ class MessageService
         return '';
     }
 
-    public function setMessage($key = self::DEFAULT_KEY)
+    public function setMessage($key = self::DEFAULT_KEY): void
     {
         $message = $this->message($key);
         if (!empty($message)) {

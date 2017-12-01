@@ -14,7 +14,7 @@ class UserService
         $this->db = $db;
     }
 
-    public function convertUser($user_info = [], $access_token = [])
+    public function convertUser($user_info = [], $access_token = []): User
     {
         $user = new User();
 
@@ -27,7 +27,7 @@ class UserService
         return $user;
     }
 
-    public function existUser(string $user_id)
+    public function existUser(string $user_id): bool
     {
         $sql = <<<EXIST
 SELECT COUNT(`user_id`) FROM `users` WHERE `user_id` = :user_id;
@@ -40,7 +40,7 @@ EXIST;
         return $count > 0;
     }
 
-    public function saveUser(User $user)
+    public function saveUser(User $user): void
     {
         // isExists
         $exists = $this->existUser($user->user_id);

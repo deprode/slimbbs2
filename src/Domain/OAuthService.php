@@ -21,7 +21,7 @@ class OAuthService
         $this->callback_url = $callback_url;
     }
 
-    public function getLoginUrl(string $basepath)
+    public function getLoginUrl(string $basepath): string
     {
         $request_token = $this->twitter->oauth('oauth/request_token', ['oauth_callback' => $basepath . $this->callback_url]);
         $this->auth->setOAuthToken($request_token);
@@ -29,12 +29,12 @@ class OAuthService
         return $this->twitter->url('oauth/authorize', ['oauth_token' => $request_token['oauth_token']]);
     }
 
-    public function verifyToken(string $oauth_token, string $oauth_verifier)
+    public function verifyToken(string $oauth_token, string $oauth_verifier): bool
     {
         return ($this->auth->verifyToken($oauth_token) && $oauth_verifier);
     }
 
-    public function oAuth(string $oauth_verifier)
+    public function oAuth(string $oauth_verifier): void
     {
         $connection = $this->twitter;
         $token = $this->auth->getOAuthToken();
@@ -49,7 +49,7 @@ class OAuthService
         $this->auth->setOAuthToken($access_token);
     }
 
-    public function getUserInfo()
+    public function getUserInfo(): array
     {
         $access_token = $this->auth->getOAuthToken();
         $user_connection = $this->twitter;
@@ -58,12 +58,12 @@ class OAuthService
         return $user_connection->get('account/verify_credentials');
     }
 
-    public function getToken()
+    public function getToken(): array
     {
         return $this->auth->getOAuthToken();
     }
 
-    public function loginUser(User $user)
+    public function loginUser(User $user): void
     {
         $this->auth->regenerate();
         $this->auth->setUserInfo($user);
