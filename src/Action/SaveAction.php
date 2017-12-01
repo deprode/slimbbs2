@@ -51,6 +51,7 @@ class SaveAction
             $comment->user_id = $data['user_id'];
             $this->comment->saveThread($comment);
         } catch (\PDOException $e) {
+            $this->logger->error($e->getMessage(), ['exception' => $e]);
             return $this->responder->saveFailed($response);
         }
 

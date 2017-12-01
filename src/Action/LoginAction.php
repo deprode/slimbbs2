@@ -43,6 +43,7 @@ class LoginAction
             try {
                 $this->oauth->oAuth($oauth_verifier);
             } catch (OAuthException $e) {
+                $this->logger->error($e->getMessage(), ['exception' => $e]);
                 return $this->responder->oAuthFailed($response);
             }
 
@@ -54,6 +55,7 @@ class LoginAction
                 $user = $this->user->convertUser($user_info, $access_token);
                 $this->user->saveUser($user);
             } catch (\PDOException $e) {
+                $this->logger->error($e->getMessage(), ['exception' => $e]);
                 return $this->responder->saveFailed($response);
             }
 
