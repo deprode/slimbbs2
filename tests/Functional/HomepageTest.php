@@ -62,6 +62,15 @@ class HomepageTest extends BaseTestCase
         $this->assertContains('スレッドを作成しました。', (string)$response->getBody());
     }
 
+    public function testCSRFスレッド作成エラー()
+    {
+        $this->withMiddleware = true;
+        $response = $this->runApp('POST', '/', ['comment' => 'Test', 'user_id' => '1']);
+
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertContains('投稿に失敗しました。', (string)$response->getBody());
+    }
+
     public function test通らない投稿()
     {
         // *注: CSRF(middleware)を切ってテストしています。

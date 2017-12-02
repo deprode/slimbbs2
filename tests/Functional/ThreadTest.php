@@ -90,6 +90,16 @@ class ThreadTest extends BaseTestCase
         $this->assertNotContains('コメントを保存しました。', (string)$response->getBody());
     }
 
+    public function testCSRFコメントの投稿エラー()
+    {
+        $this->withMiddleware = true;
+        $this->postReply();
+
+        $response = $this->runApp('POST', '/thread', ['comment' => 'comment_test']);
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertContains('投稿に失敗しました。', (string)$response->getBody());
+    }
+
     public function test投稿の削除()
     {
         $this->postReply();
@@ -101,6 +111,16 @@ class ThreadTest extends BaseTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertNotContains('comment_test', (string)$response->getBody());
         $this->assertContains('コメントを削除しました。', (string)$response->getBody());
+    }
+
+    public function testCSRF削除エラー()
+    {
+        $this->withMiddleware = true;
+        $this->postReply();
+
+        $response = $this->runApp('DELETE', '/thread', ['thread_id' => '1', 'comment_id' => '2']);
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertContains('削除に失敗しました。', (string)$response->getBody());
     }
 
     public function testスレッドの削除()
