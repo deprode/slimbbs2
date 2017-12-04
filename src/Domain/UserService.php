@@ -9,7 +9,7 @@ class UserService
 {
     private $db;
 
-    public function __construct(\PDO $db)
+    public function __construct(DatabaseService $db)
     {
         $this->db = $db;
     }
@@ -37,15 +37,10 @@ FROM
 WHERE
   `user_id` = :user_id;
 EXIST;
-        $prepare = $this->db->prepare($sql);
-        $prepare->bindValue(':user_id', $user_id, \PDO::PARAM_STR);
-        $prepare->execute();
-        $count = $prepare->fetchColumn();
-
-        return $count > 0;
+        return $this->db->exists($sql, [':user_id' => ['value' => $user_id]]);
     }
 
-    public function saveUser(User $user): void
+    public function saveUser(User $user): int
     {
         // isExists
         $exists = $this->existUser($user->user_id);
@@ -70,12 +65,15 @@ VALUES
   (:user_id, :user_name, :user_image_url, :access_token, :access_secret);
 SAVE;
         }
-        $prepare = $this->db->prepare($sql);
-        $prepare->bindValue(':user_id', $user->user_id, \PDO::PARAM_STR);
-        $prepare->bindValue(':user_name', $user->user_name, \PDO::PARAM_STR);
-        $prepare->bindValue(':user_image_url', $user->user_image_url, \PDO::PARAM_STR);
-        $prepare->bindValue(':access_token', $user->access_token, \PDO::PARAM_STR);
-        $prepare->bindValue(':access_secret', $user->access_secret, \PDO::PARAM_STR);
-        $prepare->execute();
+
+        $values = [
+            ':user_id' => ['value' => $user->user_id],
+            ':user_name' => ['value' => $user->user_name],
+            ':user_image_url' => ['value' => $user->user_image_url],
+            ':access_token' => ['value' => $user->access_token],
+            ':access_secret' => ['value' => $user->access_secret],
+        ];
+
+        return $this->db->execute($sql, $values);
     }
 }

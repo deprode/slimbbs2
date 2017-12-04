@@ -8,7 +8,7 @@ class CommentService
 {
     private $db;
 
-    public function __construct(\PDO $db)
+    public function __construct(DatabaseService $db)
     {
         $this->db = $db;
     }
@@ -26,16 +26,11 @@ LEFT JOIN
 WHERE
   `thread_id` = :thread_id;
 COMMENTS;
-        $prepare = $this->db->prepare($sql);
-        $prepare->bindValue(':thread_id', $thread_id, \PDO::PARAM_INT);
-        $prepare->execute();
 
-        $prepare->setFetchMode(\PDO::FETCH_ASSOC | \PDO::FETCH_PROPS_LATE);
-        $comments = $prepare->fetchAll();
-        return $comments;
+        return $this->db->fetchAll($sql, [':thread_id' => ['value' => $thread_id, 'type' => \PDO::PARAM_INT]]);
     }
 
-    public function saveThread(Comment $comment): void
+    public function saveThread(Comment $comment): int
     {
         $sql = <<<SAVE
 INSERT INTO
@@ -49,14 +44,16 @@ SELECT
 FROM
     `comments`;
 SAVE;
-        $prepare = $this->db->prepare($sql);
-        $prepare->bindValue(':user_id', $comment->user_id, \PDO::PARAM_INT);
-        $prepare->bindValue(':comment', $comment->comment, \PDO::PARAM_STR);
-        $prepare->bindValue(':created_at', date_create()->format('Y-m-d H:i:s'), \PDO::PARAM_STR);
-        $prepare->execute();
+        $values = [
+            ':user_id' => ['value' => $comment->user_id, 'type' => \PDO::PARAM_INT],
+            ':comment' => ['value' => $comment->comment, 'type' => \PDO::PARAM_STR],
+            ':created_at' => ['value' => date_create()->format('Y-m-d H:i:s'), 'type' => \PDO::PARAM_STR],
+        ];
+
+        return $this->db->execute($sql, $values);
     }
 
-    public function saveComment(Comment $comment): void
+    public function saveComment(Comment $comment): int
     {
         $sql = <<<SAVE
 INSERT INTO
@@ -65,12 +62,14 @@ INSERT INTO
 VALUES
     (:thread_id, :user_id, 0, :comment, '', :created_at, NULL);
 SAVE;
-        $prepare = $this->db->prepare($sql);
-        $prepare->bindValue(':thread_id', $comment->thread_id, \PDO::PARAM_INT);
-        $prepare->bindValue(':user_id', $comment->user_id, \PDO::PARAM_INT);
-        $prepare->bindValue(':comment', $comment->comment, \PDO::PARAM_STR);
-        $prepare->bindValue(':created_at', date_create()->format('Y-m-d H:i:s'), \PDO::PARAM_STR);
-        $prepare->execute();
+        $values = [
+            ':thread_id' => ['value' => $comment->thread_id, 'type' => \PDO::PARAM_INT],
+            ':user_id' => ['value' => $comment->user_id, 'type' => \PDO::PARAM_INT],
+            ':comment' => ['value' => $comment->comment, 'type' => \PDO::PARAM_STR],
+            ':created_at' => ['value' => date_create()->format('Y-m-d H:i:s'), 'type' => \PDO::PARAM_STR],
+        ];
+
+        return $this->db->execute($sql, $values);
     }
 
     public function deleteComment(int $comment_id, int $user_id): bool
@@ -81,12 +80,14 @@ DELETE FROM
 WHERE
   `comments`.`comment_id` = :comment_id AND `comments`.`user_id` = :user_id;
 DELETE;
-        $delete = $this->db->prepare($sql);
-        $delete->bindValue(':comment_id', $comment_id, \PDO::PARAM_INT);
-        $delete->bindValue(':user_id', $user_id, \PDO::PARAM_INT);
-        $delete->execute();
+        $values = [
+            ':comment_id' => ['value' => $comment_id, 'type' => \PDO::PARAM_INT],
+            ':user_id' => ['value' => $user_id, 'type' => \PDO::PARAM_INT],
+        ];
 
-        return ($delete->rowCount() === 1);
+        $deleted = $this->db->execute($sql, $values);
+
+        return $deleted === 1;
     }
 
     public function deleteCommentByAdmin(int $comment_id): bool
@@ -97,10 +98,9 @@ DELETE FROM
 WHERE
   `comments`.`comment_id` = :comment_id;
 DELETE;
-        $delete = $this->db->prepare($sql);
-        $delete->bindValue(':comment_id', $comment_id, \PDO::PARAM_INT);
-        $delete->execute();
 
-        return ($delete->rowCount() === 1);
+        $deleted = $this->db->execute($sql, [':comment_id' => ['value' => $comment_id, 'type' => \PDO::PARAM_INT]]);
+
+        return $deleted === 1;
     }
 }

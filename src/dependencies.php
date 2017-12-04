@@ -105,16 +105,20 @@ $container['App\Action\CommentDeleteAction'] = function ($c) {
 // -----------------------------------------------------------------------------
 // Domain factories
 // -----------------------------------------------------------------------------
+$container['DatabaseService'] = function($c) {
+    return new App\Domain\DatabaseService($c->get('db'));
+};
+
 $container['CommentService'] = function($c) {
-    return new App\Domain\CommentService($c->get('db'));
+    return new App\Domain\CommentService($c->get('DatabaseService'));
 };
 
 $container['ThreadService'] = function($c) {
-    return new App\Domain\ThreadService($c->get('db'));
+    return new App\Domain\ThreadService($c->get('DatabaseService'));
 };
 
 $container['UserService'] = function($c) {
-    return new App\Domain\UserService($c->get('db'));
+    return new App\Domain\UserService($c->get('DatabaseService'));
 };
 
 $container['AuthService'] = function($c) {
