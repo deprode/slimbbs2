@@ -49,7 +49,7 @@ class OAuthService
         $this->auth->setOAuthToken($access_token);
     }
 
-    public function getUserInfo(): array
+    public function getUserInfo(): \stdClass
     {
         $access_token = $this->auth->getOAuthToken();
         $user_connection = $this->twitter;
