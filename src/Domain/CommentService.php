@@ -21,8 +21,10 @@ SELECT
 FROM
   `comments`
 LEFT JOIN
-  `users` ON `comments`.`user_id` = `users`.`user_id`
-WHERE `thread_id` = :thread_id;
+  `users`
+  ON `comments`.`user_id` = `users`.`user_id`
+WHERE
+  `thread_id` = :thread_id;
 COMMENTS;
         $prepare = $this->db->prepare($sql);
         $prepare->bindValue(':thread_id', $thread_id, \PDO::PARAM_INT);
@@ -36,7 +38,8 @@ COMMENTS;
     public function saveThread(Comment $comment): void
     {
         $sql = <<<SAVE
-INSERT INTO `comments` (`thread_id`, `user_id`, `like_count`, `comment`, `photo_url`, `created_at`, `updated_at`)
+INSERT INTO
+  `comments` (`thread_id`, `user_id`, `like_count`, `comment`, `photo_url`, `created_at`, `updated_at`)
 SELECT
     CASE 
         WHEN MAX(`thread_id`) IS NULL THEN 1
@@ -73,7 +76,10 @@ SAVE;
     public function deleteComment(int $comment_id, int $user_id): bool
     {
         $sql = <<<DELETE
-DELETE FROM `comments` WHERE `comments`.`comment_id` = :comment_id AND `comments`.`user_id` = :user_id;
+DELETE FROM
+  `comments`
+WHERE
+  `comments`.`comment_id` = :comment_id AND `comments`.`user_id` = :user_id;
 DELETE;
         $delete = $this->db->prepare($sql);
         $delete->bindValue(':comment_id', $comment_id, \PDO::PARAM_INT);
@@ -86,7 +92,10 @@ DELETE;
     public function deleteCommentByAdmin(int $comment_id): bool
     {
         $sql = <<<DELETE
-DELETE FROM `comments` WHERE `comments`.`comment_id` = :comment_id;
+DELETE FROM
+  `comments`
+WHERE
+  `comments`.`comment_id` = :comment_id;
 DELETE;
         $delete = $this->db->prepare($sql);
         $delete->bindValue(':comment_id', $comment_id, \PDO::PARAM_INT);

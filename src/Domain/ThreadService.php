@@ -15,9 +15,16 @@ class ThreadService
 
     public function getThreads(): array
     {
-        $sql = "SELECT `threads`.`thread_id`, `comment`, `created_at` FROM `threads` LEFT JOIN `comments` ON `threads`.`comment_id` = `comments`.`comment_id`";
-        $prepare = $this->db->prepare($sql);
-        $prepare->execute();
+        $sql = <<<THREADS
+SELECT
+  `threads`.`thread_id`, `comment`, `created_at`
+FROM
+  `threads`
+LEFT JOIN
+  `comments`
+  ON
+    `threads`.`comment_id` = `comments`.`comment_id`;
+THREADS;
 
         $prepare->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Thread::class);
         $comments = $prepare->fetchAll();
