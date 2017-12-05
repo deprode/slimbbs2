@@ -34,6 +34,9 @@ class OAuthService
         return ($this->auth->verifyToken($oauth_token) && $oauth_verifier);
     }
 
+    /**
+     * @throws OAuthException
+     */
     public function oAuth(string $oauth_verifier): void
     {
         $connection = $this->twitter;

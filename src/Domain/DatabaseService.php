@@ -5,6 +5,9 @@ namespace App\Domain;
 
 class DatabaseService
 {
+    /**
+     * @var \PDO
+     */
     private $db;
 
     public function __construct(\PDO $db)
@@ -12,6 +15,9 @@ class DatabaseService
         $this->db = $db;
     }
 
+    /**
+     * @throws \PDOException
+     */
     private function prepare($sql = '', $params = []): \PDOStatement
     {
         $prepare = $this->db->prepare($sql);
@@ -25,6 +31,9 @@ class DatabaseService
         return $prepare;
     }
 
+    /**
+     * @throws \PDOException
+     */
     public function fetchAll($sql = '', $params = [], $class = ''): array
     {
         $prepare = $this->prepare($sql, $params);
@@ -39,6 +48,9 @@ class DatabaseService
         return $comments;
     }
 
+    /**
+     * @throws \PDOException
+     */
     public function execute($sql = '', $params = []): int
     {
         $prepare = $this->prepare($sql, $params);
