@@ -40,8 +40,8 @@ class CommentDeleteAction
         $url = $request->getUri()->getPath() . (empty(intval($data['thread_id'])) ? '' : '?thread_id=' . intval($data['thread_id']));
 
         // Validation
-        if($request->getAttribute('has_errors') || $this->auth->getUserId() == 0){
-            return $this->responder->invalid($response, $url);
+        if ($request->getAttribute('has_errors') || $this->auth->getUserId() == 0) {
+            return $this->responder->invalid($response);
         }
 
         if ($this->auth->isAdmin()) {
@@ -55,6 +55,6 @@ class CommentDeleteAction
             return $this->responder->deleted($response, $url);
         }
 
-        return $this->responder->deleteFailed($response, $url);
+        return $this->responder->deleteFailed($response);
     }
 }
