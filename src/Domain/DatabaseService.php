@@ -46,12 +46,4 @@ class DatabaseService
         return $prepare->rowCount();
     }
 
-    public function exists($sql = '', $params = []): bool
-    {
-        $prepare = $this->prepare($sql, $params);
-        $count = $prepare->fetchColumn(0);
-
-        return $count > 0;
-    }
-
 }
