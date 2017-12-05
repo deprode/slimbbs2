@@ -186,7 +186,7 @@ $container['App\Validation\Translator'] = function ($c) {
 $container['App\Validation\SaveValidation'] = function ($c) {
     $translator = $c->get('App\Validation\Translator');
     $saveValidators = [
-        'user_id' => \Respect\Validation\Validator::stringType()->digit()->setName('ユーザーID'),
+        'user_id' => \Respect\Validation\Validator::intVal()->digit()->setName('ユーザーID'),
         'comment' => \Respect\Validation\Validator::stringType()->notEmpty()->length(null, 400)->setName('本文'),
     ];
     return new \DavidePastore\Slim\Validation\Validation($saveValidators, $translator);
@@ -195,8 +195,8 @@ $container['App\Validation\SaveValidation'] = function ($c) {
 $container['App\Validation\CommentSaveValidation'] = function ($c) {
     $translator = $c->get('App\Validation\Translator');
     $saveValidators = [
-        'user_id'   => \Respect\Validation\Validator::stringType()->digit()->setName('ユーザーID'),
-        'thread_id' => \Respect\Validation\Validator::stringType()->notEmpty()->setName('スレッドID'),
+        'user_id'   => \Respect\Validation\Validator::intVal()->digit()->setName('ユーザーID'),
+        'thread_id' => \Respect\Validation\Validator::intVal()->notEmpty()->setName('スレッドID'),
         'comment'   => \Respect\Validation\Validator::stringType()->notEmpty()->length(1, 400)->setName('本文'),
     ];
     return new \DavidePastore\Slim\Validation\Validation($saveValidators, $translator);
