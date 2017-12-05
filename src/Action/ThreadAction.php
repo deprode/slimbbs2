@@ -6,10 +6,10 @@ use App\Domain\AuthService;
 use App\Domain\CommentService;
 use App\Domain\MessageService;
 use App\Responder\ThreadResponder;
-use Slim\Http\Request;
-use Slim\Http\Response;
 use Psr\Log\LoggerInterface;
 use Slim\Csrf\Guard as Csrf;
+use Slim\Http\Request;
+use Slim\Http\Response;
 
 class ThreadAction
 {

@@ -2,8 +2,8 @@
 
 namespace App\Responder;
 
-use Slim\Views\Twig;
 use Slim\Http\Response;
+use Slim\Views\Twig;
 
 class HomeResponder
 {

@@ -44,7 +44,7 @@ class OAuthService
 
         $connection->setOauthToken($token['token'], $token['secret']);
         try {
-            $access_token = $connection->oauth('oauth/access_token', ['oauth_verifier' => $oauth_verifier, 'oauth_token'=> $token['token']]);
+            $access_token = $connection->oauth('oauth/access_token', ['oauth_verifier' => $oauth_verifier, 'oauth_token' => $token['token']]);
         } catch (TwitterOAuthException $e) {
             throw new OAuthException();
         }

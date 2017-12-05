@@ -6,9 +6,9 @@ use App\Domain\OAuthService;
 use App\Domain\UserService;
 use App\Exception\OAuthException;
 use App\Responder\LoginResponder;
+use Psr\Log\LoggerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use Psr\Log\LoggerInterface;
 
 class LoginAction
 {

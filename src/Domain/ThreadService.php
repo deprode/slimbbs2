@@ -2,8 +2,6 @@
 
 namespace App\Domain;
 
-use App\Model\Thread;
-
 class ThreadService
 {
     private $db;

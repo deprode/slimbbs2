@@ -3,13 +3,13 @@
 namespace App\Action;
 
 use App\Domain\AuthService;
+use App\Domain\CommentService;
 use App\Domain\MessageService;
 use App\Model\Comment;
 use App\Responder\SaveResponder;
+use Psr\Log\LoggerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use Psr\Log\LoggerInterface;
-use App\Domain\CommentService;
 
 class SaveAction
 {
@@ -44,7 +44,7 @@ class SaveAction
         }
 
         // Validation
-        if(empty($request->getAttribute('has_errors')) === false){
+        if (empty($request->getAttribute('has_errors')) === false) {
             return $this->responder->invalid($response, '/');
         }
 

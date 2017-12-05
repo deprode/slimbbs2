@@ -43,11 +43,11 @@ ON DUPLICATE KEY UPDATE
 SAVE;
 
         $values = [
-            ':user_id' => ['value' => $user->user_id],
-            ':user_name' => ['value' => $user->user_name],
+            ':user_id'        => ['value' => $user->user_id],
+            ':user_name'      => ['value' => $user->user_name],
             ':user_image_url' => ['value' => $user->user_image_url],
-            ':access_token' => ['value' => $user->access_token],
-            ':access_secret' => ['value' => $user->access_secret],
+            ':access_token'   => ['value' => $user->access_token],
+            ':access_secret'  => ['value' => $user->access_secret],
         ];
 
         return $this->db->execute($sql, $values);

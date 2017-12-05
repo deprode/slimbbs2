@@ -31,7 +31,7 @@ $container['logger'] = function ($c) {
 // database
 $container['db'] = function ($c) {
     $db = $c['settings']['db'];
-    $dns = $db['driver'].':host='.$db['host'].';port='.$db['port'].';dbname='.$db['database'].';charset=utf8mb4;';
+    $dns = $db['driver'] . ':host=' . $db['host'] . ';port=' . $db['port'] . ';dbname=' . $db['database'] . ';charset=utf8mb4;';
     try {
         $db_connection = new PDO($dns, $db['username'], $db['password']);
         $db_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -59,11 +59,11 @@ $container['validate'] = function ($c) {
     return new \Respect\Validation\Validator();
 };
 
-$container['twitter'] = function($c) {
+$container['twitter'] = function ($c) {
     return new Abraham\TwitterOAuth\TwitterOAuth(getenv('TWITTER_CONSUMER_KEY'), getenv('TWITTER_CONSUMER_SECRET'));
 };
 
-$container['session'] = function($c) {
+$container['session'] = function ($c) {
     return new \RKA\Session();
 };
 
@@ -105,60 +105,60 @@ $container['App\Action\CommentDeleteAction'] = function ($c) {
 // -----------------------------------------------------------------------------
 // Domain factories
 // -----------------------------------------------------------------------------
-$container['DatabaseService'] = function($c) {
+$container['DatabaseService'] = function ($c) {
     return new App\Domain\DatabaseService($c->get('db'));
 };
 
-$container['CommentService'] = function($c) {
+$container['CommentService'] = function ($c) {
     return new App\Domain\CommentService($c->get('DatabaseService'));
 };
 
-$container['ThreadService'] = function($c) {
+$container['ThreadService'] = function ($c) {
     return new App\Domain\ThreadService($c->get('DatabaseService'));
 };
 
-$container['UserService'] = function($c) {
+$container['UserService'] = function ($c) {
     return new App\Domain\UserService($c->get('DatabaseService'));
 };
 
-$container['AuthService'] = function($c) {
+$container['AuthService'] = function ($c) {
     return new App\Domain\AuthService($c->get('session'), getenv('ADMIN_ID'));
 };
 
-$container['OAuthService'] = function($c) {
+$container['OAuthService'] = function ($c) {
     return new App\Domain\OAuthService($c->get('twitter'), $c->get('AuthService'), $c->get('router')->pathFor('callback'));
 };
 
-$container['MessageService'] = function($c) {
+$container['MessageService'] = function ($c) {
     return new App\Domain\MessageService($c->get('flash'));
 };
 // -----------------------------------------------------------------------------
 // Responder factories
 // -----------------------------------------------------------------------------
-$container['HomeResponder'] = function($c) {
+$container['HomeResponder'] = function ($c) {
     return new App\Responder\HomeResponder($c->get('view'));
 };
 
-$container['SaveResponder'] = function($c) {
+$container['SaveResponder'] = function ($c) {
     return new App\Responder\SaveResponder($c->get('view'));
 };
 
-$container['LoginResponder'] = function($c) {
+$container['LoginResponder'] = function ($c) {
     return new App\Responder\LoginResponder($c->get('view'));
 };
 
-$container['ThreadResponder'] = function($c) {
+$container['ThreadResponder'] = function ($c) {
     return new App\Responder\ThreadResponder($c->get('view'));
 };
 
-$container['DeleteResponder'] = function($c) {
+$container['DeleteResponder'] = function ($c) {
     return new App\Responder\DeleteResponder($c->get('view'));
 };
 // -----------------------------------------------------------------------------
 // Validation factories
 // -----------------------------------------------------------------------------
 
-$container['App\Validation\Translator'] = function($c){
+$container['App\Validation\Translator'] = function ($c) {
     return $translator = function ($message) {
         $messages = [
             'These rules must pass for {{name}}'                                => '{{name}}で守られていないルールがあります',
@@ -183,7 +183,7 @@ $container['App\Validation\Translator'] = function($c){
     };
 };
 
-$container['App\Validation\SaveValidation'] = function($c) {
+$container['App\Validation\SaveValidation'] = function ($c) {
     $translator = $c->get('App\Validation\Translator');
     $saveValidators = [
         'user_id' => \Respect\Validation\Validator::stringType()->digit()->setName('ユーザーID'),
@@ -192,20 +192,20 @@ $container['App\Validation\SaveValidation'] = function($c) {
     return new \DavidePastore\Slim\Validation\Validation($saveValidators, $translator);
 };
 
-$container['App\Validation\CommentSaveValidation'] = function($c) {
+$container['App\Validation\CommentSaveValidation'] = function ($c) {
     $translator = $c->get('App\Validation\Translator');
     $saveValidators = [
-        'user_id' => \Respect\Validation\Validator::stringType()->digit()->setName('ユーザーID'),
+        'user_id'   => \Respect\Validation\Validator::stringType()->digit()->setName('ユーザーID'),
         'thread_id' => \Respect\Validation\Validator::stringType()->notEmpty()->setName('スレッドID'),
-        'comment'     => \Respect\Validation\Validator::stringType()->notEmpty()->length(1, 400)->setName('本文'),
+        'comment'   => \Respect\Validation\Validator::stringType()->notEmpty()->length(1, 400)->setName('本文'),
     ];
     return new \DavidePastore\Slim\Validation\Validation($saveValidators, $translator);
 };
 
-$container['App\Validation\DeleteValidation'] = function($c) {
+$container['App\Validation\DeleteValidation'] = function ($c) {
     $translator = $c->get('App\Validation\Translator');
     $saveValidators = [
-        'thread_id' => \Respect\Validation\Validator::stringType()->notEmpty()->setName('スレッドID'),
+        'thread_id'  => \Respect\Validation\Validator::stringType()->notEmpty()->setName('スレッドID'),
         'comment_id' => \Respect\Validation\Validator::stringType()->notEmpty()->setName('コメントID'),
     ];
     return new \DavidePastore\Slim\Validation\Validation($saveValidators, $translator);

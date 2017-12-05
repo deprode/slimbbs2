@@ -45,8 +45,8 @@ FROM
     `comments`;
 SAVE;
         $values = [
-            ':user_id' => ['value' => $comment->user_id, 'type' => \PDO::PARAM_INT],
-            ':comment' => ['value' => $comment->comment, 'type' => \PDO::PARAM_STR],
+            ':user_id'    => ['value' => $comment->user_id, 'type' => \PDO::PARAM_INT],
+            ':comment'    => ['value' => $comment->comment, 'type' => \PDO::PARAM_STR],
             ':created_at' => ['value' => date_create()->format('Y-m-d H:i:s'), 'type' => \PDO::PARAM_STR],
         ];
 
@@ -63,9 +63,9 @@ VALUES
     (:thread_id, :user_id, 0, :comment, '', :created_at, NULL);
 SAVE;
         $values = [
-            ':thread_id' => ['value' => $comment->thread_id, 'type' => \PDO::PARAM_INT],
-            ':user_id' => ['value' => $comment->user_id, 'type' => \PDO::PARAM_INT],
-            ':comment' => ['value' => $comment->comment, 'type' => \PDO::PARAM_STR],
+            ':thread_id'  => ['value' => $comment->thread_id, 'type' => \PDO::PARAM_INT],
+            ':user_id'    => ['value' => $comment->user_id, 'type' => \PDO::PARAM_INT],
+            ':comment'    => ['value' => $comment->comment, 'type' => \PDO::PARAM_STR],
             ':created_at' => ['value' => date_create()->format('Y-m-d H:i:s'), 'type' => \PDO::PARAM_STR],
         ];
 
@@ -82,7 +82,7 @@ WHERE
 DELETE;
         $values = [
             ':comment_id' => ['value' => $comment_id, 'type' => \PDO::PARAM_INT],
-            ':user_id' => ['value' => $user_id, 'type' => \PDO::PARAM_INT],
+            ':user_id'    => ['value' => $user_id, 'type' => \PDO::PARAM_INT],
         ];
 
         $deleted = $this->db->execute($sql, $values);

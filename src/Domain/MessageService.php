@@ -18,10 +18,10 @@ class MessageService
     private function message($key = self::DEFAULT_KEY): string
     {
         $messages = [
-            'Message' => '',
-            'SavedThread' => 'スレッドを作成しました。',
-            'SavedComment' => 'コメントを保存しました。',
-            'DeletedThread' => 'スレッドは削除されました。',
+            'Message'        => '',
+            'SavedThread'    => 'スレッドを作成しました。',
+            'SavedComment'   => 'コメントを保存しました。',
+            'DeletedThread'  => 'スレッドは削除されました。',
             'DeletedComment' => 'コメントを削除しました。'
         ];
         return isset($messages[$key]) ? $messages[$key] : '';
