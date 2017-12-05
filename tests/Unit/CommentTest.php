@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
 use App\Model\Comment;
+use PHPUnit\Framework\TestCase;
 
 class CommentTest extends TestCase
 {
@@ -25,6 +25,6 @@ class CommentTest extends TestCase
     {
         $comment = new Comment();
         $this->assertEquals(true, isset($comment->comment));
-        $this->assertEquals(false, $comment->hoge);
+        $this->assertEquals(false, isset($comment->hoge));
     }
 }
