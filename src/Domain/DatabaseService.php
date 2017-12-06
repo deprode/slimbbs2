@@ -43,9 +43,8 @@ class DatabaseService
         } else {
             $prepare->setFetchMode(\PDO::FETCH_ASSOC | \PDO::FETCH_PROPS_LATE);
         }
-        $comments = $prepare->fetchAll();
 
-        return $comments;
+        return $prepare->fetchAll();
     }
 
     /**
