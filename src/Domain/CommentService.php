@@ -3,6 +3,7 @@
 namespace App\Domain;
 
 use App\Exception\DeleteFailedException;
+use App\Exception\SaveFailedException;
 use App\Model\Comment;
 
 class CommentService
@@ -51,7 +52,11 @@ SAVE;
             ':created_at' => ['value' => date_create()->format('Y-m-d H:i:s'), 'type' => \PDO::PARAM_STR],
         ];
 
-        return $this->db->execute($sql, $values);
+        try {
+            return $this->db->execute($sql, $values);
+        } catch (\PDOException $e) {
+            throw new SaveFailedException();
+        }
     }
 
     public function saveComment(Comment $comment): int
@@ -70,7 +75,11 @@ SAVE;
             ':created_at' => ['value' => date_create()->format('Y-m-d H:i:s'), 'type' => \PDO::PARAM_STR],
         ];
 
-        return $this->db->execute($sql, $values);
+        try {
+            return $this->db->execute($sql, $values);
+        } catch (\PDOException $e) {
+            throw new SaveFailedException();
+        }
     }
 
     public function deleteComment(int $comment_id, int $user_id): bool

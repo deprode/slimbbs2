@@ -3,6 +3,7 @@
 namespace App\Domain;
 
 
+use App\Exception\SaveFailedException;
 use App\Model\User;
 
 class UserService
@@ -50,6 +51,10 @@ SAVE;
             ':access_secret'  => ['value' => $user->access_secret],
         ];
 
-        return $this->db->execute($sql, $values);
+        try {
+            return $this->db->execute($sql, $values);
+        } catch (\PDOException $e) {
+            throw new SaveFailedException();
+        }
     }
 }

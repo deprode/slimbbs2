@@ -5,6 +5,7 @@ namespace App\Action;
 use App\Domain\AuthService;
 use App\Domain\CommentService;
 use App\Domain\MessageService;
+use App\Exception\SaveFailedException;
 use App\Model\Comment;
 use App\Responder\SaveResponder;
 use Psr\Log\LoggerInterface;
@@ -53,7 +54,7 @@ class SaveAction
             $comment->comment = $data['comment'];
             $comment->user_id = $data['user_id'];
             $this->comment->saveThread($comment);
-        } catch (\PDOException $e) {
+        } catch (SaveFailedException $e) {
             $this->logger->error($e->getMessage(), ['exception' => $e]);
             return $this->responder->saveFailed($response);
         }

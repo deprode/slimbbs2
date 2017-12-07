@@ -5,6 +5,7 @@ namespace App\Action;
 use App\Domain\OAuthService;
 use App\Domain\UserService;
 use App\Exception\OAuthException;
+use App\Exception\SaveFailedException;
 use App\Responder\LoginResponder;
 use Psr\Log\LoggerInterface;
 use Slim\Http\Request;
@@ -54,7 +55,7 @@ class LoginAction
             try {
                 $user = $this->user->convertUser($user_info, $access_token);
                 $this->user->saveUser($user);
-            } catch (\PDOException $e) {
+            } catch (SaveFailedException $e) {
                 $this->logger->error($e->getMessage(), ['exception' => $e]);
                 return $this->responder->saveFailed($response);
             }

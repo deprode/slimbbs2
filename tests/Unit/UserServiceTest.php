@@ -21,14 +21,14 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
         $this->data->user_image_url = 'http://via.placeholder.com/64x64';
         $this->data->access_token = 'token';
         $this->data->access_secret = 'secret';
-
-        $dbs = $this->createMock(DatabaseService::class);
-        $dbs->expects($this->any())->method('execute')->willReturn(1);
-        $this->comment = new UserService($dbs);
     }
 
     public function testConvertUser()
     {
+        $dbs = $this->createMock(DatabaseService::class);
+        $dbs->expects($this->any())->method('execute')->willReturn(1);
+        $this->comment = new UserService($dbs);
+
         $user_info = [
             'id_str'            => '1',
             'screen_name'       => 'testuser',
@@ -42,8 +42,18 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->data, $this->comment->convertUser((object)$user_info, $access_token));
     }
 
+    /**
+     * @expectedException \App\Exception\SaveFailedException
+     */
     public function testSaveUser()
     {
+        $dbs = $this->createMock(DatabaseService::class);
+        $dbs->expects($this->at(0))->method('execute')->willReturn(1);
+        $dbs->expects($this->at(1))->method('execute')->will($this->throwException(new \PDOException()));
+        $this->comment = new UserService($dbs);
+
+        $this->assertEquals(1, $this->comment->saveUser($this->data));
+
         $this->assertEquals(1, $this->comment->saveUser($this->data));
     }
 }

@@ -43,7 +43,7 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PDOException
+     * @expectedException \App\Exception\SaveFailedException
      */
     public function testSaveThread()
     {
@@ -56,7 +56,7 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PDOException
+     * @expectedException \App\Exception\SaveFailedException
      */
     public function testSaveComment()
     {
