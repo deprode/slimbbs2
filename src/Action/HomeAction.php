@@ -5,6 +5,7 @@ namespace App\Action;
 use App\Domain\AuthService;
 use App\Domain\MessageService;
 use App\Domain\ThreadService;
+use App\Exception\FetchFailedException;
 use App\Responder\HomeResponder;
 use Psr\Log\LoggerInterface;
 use Slim\Csrf\Guard as Csrf;
@@ -36,7 +37,12 @@ final class HomeAction
 
         $data['loggedIn'] = $this->auth->isLoggedIn();
 
-        $data['threads'] = $this->thread->getThreads();
+        try {
+            $data['threads'] = $this->thread->getThreads();
+        } catch (FetchFailedException $e) {
+            $this->logger->error($e->getMessage(), ['exception' => $e]);
+            return $this->responder->fetchFailed($response);
+        }
 
         $nameKey = $this->csrf->getTokenNameKey();
         $valueKey = $this->csrf->getTokenValueKey();

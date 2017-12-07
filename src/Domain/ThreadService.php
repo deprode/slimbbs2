@@ -2,6 +2,8 @@
 
 namespace App\Domain;
 
+use App\Exception\FetchFailedException;
+
 class ThreadService
 {
     private $db;
@@ -24,6 +26,10 @@ LEFT JOIN
     `threads`.`comment_id` = `comments`.`comment_id`;
 THREADS;
 
-        return $this->db->fetchAll($sql);
+        try {
+            return $this->db->fetchAll($sql);
+        } catch (\PDOException $e) {
+            throw new FetchFailedException();
+        }
     }
 }

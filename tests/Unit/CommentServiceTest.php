@@ -32,7 +32,7 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PDOException
+     * @expectedException \App\Exception\FetchFailedException
      */
     public function testGetComments()
     {

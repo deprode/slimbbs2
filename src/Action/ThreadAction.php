@@ -5,6 +5,7 @@ namespace App\Action;
 use App\Domain\AuthService;
 use App\Domain\CommentService;
 use App\Domain\MessageService;
+use App\Exception\FetchFailedException;
 use App\Responder\ThreadResponder;
 use Psr\Log\LoggerInterface;
 use Slim\Csrf\Guard as Csrf;
@@ -39,7 +40,13 @@ class ThreadAction
             return $this->responder->invalid($response, '/');
         }
 
-        $data['comments'] = $this->comment->getComments($thread_id);
+        try {
+            $data['comments'] = $this->comment->getComments($thread_id);
+        } catch (FetchFailedException $e) {
+            $this->logger->error($e->getMessage(), ['exception' => $e]);
+            return $this->responder->fetchFailed($response);
+        }
+
         if (empty($data['comments'])) {
             $this->message->setMessage('DeletedThread');
             return $this->responder->invalid($response, '/');

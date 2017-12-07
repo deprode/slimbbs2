@@ -3,6 +3,7 @@
 namespace App\Domain;
 
 use App\Exception\DeleteFailedException;
+use App\Exception\FetchFailedException;
 use App\Exception\SaveFailedException;
 use App\Model\Comment;
 
@@ -29,7 +30,11 @@ WHERE
   `thread_id` = :thread_id;
 COMMENTS;
 
-        return $this->db->fetchAll($sql, [':thread_id' => ['value' => $thread_id, 'type' => \PDO::PARAM_INT]]);
+        try {
+            return $this->db->fetchAll($sql, [':thread_id' => ['value' => $thread_id, 'type' => \PDO::PARAM_INT]]);
+        } catch (\PDOException $e) {
+            throw new FetchFailedException();
+        }
     }
 
     public function saveThread(Comment $comment): int
