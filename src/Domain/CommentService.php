@@ -2,6 +2,7 @@
 
 namespace App\Domain;
 
+use App\Exception\DeleteFailedException;
 use App\Model\Comment;
 
 class CommentService
@@ -85,7 +86,11 @@ DELETE;
             ':user_id'    => ['value' => $user_id, 'type' => \PDO::PARAM_INT],
         ];
 
-        $deleted = $this->db->execute($sql, $values);
+        try {
+            $deleted = $this->db->execute($sql, $values);
+        } catch (\PDOException $e) {
+            throw new DeleteFailedException();
+        }
 
         return $deleted === 1;
     }
@@ -99,7 +104,11 @@ WHERE
   `comments`.`comment_id` = :comment_id;
 DELETE;
 
-        $deleted = $this->db->execute($sql, [':comment_id' => ['value' => $comment_id, 'type' => \PDO::PARAM_INT]]);
+        try {
+            $deleted = $this->db->execute($sql, [':comment_id' => ['value' => $comment_id, 'type' => \PDO::PARAM_INT]]);
+        } catch (\PDOException $e) {
+            throw new DeleteFailedException();
+        }
 
         return $deleted === 1;
     }

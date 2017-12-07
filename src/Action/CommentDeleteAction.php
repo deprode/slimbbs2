@@ -6,6 +6,7 @@ namespace App\Action;
 use App\Domain\AuthService;
 use App\Domain\CommentService;
 use App\Domain\MessageService;
+use App\Exception\DeleteFailedException;
 use App\Responder\DeleteResponder;
 use Psr\Log\LoggerInterface;
 use Slim\Http\Request;
@@ -44,17 +45,21 @@ class CommentDeleteAction
             return $this->responder->invalid($response);
         }
 
-        if ($this->auth->isAdmin()) {
-            $delete = $this->comment->deleteCommentByAdmin($data['comment_id']);
-        } else {
-            $delete = $this->comment->deleteComment($data['comment_id'], $this->auth->getUserId());
+        try {
+            if ($this->auth->isAdmin()) {
+                $delete = $this->comment->deleteCommentByAdmin($data['comment_id']);
+            } else {
+                $delete = $this->comment->deleteComment($data['comment_id'], $this->auth->getUserId());
+            }
+
+            if ($delete) {
+                $this->message->setMessage('DeletedComment');
+            }
+        } catch (DeleteFailedException $e) {
+            $this->log->error($e->getMessage(), ['exception' => $e]);
+            return $this->responder->deleteFailed($response);
         }
 
-        if ($delete) {
-            $this->message->setMessage('DeletedComment');
-            return $this->responder->deleted($response, $url);
-        }
-
-        return $this->responder->deleteFailed($response);
+        return $this->responder->deleted($response, $url);
     }
 }

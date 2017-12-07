@@ -24,25 +24,40 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
         ];
 
         $dbs = $this->createMock(DatabaseService::class);
-        $dbs->expects($this->any())->method('fetchAll')->willReturn($this->data);
-        $dbs->expects($this->any())->method('execute')->willReturn(1);
+        $dbs->expects($this->at(0))->method('fetchAll')->willReturn($this->data);
+        $dbs->expects($this->at(1))->method('fetchAll')->will($this->throwException(new \PDOException()));
+        $dbs->expects($this->at(0))->method('execute')->willReturn(1);
+        $dbs->expects($this->at(1))->method('execute')->will($this->throwException(new \PDOException()));
         $this->comment = new CommentService($dbs);
     }
 
+    /**
+     * @expectedException \PDOException
+     */
     public function testGetComments()
     {
         $comments = $this->comment->getComments(1);
         $this->assertEquals($this->data, $comments);
+
+        $this->comment->getComments(1);
     }
 
+    /**
+     * @expectedException \PDOException
+     */
     public function testSaveThread()
     {
         $comment = new Comment();
         $comment->user_id = 1;
         $comment->comment = 'aaaa';
         $this->assertEquals(1, $this->comment->saveThread($comment));
+
+        $this->comment->saveThread($comment);
     }
 
+    /**
+     * @expectedException \PDOException
+     */
     public function testSaveComment()
     {
         $comment = new Comment();
@@ -50,15 +65,25 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
         $comment->user_id = 1;
         $comment->comment = 'aaaa';
         $this->assertEquals(1, $this->comment->saveComment($comment));
+
+        $this->comment->saveComment($comment);
     }
 
+    /**
+     * @expectedException \App\Exception\DeleteFailedException
+     */
     public function testDeleteComment()
     {
         $this->assertTrue($this->comment->deleteComment(1, 1));
+        $this->assertTrue($this->comment->deleteComment(1, 1));
     }
 
+    /**
+     * @expectedException \App\Exception\DeleteFailedException
+     */
     public function testDeleteCommentByAdmin()
     {
+        $this->assertTrue($this->comment->deleteCommentByAdmin(1, 1));
         $this->assertTrue($this->comment->deleteCommentByAdmin(1, 1));
     }
 }
