@@ -2,7 +2,7 @@
 if (PHP_SAPI == 'cli-server') {
     // To help the built-in PHP dev server, check if the request was actually for
     // something which should probably be served as a static file
-    $url  = parse_url($_SERVER['REQUEST_URI']);
+    $url = parse_url($_SERVER['REQUEST_URI']);
     $file = __DIR__ . $url['path'];
     if (is_file($file)) {
         return false;
@@ -11,9 +11,10 @@ if (PHP_SAPI == 'cli-server') {
 
 require __DIR__ . '/../vendor/autoload.php';
 
+session_name('SlimSession');
 session_start();
 
-$env_file = __DIR__. '/../.env';
+$env_file = __DIR__ . '/../.env';
 if (is_readable($env_file)) {
     $dot_env = new Dotenv\Dotenv(__DIR__ . '/../');
     $dot_env->load();
