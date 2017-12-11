@@ -58,5 +58,6 @@ class LoginBrowserTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertContains("Slimbbs", $this->driver->getTitle());
+        $this->assertNotContains("Error", $this->driver->getTitle());
     }
 }

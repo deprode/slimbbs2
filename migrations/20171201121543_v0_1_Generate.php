@@ -34,7 +34,7 @@ class V01Generate extends Migration
         $c['db']->query($query);
 
         $query = "CREATE TABLE IF NOT EXISTS `users` (
-          `user_id` int(64) NOT NULL,
+          `user_id` varchar(50) NOT NULL,
           `user_name` varchar(255) NOT NULL DEFAULT 0,
           `user_image_url` varchar(2000) NOT NULL DEFAULT '',
           `access_token` varchar(80) NOT NULL,
