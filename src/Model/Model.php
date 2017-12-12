@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-class Model
+abstract class Model
 {
     public function __get($key)
     {
@@ -23,4 +23,6 @@ class Model
     {
         return property_exists(static::class, $name);
     }
+
+    abstract public function __toString();
 }
