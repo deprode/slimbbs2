@@ -11,7 +11,7 @@ class SaveResponderTest extends TestCase
 {
     public function testSaveFailed()
     {
-        $responder = new SaveResponder(new Twig(__DIR__ . '/../../templates'));
+        $responder = new SaveResponder(new Twig(__DIR__ . '/../../../templates'));
         $response = $responder->invalid(new Response(), '/invalid');
 
         $this->assertEquals(400, $response->getStatusCode());
