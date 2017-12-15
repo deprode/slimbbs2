@@ -82,7 +82,7 @@ class HomepageTest extends BaseTestCase
 
     public function test匿名投稿()
     {
-        $_SESSION['user_id'] = "0";
+        $_SESSION['user_id'] = null;
         $response = $this->runApp('POST', '/', ['comment' => 'aaaa', 'user_id' => '0']);
 
         $this->assertNotContains('Error', (string)$response->getBody());

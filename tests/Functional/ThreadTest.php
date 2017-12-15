@@ -153,7 +153,7 @@ class ThreadTest extends BaseTestCase
 
     public function test匿名で削除不可()
     {
-        $_SESSION['user_id'] = 0;
+        $_SESSION['user_id'] = null;
         $this->postReply("0");
 
         $response = $this->runApp('DELETE', '/thread', ['thread_id' => '1', 'comment_id' => '2']);
