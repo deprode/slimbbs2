@@ -102,6 +102,10 @@ $container['App\Action\CommentSaveAction'] = function ($c) {
 $container['App\Action\CommentDeleteAction'] = function ($c) {
     return new App\Action\CommentDeleteAction($c->get('logger'), $c->get('CommentService'), $c->get('AuthService'), $c->get('MessageService'), $c->get('DeleteResponder'));
 };
+
+$container['App\Action\LikeAction'] = function ($c) {
+    return new App\Action\LikeAction($c->get('logger'), $c->get('CommentService'), $c->get('MessageService'));
+};
 // -----------------------------------------------------------------------------
 // Domain factories
 // -----------------------------------------------------------------------------
@@ -202,11 +206,11 @@ $container['App\Validation\CommentSaveValidation'] = function ($c) {
     return new \DavidePastore\Slim\Validation\Validation($saveValidators, $translator);
 };
 
-$container['App\Validation\DeleteValidation'] = function ($c) {
+$container['App\Validation\CommentUpdateValidation'] = function ($c) {
     $translator = $c->get('App\Validation\Translator');
-    $saveValidators = [
-        'thread_id'  => \Respect\Validation\Validator::stringType()->notEmpty()->setName('スレッドID'),
-        'comment_id' => \Respect\Validation\Validator::stringType()->notEmpty()->setName('コメントID'),
+    $updateValidators = [
+        'thread_id'  => \Respect\Validation\Validator::intVal()->digit()->notEmpty()->setName('スレッドID'),
+        'comment_id' => \Respect\Validation\Validator::intVal()->digit()->notEmpty()->setName('コメントID'),
     ];
-    return new \DavidePastore\Slim\Validation\Validation($saveValidators, $translator);
+    return new \DavidePastore\Slim\Validation\Validation($updateValidators, $translator);
 };

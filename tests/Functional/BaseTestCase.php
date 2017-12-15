@@ -31,7 +31,7 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
      * @param array|object|null $requestData the request data
      * @return \Slim\Http\Response
      */
-    public function runApp($requestMethod, $requestUri, $requestData = null)
+    public function runApp($requestMethod, $requestUri, $requestData = null, $isHxr = false)
     {
         // Create a mock environment for testing with
         $environment = Environment::mock(
@@ -54,6 +54,10 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
         // Add request data, if it exists
         if (isset($requestData)) {
             $request = $request->withParsedBody($requestData);
+        }
+
+        if ($isHxr === true) {
+            $request = $request->withHeader('X-Requested-With', 'XMLHttpRequest');
         }
 
         // Set up a response object

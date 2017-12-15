@@ -86,4 +86,13 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->comment->deleteCommentByAdmin(1, 1));
         $this->assertTrue($this->comment->deleteCommentByAdmin(1, 1));
     }
+
+    /**
+     * @expectedException \App\Exception\SaveFailedException
+     */
+    public function testAddLike()
+    {
+        $this->assertTrue($this->comment->addLike(1, 1));
+        $this->assertTrue($this->comment->addLike(1, 1));
+    }
 }

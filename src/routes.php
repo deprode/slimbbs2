@@ -26,4 +26,8 @@ $app->post('/thread', 'App\Action\CommentSaveAction:save')
 
 $app->delete('/thread', 'App\Action\CommentDeleteAction:delete')
     ->setName('delete_comment')
-    ->add($container->get('App\Validation\DeleteValidation'));
+    ->add($container->get('App\Validation\CommentUpdateValidation'));
+
+$app->post('/like', 'App\Action\LikeAction:add')
+    ->setName('add_like')
+    ->add($container->get('App\Validation\CommentUpdateValidation'));

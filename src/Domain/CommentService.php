@@ -20,7 +20,7 @@ class CommentService
     {
         $sql = <<<COMMENTS
 SELECT
-  `comments`.`comment_id`, `comments`.`user_id`, `comments`.`comment`, `comments`.`created_at`, `users`.`user_name`, `users`.`user_image_url`
+  `comments`.`comment_id`, `comments`.`user_id`, `comments`.`like_count`, `comments`.`comment`, `comments`.`created_at`, `users`.`user_name`, `users`.`user_image_url`
 FROM
   `comments`
 LEFT JOIN
@@ -125,5 +125,23 @@ DELETE;
         }
 
         return $deleted === 1;
+    }
+
+    public function addLike(int $thread_id, int $comment_id)
+    {
+        $sql = <<<SQL
+UPDATE `comments` SET `like_count` = `like_count` + 1 WHERE `thread_id` = :thread_id AND `comment_id` = :comment_id;
+SQL;
+
+        try {
+            $updated = $this->db->execute($sql, [
+                ':thread_id' => ['value' => $thread_id, 'type' => \PDO::PARAM_INT],
+                ':comment_id' => ['value' => $comment_id, 'type' => \PDO::PARAM_INT]
+            ]);
+        } catch (\PDOException $e) {
+            throw new SaveFailedException();
+        }
+
+        return $updated === 1;
     }
 }

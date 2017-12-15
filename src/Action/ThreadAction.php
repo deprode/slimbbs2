@@ -62,6 +62,7 @@ class ThreadAction
         $data['thread_id'] = $thread_id;
         $data['user_id'] = $this->auth->getUserId();
         $data['is_admin'] = $this->auth->isAdmin();
+        $data['loggedIn'] = $this->auth->isLoggedIn();
         $data['saved'] = $this->message->getMessage('SavedComment');
         $data['deleted'] = $this->message->getMessage('DeletedComment');
 

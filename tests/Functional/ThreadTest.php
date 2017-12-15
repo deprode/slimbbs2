@@ -202,4 +202,24 @@ class ThreadTest extends BaseTestCase
         $this->assertNotContains('削除済み', (string)$response->getBody());
         $this->assertContains('スレッドは削除されました。', (string)$response->getBody());
     }
+
+    public function testそうだねをつける()
+    {
+        $response = $this->runApp('POST', '/like', ['thread_id' => '1', 'comment_id' => '1'], true);
+        $this->assertEquals(204, $response->getStatusCode());
+        $this->assertNotContains('Error', (string)$response->getBody());
+
+        $response = $this->runApp('GET', '/thread?thread_id=1');
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertContains('そうだね&#215;<span id="1_like">1</span>', (string)$response->getBody());
+    }
+
+    public function test匿名でそうだねが出ない()
+    {
+        $_SESSION['user_id'] = null;
+
+        $response = $this->runApp('GET', '/thread?thread_id=1');
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertNotContains('<input type="submit" value="そうだね">', (string)$response->getBody());
+    }
 }
