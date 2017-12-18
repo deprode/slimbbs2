@@ -76,7 +76,7 @@
                         </form>
                     {% endif %}
                     {% if loggedIn %}
-                        <form action="javascript: void(0);" method="post" id="{{ comment.comment_id }}">
+                        <form action="javascript: void(0);" method="post" id="{{ comment.comment_id }}" class="js-like">
                             <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
                             <input type="hidden" name="thread_id" value="{{ thread_id }}">
                             <input type="submit" value="そうだね" class="button--small">
@@ -95,7 +95,7 @@
     <script src="{{ base_url() }}/assets/js/like.js"></script>
     <script>
         const add_like_path = '' + '{{ path_for('add_like') }}';
-        let forms = document.querySelectorAll('form');
+        let forms = document.querySelectorAll('form.js-like');
         Array.from(forms).forEach((form) => {
             form.addEventListener('click', (envet) => {
                 addLike(event.target.parentElement.id);
