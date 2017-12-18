@@ -15,12 +15,12 @@
             <li>{{ deleted }}</li>
         {% endif %}
     </div>
-    <form action="{{ path_for('home') }}" method="post" class="pure-form">
-        <label>テキスト：<input type="text" name="comment"></label>
+    <form action="{{ path_for('home') }}" method="post">
+        <label>コメント：<input type="text" name="comment"></label>
         <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
         <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
         <input type="hidden" name="user_id" value="{{ user_id }}">
-        <input type="submit" value="送信" class="pure-button pure-button-primary">
+        <input type="submit" value="スレッドを作成" class="button">
     </form>
     <article class="threads">
         {% for thread in threads %}
