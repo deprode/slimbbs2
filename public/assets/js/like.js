@@ -9,10 +9,15 @@ function likePlus1(id)
 
 function removeLikeButton(id)
 {
-    document.getElementById(id).parentNode.removeChild(document.getElementById(id));
+    document.getElementById(id).querySelector('input[type=submit]').disabled = true;
+    document.getElementById(id).disabled = true;
 }
 
 function addLike(id) {
+    if (document.getElementById(id).disabled) {
+        return;
+    }
+
     fetch(add_like_path, {
         method: 'POST',
         headers: { 'X-Requested-With': 'XMLHttpRequest' },

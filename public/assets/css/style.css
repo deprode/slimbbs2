@@ -2,7 +2,12 @@ a {
     color: darkgreen;
 }
 
-input[type='submit']{
+input[type='submit'] {
+    background-color: darkgreen;
+    border: 0.1rem solid darkgreen;
+}
+
+input[type='submit'][disabled]:hover {
     background-color: darkgreen;
     border: 0.1rem solid darkgreen;
 }
