@@ -23,6 +23,7 @@
         <input type="submit" value="スレッドを作成" class="button">
     </form>
     <article class="threads">
+        <h2>スレッド一覧</h2>
         {% for thread in threads %}
             <section class="thread">
                 <a href="{{ path_for('thread', {}, {'thread_id': thread.thread_id}) }}">
@@ -31,4 +32,13 @@
             </section>
         {% endfor %}
     </article>
+    <div class="row">
+        <article class="search column column-50">
+            <h2>検索フォーム</h2>
+            <form action="{{ path_for('search') }}" method="post">
+                <label for="query"><input type="text" name="query" class="search__query"></label>
+                <input type="submit" value="検索">
+            </form>
+        </article>
+    </div>
 {% endblock %}

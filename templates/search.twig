@@ -1,0 +1,48 @@
+{% extends "base.twig" %}
+
+{% block title %}Search{% endblock %}
+{% block contents %}
+    <div class="row">
+        <nav class="column column-50">
+            <a href="{{ path_for('home') }}">トップページに戻る</a>
+        </nav>
+    </div>
+    <div class="row">
+        <article class="comments column column-50">
+            {% if comments %}
+                {% for comment in comments %}
+                    <section class="comment">
+                        <header class="comment__header">
+                            {% set isSigned = comment.user_name and comment.user_image_url %}
+                            <div>
+                                {% if isSigned %}
+                                    <img src="{{ comment.user_image_url }}" alt="{{ comment.user_name }}">
+                                {% else %}
+                                    <img src="http://via.placeholder.com/64x64" alt="匿名ユーザー">
+                                {% endif %}
+                            </div>
+                            <div>
+                                {% if isSigned %}
+                                    {{ comment.user_name }}:
+                                {% else %}
+                                    匿名ユーザー:
+                                {% endif %}
+                            </div>
+                            <div>
+                                {{ comment.created_at }}
+                            </div>
+                            <div>
+                                そうだね&#215;<span id="{{ comment.comment_id }}_like">{{ comment.like_count }}</span>
+                            </div>
+                        </header>
+                        <main class="comment__main">️
+                            {{ comment.comment }}
+                        </main>
+                    </section>
+                {% endfor %}
+            {% else %}
+                コメントがありません。
+            {% endif %}
+        </article>
+    </div>
+{% endblock %}

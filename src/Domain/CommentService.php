@@ -37,6 +37,26 @@ COMMENTS;
         }
     }
 
+    public function searchComments(string $query): array
+    {
+        $sql = <<<COMMENTS
+SELECT
+  `comments`.`comment_id`, `comments`.`user_id`, `comments`.`like_count`, `comments`.`comment`, `comments`.`created_at`, `users`.`user_name`, `users`.`user_image_url`
+FROM
+  `comments`
+LEFT JOIN
+  `users`
+  ON `comments`.`user_id` = `users`.`user_id`
+WHERE
+  `comment` LIKE :query;
+COMMENTS;
+        try {
+            return $this->db->fetchAll($sql, [':query' => ['value' => '%'.$query.'%', 'type' => \PDO::PARAM_STR]]);
+        } catch (\PDOException $e) {
+            throw new FetchFailedException();
+        }
+    }
+
     public function saveThread(Comment $comment): int
     {
         $sql = <<<SAVE

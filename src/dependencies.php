@@ -91,6 +91,10 @@ $container['App\Action\LogoutAction'] = function ($c) {
     return new App\Action\LogoutAction($c->get('logger'), $c->get('AuthService'));
 };
 
+$container['App\Action\SearchAction'] = function ($c) {
+    return new App\Action\SearchAction($c->get('logger'), $c->get('CommentService'), $c->get('SearchResponder'));
+};
+
 $container['App\Action\ThreadAction'] = function ($c) {
     return new App\Action\ThreadAction($c->get('logger'), $c->get('csrf'), $c->get('CommentService'), $c->get('AuthService'), $c->get('MessageService'), $c->get('ThreadResponder'));
 };
@@ -158,6 +162,10 @@ $container['ThreadResponder'] = function ($c) {
 $container['DeleteResponder'] = function ($c) {
     return new App\Responder\DeleteResponder($c->get('view'));
 };
+
+$container['SearchResponder'] = function ($c) {
+    return new App\Responder\SearchResponder($c->get('view'));
+};
 // -----------------------------------------------------------------------------
 // Validation factories
 // -----------------------------------------------------------------------------
@@ -185,6 +193,14 @@ $container['App\Validation\Translator'] = function ($c) {
         ];
         return $messages[$message];
     };
+};
+
+$container['App\Validation\SearchValidation'] = function ($c) {
+    $translator = $c->get('App\Validation\Translator');
+    $searchValidators = [
+        'query' => \Respect\Validation\Validator::stringType()->setName('検索ワード'),
+    ];
+    return new \DavidePastore\Slim\Validation\Validation($searchValidators, $translator);
 };
 
 $container['App\Validation\SaveValidation'] = function ($c) {

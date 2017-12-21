@@ -19,6 +19,7 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
             'comment_id'     => 1,
             'user_id'        => 1,
             'created_at'     => '2017-12-06 13:42:28',
+            'comment'        => 'sample comment test',
             'user_name'      => 'testuser',
             'user_image_url' => 'http://via.placeholder.com/64x64'
         ];
@@ -40,6 +41,17 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->data, $comments);
 
         $this->comment->getComments(1);
+    }
+
+    /**
+     * @expectedException \App\Exception\FetchFailedException
+     */
+    public function testSearchComments()
+    {
+        $comments = $this->comment->searchComments('comment');
+        $this->assertEquals($this->data, $comments);
+
+        $this->comment->searchComments(1);
     }
 
     /**
