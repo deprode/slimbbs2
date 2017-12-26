@@ -38,7 +38,6 @@ class CommentDeleteAction
         }
 
         $data = $request->getParsedBody();
-        $url = $request->getUri()->getPath() . (empty(intval($data['thread_id'])) ? '' : '?thread_id=' . intval($data['thread_id']));
 
         // Validation
         if ($request->getAttribute('has_errors') || $this->auth->getUserId() == 0) {
@@ -60,6 +59,19 @@ class CommentDeleteAction
             return $this->responder->deleteFailed($response);
         }
 
+        $url = $this->getRedirectUrl($request->getUri()->getPath(), $data);
         return $this->responder->deleted($response, $url);
+    }
+
+    private function getRedirectUrl(string $base_path, array $data): string
+    {
+        $query = $data['query'] ?? null;
+        if ($query) {
+            $url = '/search?query=' . $query;
+        } else {
+            $url = $base_path . (empty(intval($data['thread_id'])) ? '' : '?thread_id=' . intval($data['thread_id']));
+        }
+
+        return $url;
     }
 }

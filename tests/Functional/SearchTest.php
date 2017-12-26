@@ -57,4 +57,29 @@ class SearchTest extends BaseTestCase
         $this->assertNotContains('<section class="comment">', (string)$response->getBody());
         $this->assertContains('コメントがありません', (string)$response->getBody());
     }
+
+    public function test検索後コメント削除()
+    {
+        $_SESSION['user_id'] = 2;
+
+        $response = $this->runApp('DELETE', '/thread', ['thread_id' => '1', 'comment_id' => '1', 'query' => 'aaaa']);
+        $this->assertEquals(303, $response->getStatusCode());
+        $this->assertNotContains('Error', (string)$response->getBody());
+        $this->assertEquals('/search?query=aaaa', (string)$response->getHeader('location')[0]);
+
+        $response = $this->runApp('GET', '/search', ['query' => 'サンプル']);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertNotContains('<section class="comment">', (string)$response->getBody());
+        $this->assertContains('コメントがありません', (string)$response->getBody());
+    }
+
+    public function test検索後一般ユーザーでコメント削除不可()
+    {
+        $response = $this->runApp('GET', '/search', ['query' => 'サンプル']);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertContains('<section class="comment">', (string)$response->getBody());
+        $this->assertNotContains('削除', (string)$response->getBody());
+    }
 }

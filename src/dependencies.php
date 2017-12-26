@@ -92,7 +92,7 @@ $container['App\Action\LogoutAction'] = function ($c) {
 };
 
 $container['App\Action\SearchAction'] = function ($c) {
-    return new App\Action\SearchAction($c->get('logger'), $c->get('CommentService'), $c->get('SearchResponder'));
+    return new App\Action\SearchAction($c->get('logger'), $c->get('csrf'), $c->get('AuthService'), $c->get('CommentService'), $c->get('SearchResponder'));
 };
 
 $container['App\Action\ThreadAction'] = function ($c) {

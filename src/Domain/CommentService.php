@@ -41,7 +41,7 @@ COMMENTS;
     {
         $sql = <<<COMMENTS
 SELECT
-  `comments`.`comment_id`, `comments`.`user_id`, `comments`.`like_count`, `comments`.`comment`, `comments`.`created_at`, `users`.`user_name`, `users`.`user_image_url`
+  `comments`.`comment_id`, `comments`.`thread_id`, `comments`.`user_id`, `comments`.`like_count`, `comments`.`comment`, `comments`.`created_at`, `users`.`user_name`, `users`.`user_image_url`
 FROM
   `comments`
 LEFT JOIN
