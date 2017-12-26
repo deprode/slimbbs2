@@ -17,7 +17,7 @@ $app->get('/login/callback', 'App\Action\LoginAction:callback')
 $app->get('/logout', 'App\Action\LogoutAction:index')
     ->setName('logout');
 
-$app->post('/search', 'App\Action\SearchAction:comments')
+$app->get('/search', 'App\Action\SearchAction:comments')
     ->setName('search')
     ->add($container->get('App\Validation\SearchValidation'));
 

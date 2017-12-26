@@ -34,7 +34,7 @@ class SearchTest extends BaseTestCase
 
     public function test検索()
     {
-        $response = $this->runApp('POST', '/search', ['query' => 'コメント']);
+        $response = $this->runApp('GET', '/search', ['query' => 'コメント']);
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('<section class="comment">', (string)$response->getBody());
@@ -43,7 +43,7 @@ class SearchTest extends BaseTestCase
 
     public function test空クエリで検索()
     {
-        $response = $this->runApp('POST', '/search', ['query' => '']);
+        $response = $this->runApp('GET', '/search', ['query' => '']);
 
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals('/', (string)$response->getHeader('location')[0]);
@@ -51,7 +51,7 @@ class SearchTest extends BaseTestCase
 
     public function test検索結果がない()
     {
-        $response = $this->runApp('POST', '/search', ['query' => 'not found']);
+        $response = $this->runApp('GET', '/search', ['query' => 'not found']);
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertNotContains('<section class="comment">', (string)$response->getBody());
