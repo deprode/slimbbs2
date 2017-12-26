@@ -26,6 +26,8 @@ return [
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
-        ]
+        ],
+
+        'admin_id' => getenv('ADMIN_ID')
     ],
 ];
