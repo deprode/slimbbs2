@@ -40,7 +40,7 @@ class LikeAction
         try {
             $this->comment->addLike($thread_id, $comment_id);
         } catch (SaveFailedException $e) {
-            $this->logger->error($e->getMessage(), ['excepion' => $e]);
+            $this->logger->error($e->getMessage(), ['exception' => $e]);
             return $response->withStatus(500);
         }
 
