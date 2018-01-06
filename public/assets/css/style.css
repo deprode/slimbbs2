@@ -2,20 +2,27 @@ a {
     color: darkgreen;
 }
 
+button,
 input[type='submit'] {
     background-color: darkgreen;
     border: 0.1rem solid darkgreen;
 }
 
+button,
 input[type='submit'][disabled]:hover {
     background-color: darkgreen;
     border: 0.1rem solid darkgreen;
+}
+
+.hidden {
+    display: none;
 }
 
 .search .search__query:focus {
     border-color: darkgreen;
 }
 
+button.button--small,
 input.button--small {
     font-size: 1.2rem;
     font-weight: 400;

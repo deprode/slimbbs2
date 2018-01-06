@@ -103,6 +103,10 @@ $container['App\Action\CommentSaveAction'] = function ($c) {
     return new App\Action\CommentSaveAction($c->get('logger'), $c->get('CommentService'), $c->get('SaveResponder'), $c->get('AuthService'), $c->get('MessageService'));
 };
 
+$container['App\Action\CommentUpdateAction'] = function ($c) {
+    return new App\Action\CommentUpdateAction($c->get('logger'), $c->get('CommentService'));
+};
+
 $container['App\Action\CommentDeleteAction'] = function ($c) {
     return new App\Action\CommentDeleteAction($c->get('logger'), $c->get('CommentService'), $c->get('AuthService'), $c->get('MessageService'), $c->get('DeleteResponder'));
 };
@@ -222,11 +226,30 @@ $container['App\Validation\CommentSaveValidation'] = function ($c) {
     return new \DavidePastore\Slim\Validation\Validation($saveValidators, $translator);
 };
 
+$container['App\Validation\CommentDeleteValidation'] = function ($c) {
+    $translator = $c->get('App\Validation\Translator');
+    $deleteValidators = [
+        'thread_id'  => \Respect\Validation\Validator::intVal()->digit()->notEmpty()->setName('スレッドID'),
+        'comment_id' => \Respect\Validation\Validator::intVal()->digit()->notEmpty()->setName('コメントID'),
+    ];
+    return new \DavidePastore\Slim\Validation\Validation($deleteValidators, $translator);
+};
+
+$container['App\Validation\CommentLikeValidation'] = function ($c) {
+    $translator = $c->get('App\Validation\Translator');
+    $likeValidators = [
+        'thread_id'  => \Respect\Validation\Validator::intVal()->digit()->notEmpty()->setName('スレッドID'),
+        'comment_id' => \Respect\Validation\Validator::intVal()->digit()->notEmpty()->setName('コメントID'),
+    ];
+    return new \DavidePastore\Slim\Validation\Validation($likeValidators, $translator);
+};
+
 $container['App\Validation\CommentUpdateValidation'] = function ($c) {
     $translator = $c->get('App\Validation\Translator');
     $updateValidators = [
         'thread_id'  => \Respect\Validation\Validator::intVal()->digit()->notEmpty()->setName('スレッドID'),
         'comment_id' => \Respect\Validation\Validator::intVal()->digit()->notEmpty()->setName('コメントID'),
+        'comment' => \Respect\Validation\Validator::stringType()->notEmpty()->length(null, 400)->setName('本文')
     ];
     return new \DavidePastore\Slim\Validation\Validation($updateValidators, $translator);
 };

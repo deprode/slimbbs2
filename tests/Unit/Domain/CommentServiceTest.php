@@ -82,6 +82,15 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \App\Exception\SaveFailedException
+     */
+    public function testUpdateComment()
+    {
+        $this->assertEquals(1, $this->comment->updateComment(1, 1, 'hoge'));
+        $this->comment->updateComment(1, 1, 'hoge');
+    }
+
+    /**
      * @expectedException \App\Exception\DeleteFailedException
      */
     public function testDeleteComment()

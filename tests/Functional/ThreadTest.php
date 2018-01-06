@@ -222,4 +222,14 @@ class ThreadTest extends BaseTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertNotContains('<input type="submit" value="そうだね">', (string)$response->getBody());
     }
+
+    public function testコメントの編集()
+    {
+        $response = $this->runApp('PUT', '/thread', ['thread_id' => "1", 'comment_id' => "1", 'comment' => 'comment_test2'], true);
+        $this->assertEquals(204, $response->getStatusCode());
+
+        $response = $this->runApp('GET', '/thread?thread_id=1');
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertContains('comment_test2', (string)$response->getBody());
+    }
 }

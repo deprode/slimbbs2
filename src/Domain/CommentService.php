@@ -107,6 +107,34 @@ SAVE;
         }
     }
 
+    /**
+     * @throws SaveFailedException
+     */
+    public function updateComment(int $thread_id, int $comment_id, string $comment): bool
+    {
+        $sql = <<<UPDATE_COMMENT
+UPDATE
+    `comments`
+SET
+    `comment` = :comment, `updated_at` = :updated_at    
+WHERE
+    `thread_id` = :thread_id AND `comment_id` = :comment_id;
+UPDATE_COMMENT;
+
+        $values = [
+            ':thread_id'  => ['value' => $thread_id, 'type' => \PDO::PARAM_INT],
+            ':comment_id'  => ['value' => $comment_id, 'type' => \PDO::PARAM_INT],
+            ':comment'    => ['value' => $comment, 'type' => \PDO::PARAM_STR],
+            ':updated_at' => ['value' => date_create()->format('Y-m-d H:i:s'), 'type' => \PDO::PARAM_STR],
+        ];
+
+        try {
+            return $this->db->execute($sql, $values);
+        } catch (\PDOException $e) {
+            throw new SaveFailedException();
+        }
+    }
+
     public function deleteComment(int $comment_id, int $user_id): bool
     {
         $sql = <<<DELETE
