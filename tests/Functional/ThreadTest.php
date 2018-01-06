@@ -211,7 +211,7 @@ class ThreadTest extends BaseTestCase
 
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains('そうだね&#215;<span id="1_like">1</span>', (string)$response->getBody());
+        $this->assertContains('そうだね&#215;<span id="like-1_like">1</span>', (string)$response->getBody());
     }
 
     public function test匿名でそうだねが出ない()
