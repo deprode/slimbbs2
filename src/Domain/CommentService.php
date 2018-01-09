@@ -110,7 +110,7 @@ SAVE;
     /**
      * @throws SaveFailedException
      */
-    public function updateComment(int $thread_id, int $comment_id, string $comment): bool
+    public function updateComment(int $thread_id, int $comment_id, string $comment): int
     {
         $sql = <<<UPDATE_COMMENT
 UPDATE
