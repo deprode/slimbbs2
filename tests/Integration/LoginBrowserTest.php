@@ -57,7 +57,7 @@ class LoginBrowserTest extends \PHPUnit_Framework_TestCase
             WebDriverExpectedCondition::titleContains('Slimbbs')
         );
 
-        $this->assertContains("Slimbbs", $this->driver->getTitle());
+        $this->assertEquals("Toppage - Slimbbs", $this->driver->getTitle());
         $this->assertNotContains("Error", $this->driver->getTitle());
     }
 }
