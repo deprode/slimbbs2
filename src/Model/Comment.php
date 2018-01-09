@@ -13,7 +13,7 @@ class Comment extends Model
     protected $created_at;
     protected $updated_at;
 
-    public function __toString()
+    public function __toString(): string
     {
         return <<<TO_STRING
 comment_id: $this->comment_id

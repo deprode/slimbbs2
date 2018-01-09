@@ -24,6 +24,7 @@ created_at: 2017-12-31
 TOSTRING;
 
         $this->assertEquals($string, (string)$thread);
+        $this->assertInternalType('string', (string)$thread);
     }
 
 }

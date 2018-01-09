@@ -31,5 +31,6 @@ updated_at:
 TOSTRING;
 
         $this->assertEquals($string, (string)$comment);
+        $this->assertInternalType('string', (string)$comment);
     }
 }

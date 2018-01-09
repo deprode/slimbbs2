@@ -24,5 +24,6 @@ access_secret: secret
 TOSTRING;
 
         $this->assertEquals($string, (string)$user);
+        $this->assertInternalType('string', (string)$user);
     }
 }

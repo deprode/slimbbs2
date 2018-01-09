@@ -10,7 +10,7 @@ class Thread extends Model
     protected $comment;
     protected $created_at;
 
-    public function __toString()
+    public function __toString(): string
     {
         return <<<TO_STRING
 thread_id: $this->thread_id

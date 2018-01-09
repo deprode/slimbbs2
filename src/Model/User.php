@@ -11,7 +11,7 @@ class User extends Model
     protected $access_token;
     protected $access_secret;
 
-    public function __toString()
+    public function __toString(): string
     {
         return <<<TO_STRING
 user_id: $this->user_id
