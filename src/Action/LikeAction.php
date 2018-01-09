@@ -38,7 +38,10 @@ class LikeAction
         $comment_id = $request->getParsedBodyParam('comment_id');
         $thread_id = $request->getParsedBodyParam('thread_id');
         try {
-            $this->comment->addLike($thread_id, $comment_id);
+            $result = $this->comment->addLike($thread_id, $comment_id);
+            if ($result === false) {
+                throw new SaveFailedException();
+            }
         } catch (SaveFailedException $e) {
             $this->logger->error($e->getMessage(), ['exception' => $e]);
             return $response->withStatus(500);
