@@ -2,6 +2,7 @@
 
 namespace App\Responder;
 
+use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Response;
 use Slim\Views\Twig;
 
@@ -14,12 +15,12 @@ class HomeResponder
         $this->view = $view;
     }
 
-    public function index(Response $response, array $data)
+    public function index(Response $response, array $data): ResponseInterface
     {
         return $this->view->render($response, 'index.twig', $data);
     }
 
-    public function fetchFailed(Response $response)
+    public function fetchFailed(Response $response): ResponseInterface
     {
         $error_msg = "スレッドの取得に失敗しました。元の画面から、もう一度やり直してください。";
         $response = $response->withStatus(400);

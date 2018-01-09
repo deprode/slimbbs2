@@ -2,6 +2,7 @@
 
 namespace App\Responder;
 
+use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Response;
 use Slim\Views\Twig;
 
@@ -14,28 +15,28 @@ class SaveResponder
         $this->view = $view;
     }
 
-    public function csrfInvalid(Response $response)
+    public function csrfInvalid(Response $response): ResponseInterface
     {
         $error_msg = "投稿に失敗しました。元の画面から、もう一度やり直してください。";
         $response = $response->withStatus(400);
         return $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
     }
 
-    public function invalid(Response $response, string $redirect)
+    public function invalid(Response $response, string $redirect): ResponseInterface
     {
         $error_msg = "投稿に失敗しました。元の画面から、もう一度やり直してください。";
         $response = $response->withStatus(400);
         return $this->view->render($response, 'error.twig', ['error_message' => $error_msg, 'redirect' => $redirect]);
     }
 
-    public function saveFailed(Response $response)
+    public function saveFailed(Response $response): ResponseInterface
     {
         $error_msg = "保存に失敗しました。元の画面から、もう一度やり直してください。";
         $response = $response->withStatus(400);
         return $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
     }
 
-    public function saved(Response $response, string $redirect)
+    public function saved(Response $response, string $redirect): Response
     {
         return $response->withRedirect($redirect, 303);
     }

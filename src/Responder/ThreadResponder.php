@@ -2,6 +2,7 @@
 
 namespace App\Responder;
 
+use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Response;
 use Slim\Views\Twig;
 
@@ -14,17 +15,17 @@ class ThreadResponder
         $this->view = $view;
     }
 
-    public function index(Response $response, array $data)
+    public function index(Response $response, array $data): ResponseInterface
     {
         return $this->view->render($response, 'thread.twig', $data);
     }
 
-    public function invalid(Response $response, string $redirect)
+    public function invalid(Response $response, string $redirect): Response
     {
         return $response->withRedirect($redirect, 302);
     }
 
-    public function fetchFailed(Response $response)
+    public function fetchFailed(Response $response): ResponseInterface
     {
         $error_msg = "コメントの取得に失敗しました。元の画面から、もう一度やり直してください。";
         $response = $response->withStatus(400);
