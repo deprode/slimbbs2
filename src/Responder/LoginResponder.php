@@ -23,14 +23,14 @@ class LoginResponder
     public function oAuthFailed(Response $response): ResponseInterface
     {
         $error_msg = "ログインに失敗しました。時間をおいてから、もう一度やり直してください。";
-        $response = $response->withStatus(401);
-        return $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
+        $response = $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
+        return $response->withStatus(401);
     }
 
     public function saveFailed(Response $response): ResponseInterface
     {
         $error_msg = "ユーザー情報の保存に失敗しました。管理責任者までお問い合わせください。";
-        $response = $response->withStatus(500);
-        return $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
+        $response = $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
+        return $response->withStatus(500);
     }
 }

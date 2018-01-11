@@ -22,7 +22,6 @@ class LoginResponderTest extends TestCase
     public function testOAuthFailed()
     {
         $response = new Response();
-        $response = $response->withStatus(401);
         $response = $response->write('ログインに失敗しました。時間をおいてから、もう一度やり直してください。');
 
         $twig = $this->createMock(Twig::class);
@@ -38,7 +37,6 @@ class LoginResponderTest extends TestCase
     public function testSaveFailed()
     {
         $response = new Response();
-        $response = $response->withStatus(500);
         $response = $response->write('ユーザー情報の保存に失敗しました。管理責任者までお問い合わせください。');
 
         $twig = $this->createMock(Twig::class);

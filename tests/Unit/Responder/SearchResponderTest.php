@@ -13,7 +13,6 @@ class SearchResponderTest extends TestCase
     public function testShowComments()
     {
         $response = new Response();
-        $response = $response->withStatus(200);
         $response = $response->write('query');
 
         $twig = $this->createMock(Twig::class);
@@ -30,7 +29,6 @@ class SearchResponderTest extends TestCase
     public function testEmptyQuery()
     {
         $response = new Response();
-        $response = $response->withRedirect('/', 302);
 
         $twig = $this->createMock(Twig::class);
         $twig->expects($this->any())->method('render')->willReturn($response);
@@ -45,7 +43,6 @@ class SearchResponderTest extends TestCase
     public function testFetchFailed()
     {
         $response = new Response();
-        $response = $response->withStatus(400);
         $response = $response->write('検索データの取得に失敗しました');
 
         $twig = $this->createMock(Twig::class);

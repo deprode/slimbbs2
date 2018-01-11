@@ -12,7 +12,6 @@ class HomeResponderTest extends TestCase
     public function testIndex()
     {
         $response = new Response();
-        $response = $response->withStatus(200);
         $response = $response->write('1, 2');
 
         $twig = $this->createMock(Twig::class);
@@ -28,7 +27,6 @@ class HomeResponderTest extends TestCase
     public function testFetchFailed()
     {
         $response = new Response();
-        $response = $response->withStatus(400);
         $response = $response->write('スレッドの取得に失敗しました。元の画面から、もう一度やり直してください。');
 
         $twig = $this->createMock(Twig::class);

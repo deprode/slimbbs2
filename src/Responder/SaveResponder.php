@@ -18,22 +18,22 @@ class SaveResponder
     public function csrfInvalid(Response $response): ResponseInterface
     {
         $error_msg = "投稿に失敗しました。元の画面から、もう一度やり直してください。";
-        $response = $response->withStatus(400);
-        return $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
+        $response = $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
+        return $response->withStatus(400);
     }
 
     public function invalid(Response $response, string $redirect): ResponseInterface
     {
         $error_msg = "投稿に失敗しました。元の画面から、もう一度やり直してください。";
-        $response = $response->withStatus(400);
-        return $this->view->render($response, 'error.twig', ['error_message' => $error_msg, 'redirect' => $redirect]);
+        $response = $this->view->render($response, 'error.twig', ['error_message' => $error_msg, 'redirect' => $redirect]);
+        return $response->withStatus(400);
     }
 
     public function saveFailed(Response $response): ResponseInterface
     {
         $error_msg = "保存に失敗しました。元の画面から、もう一度やり直してください。";
-        $response = $response->withStatus(400);
-        return $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
+        $response = $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
+        return $response->withStatus(400);
     }
 
     public function saved(Response $response, string $redirect): Response

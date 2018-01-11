@@ -12,7 +12,6 @@ class DeleteResponderTest extends TestCase
     public function testCsrfInvalid()
     {
         $response = new Response();
-        $response = $response->withStatus(400);
         $response = $response->write('削除に失敗しました。元の画面から、もう一度やり直してください。');
 
         $twig = $this->createMock(Twig::class);
@@ -28,7 +27,6 @@ class DeleteResponderTest extends TestCase
     public function testInvalid()
     {
         $response = new Response();
-        $response = $response->withStatus(400);
         $response = $response->write('削除に失敗しました。元の画面から、もう一度やり直してください。');
 
         $twig = $this->createMock(Twig::class);
@@ -44,7 +42,6 @@ class DeleteResponderTest extends TestCase
     public function testDeleteFailed()
     {
         $response = new Response();
-        $response = $response->withStatus(400);
         $response = $response->write('削除に失敗しました。元の画面から、もう一度やり直してください。');
 
         $twig = $this->createMock(Twig::class);

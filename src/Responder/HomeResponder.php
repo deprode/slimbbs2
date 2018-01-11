@@ -23,7 +23,7 @@ class HomeResponder
     public function fetchFailed(Response $response): ResponseInterface
     {
         $error_msg = "スレッドの取得に失敗しました。元の画面から、もう一度やり直してください。";
-        $response = $response->withStatus(400);
-        return $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
+        $response = $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
+        return $response->withStatus(400);
     }
 }

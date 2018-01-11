@@ -38,7 +38,6 @@ class ThreadResponderTest extends TestCase
     public function testFetchFailed()
     {
         $response = new Response();
-        $response = $response->withStatus(400);
         $response = $response->write('コメントの取得に失敗しました。元の画面から、もう一度やり直してください。');
 
         $twig = $this->createMock(Twig::class);
