@@ -18,7 +18,6 @@ class SearchResponderTest extends TestCase
         $twig = $this->createMock(Twig::class);
         $twig->expects($this->any())->method('render')->willReturn($response);
 
-
         $responder = new SearchResponder($twig);
         $response = $responder->comments(new Response(), ['query' => 'query']);
 
@@ -28,13 +27,7 @@ class SearchResponderTest extends TestCase
 
     public function testEmptyQuery()
     {
-        $response = new Response();
-
-        $twig = $this->createMock(Twig::class);
-        $twig->expects($this->any())->method('render')->willReturn($response);
-
-
-        $responder = new SearchResponder($twig);
+        $responder = new SearchResponder(new Twig(__DIR__ . '/../../../templates'));
         $response = $responder->emptyQuery(new Response(), '/');
 
         $this->assertEquals(302, $response->getStatusCode());
@@ -42,14 +35,7 @@ class SearchResponderTest extends TestCase
 
     public function testFetchFailed()
     {
-        $response = new Response();
-        $response = $response->write('検索データの取得に失敗しました');
-
-        $twig = $this->createMock(Twig::class);
-        $twig->expects($this->any())->method('render')->willReturn($response);
-
-
-        $responder = new SearchResponder($twig);
+        $responder = new SearchResponder(new Twig(__DIR__ . '/../../../templates'));
         $response = $responder->fetchFailed(new Response());
 
         $this->assertEquals(400, $response->getStatusCode());

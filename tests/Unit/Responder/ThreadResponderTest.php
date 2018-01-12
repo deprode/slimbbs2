@@ -27,8 +27,7 @@ class ThreadResponderTest extends TestCase
 
     public function testInvalid()
     {
-        $twig = $this->createMock(Twig::class);
-        $responder = new ThreadResponder($twig);
+        $responder = new ThreadResponder(new Twig(__DIR__ . '/../../../templates'));
         $response = $responder->invalid(new Response(), '/redirect');
 
         $this->assertEquals(302, $response->getStatusCode());
@@ -37,13 +36,7 @@ class ThreadResponderTest extends TestCase
 
     public function testFetchFailed()
     {
-        $response = new Response();
-        $response = $response->write('コメントの取得に失敗しました。元の画面から、もう一度やり直してください。');
-
-        $twig = $this->createMock(Twig::class);
-        $twig->expects($this->any())->method('render')->willReturn($response);
-
-        $responder = new ThreadResponder($twig);
+        $responder = new ThreadResponder(new Twig(__DIR__ . '/../../../templates'));
         $response = $responder->fetchFailed(new Response());
 
         $this->assertEquals(400, $response->getStatusCode());

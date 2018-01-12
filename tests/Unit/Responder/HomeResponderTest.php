@@ -14,6 +14,7 @@ class HomeResponderTest extends TestCase
         $response = new Response();
         $response = $response->write('1, 2');
 
+        // twig独自拡張がいろいろ依存しているので、Mockを作っている
         $twig = $this->createMock(Twig::class);
         $twig->expects($this->any())->method('render')->willReturn($response);
 
@@ -26,13 +27,7 @@ class HomeResponderTest extends TestCase
 
     public function testFetchFailed()
     {
-        $response = new Response();
-        $response = $response->write('スレッドの取得に失敗しました。元の画面から、もう一度やり直してください。');
-
-        $twig = $this->createMock(Twig::class);
-        $twig->expects($this->any())->method('render')->willReturn($response);
-
-        $responder = new HomeResponder($twig);
+        $responder = new HomeResponder(new Twig(__DIR__ . '/../../../templates'));
         $response = $responder->fetchFailed(new Response());
 
         $this->assertEquals(400, $response->getStatusCode());
