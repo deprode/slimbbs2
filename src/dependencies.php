@@ -72,6 +72,18 @@ $container['flash'] = function () {
     return new \Slim\Flash\Messages();
 };
 
+$container['s3'] = function ($c) {
+    $settings = $c->get('settings')['s3'];
+    return new \Aws\S3\S3Client([
+        'version' => 'latest',
+        'region'  => $settings['region'],
+        'credentials' => [
+            'key'    => $settings['key'],
+            'secret' => $settings['secret'],
+        ],
+    ]);
+};
+
 // -----------------------------------------------------------------------------
 // Action factories
 // -----------------------------------------------------------------------------
@@ -96,11 +108,11 @@ $container['App\Action\SearchAction'] = function ($c) {
 };
 
 $container['App\Action\ThreadAction'] = function ($c) {
-    return new App\Action\ThreadAction($c->get('logger'), $c->get('csrf'), $c->get('CommentService'), $c->get('AuthService'), $c->get('MessageService'), $c->get('ThreadResponder'));
+    return new App\Action\ThreadAction($c->get('logger'), $c->get('csrf'), $c->get('CommentService'), $c->get('AuthService'), $c->get('MessageService'), $c->get('ThreadResponder'), $c->get('settings')['s3']);
 };
 
 $container['App\Action\CommentSaveAction'] = function ($c) {
-    return new App\Action\CommentSaveAction($c->get('logger'), $c->get('CommentService'), $c->get('SaveResponder'), $c->get('AuthService'), $c->get('MessageService'));
+    return new App\Action\CommentSaveAction($c->get('logger'), $c->get('CommentService'), $c->get('SaveResponder'), $c->get('AuthService'), $c->get('MessageService'), $c->get('StorageService'));
 };
 
 $container['App\Action\CommentUpdateAction'] = function ($c) {
@@ -143,6 +155,10 @@ $container['OAuthService'] = function ($c) {
 
 $container['MessageService'] = function ($c) {
     return new App\Domain\MessageService($c->get('flash'));
+};
+
+$container['StorageService'] = function ($c) {
+    return new App\Domain\StorageService($c->get('s3'), $c->get('settings')['s3']['bucket']);
 };
 // -----------------------------------------------------------------------------
 // Responder factories

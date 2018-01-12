@@ -20,7 +20,7 @@ class CommentService
     {
         $sql = <<<COMMENTS
 SELECT
-  `comments`.`comment_id`, `comments`.`user_id`, `comments`.`like_count`, `comments`.`comment`, `comments`.`created_at`, `users`.`user_name`, `users`.`user_image_url`
+  `comments`.`comment_id`, `comments`.`user_id`, `comments`.`like_count`, `comments`.`comment`, `comments`.`photo_url`, `comments`.`created_at`, `users`.`user_name`, `users`.`user_image_url`
 FROM
   `comments`
 LEFT JOIN
@@ -91,12 +91,13 @@ INSERT INTO
     `comments`
     (`thread_id`, `user_id`, `like_count`, `comment`, `photo_url`, `created_at`, `updated_at`)
 VALUES
-    (:thread_id, :user_id, 0, :comment, '', :created_at, NULL);
+    (:thread_id, :user_id, 0, :comment, :photo_url, :created_at, NULL);
 SAVE;
         $values = [
             ':thread_id'  => ['value' => $comment->thread_id, 'type' => \PDO::PARAM_INT],
             ':user_id'    => ['value' => $comment->user_id, 'type' => \PDO::PARAM_INT],
             ':comment'    => ['value' => $comment->comment, 'type' => \PDO::PARAM_STR],
+            ':photo_url'  => ['value' => $comment->photo_url, 'type' => \PDO::PARAM_STR],
             ':created_at' => ['value' => date_create()->format('Y-m-d H:i:s'), 'type' => \PDO::PARAM_STR],
         ];
 

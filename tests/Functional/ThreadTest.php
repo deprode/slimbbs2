@@ -100,6 +100,30 @@ class ThreadTest extends BaseTestCase
         $this->assertContains('投稿に失敗しました。', (string)$response->getBody());
     }
 
+    public function test画像の投稿()
+    {
+        $_FILES = [
+            'picture' => [
+                'name' => 'dummy.png',
+                'type' => 'image/png',
+                'tmp_name' => __DIR__ . '/../data/dummy.png',
+                'error' => 0,
+                'size' => 13188
+            ]
+        ];
+
+        $response = $this->runApp('POST', '/thread', ['comment' => 'file_upload_test', 'thread_id' => "1", 'user_id' => (string)1]);
+        $this->assertEquals(303, $response->getStatusCode());
+        $this->assertContains('/thread?thread_id=1', (string)$response->getHeader('location')[0]);
+        $this->assertNotContains('Slimbbs', (string)$response->getBody());
+
+        $response = $this->runApp('GET', '/thread?thread_id=1');
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertContains('コメントを保存しました。', (string)$response->getBody());
+        $this->assertContains('<img src="https://s3-ap-northeast-1.amazonaws.com/slimbbs2/', (string)$response->getBody());
+        $this->assertContains('alt="file_upload_test"', (string)$response->getBody());
+    }
+
     public function test投稿の削除()
     {
         $this->postReply();

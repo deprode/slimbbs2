@@ -20,6 +20,7 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
             'user_id'        => 1,
             'created_at'     => '2017-12-06 13:42:28',
             'comment'        => 'sample comment test',
+            'photo_url'      => 'http://via.placeholder.com/32x32',
             'user_name'      => 'testuser',
             'user_image_url' => 'http://via.placeholder.com/64x64'
         ];
@@ -76,6 +77,7 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
         $comment->thread_id = 1;
         $comment->user_id = 1;
         $comment->comment = 'aaaa';
+        $comment->photo_url = 'https://examnple.com/picture';
         $this->assertEquals(1, $this->comment->saveComment($comment));
 
         $this->comment->saveComment($comment);

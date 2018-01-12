@@ -24,8 +24,15 @@ class SaveResponder
 
     public function invalid(Response $response, string $redirect): ResponseInterface
     {
-        $error_msg = "投稿に失敗しました。元の画面から、もう一度やり直してください。";
+        $error_msg = "投稿に失敗しました。投稿内容を見直して、もう一度やり直してください。";
         $response = $this->view->render($response, 'error.twig', ['error_message' => $error_msg, 'redirect' => $redirect]);
+        return $response->withStatus(400);
+    }
+
+    public function uploadFailed(Response $response): ResponseInterface
+    {
+        $error_msg = "画像のアップロードに失敗しました。元の画面から、もう一度やり直してください。";
+        $response = $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
         return $response->withStatus(400);
     }
 

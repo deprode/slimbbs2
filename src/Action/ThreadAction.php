@@ -20,8 +20,9 @@ class ThreadAction
     private $auth;
     private $message;
     private $responder;
+    private $settings;
 
-    public function __construct(LoggerInterface $logger, Csrf $csrf, CommentService $comment, AuthService $auth, MessageService $message, ThreadResponder $responder)
+    public function __construct(LoggerInterface $logger, Csrf $csrf, CommentService $comment, AuthService $auth, MessageService $message, ThreadResponder $responder, array $settings)
     {
         $this->logger = $logger;
         $this->csrf = $csrf;
@@ -29,6 +30,7 @@ class ThreadAction
         $this->auth = $auth;
         $this->message = $message;
         $this->responder = $responder;
+        $this->settings = $settings;
     }
 
     public function index(Request $request, Response $response)
@@ -65,6 +67,8 @@ class ThreadAction
         $data['loggedIn'] = $this->auth->isLoggedIn();
         $data['saved'] = $this->message->getMessage('SavedComment');
         $data['deleted'] = $this->message->getMessage('DeletedComment');
+        $data['region'] = $this->settings['region'];
+        $data['bucket'] = $this->settings['bucket'];
 
         // Render index view
         return $this->responder->index($response, $data);

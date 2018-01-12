@@ -28,6 +28,13 @@ return [
             'prefix'    => '',
         ],
 
-        'admin_id' => getenv('ADMIN_ID')
+        'admin_id' => getenv('ADMIN_ID'),
+
+        's3' => [
+            'key'    => getenv('AWS_S3_KEY'),
+            'secret' => getenv('AWS_S3_SECRET'),
+            'bucket' => getenv('AWS_S3_BUCKET_NAME'),
+            'region' => getenv('AWS_S3_REGION')
+        ],
     ],
 ];

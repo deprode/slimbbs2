@@ -2,6 +2,10 @@ a {
     color: darkgreen;
 }
 
+img {
+    max-width: 100%;
+}
+
 button,
 input[type='submit'] {
     background-color: darkgreen;

@@ -23,8 +23,9 @@
     {% endif %}
     <div class="row">
         <div class="column column-50">
-            <form action="{{ path_for('thread_save') }}" method="post" id="comment_form">
+            <form action="{{ path_for('thread_save') }}" method="post" id="comment_form" enctype="multipart/form-data">
                 <label for="comment">コメント: <input type="text" name="comment"></label>
+                <label for="picture">画像: <input type="file" name="picture" id="picture" accept="image/png, image/gif, image/jpeg"></label>
                 <input type="hidden" name="thread_id" value="{{ thread_id }}">
                 <input type="hidden" name="user_id" value="{{ user_id }}">
                 <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
@@ -65,6 +66,11 @@
                         <div id="{{ comment.comment_id }}">
                             {{ comment.comment }}
                         </div>
+                        {% if comment.photo_url %}
+                        <div class="photo">
+                            <img src="https://s3-{{ region }}.amazonaws.com/{{ bucket }}/{{ comment.photo_url }}" alt="{{ comment.comment }}">
+                        </div>
+                        {% endif %}
                         {% if (isSigned and comment.user_id == user_id) %}
                         <div class="hidden">
                             <form action="{{ path_for('update_comment') }}" method="post" id="edit-{{ comment.comment_id }}-to" class="js-edit-form">
