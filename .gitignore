@@ -4,3 +4,4 @@
 /db/
 /cache/
 .env
+!.env.sample
