@@ -6,6 +6,7 @@ use App\Domain\AuthService;
 use App\Domain\CommentService;
 use App\Domain\MessageService;
 use App\Exception\FetchFailedException;
+use App\Model\Sort;
 use App\Responder\ThreadResponder;
 use Psr\Log\LoggerInterface;
 use Slim\Csrf\Guard as Csrf;
@@ -37,13 +38,21 @@ class ThreadAction
     {
         $this->logger->info("Slimbbs '/' route");
 
-        $thread_id = $request->getParam('thread_id');
-        if (empty($thread_id) || !is_numeric($thread_id)) {
+
+        try {
+            $thread_id = $request->getParam('thread_id');
+            if (empty($thread_id) || !is_numeric($thread_id)) {
+                throw new \InvalidArgumentException();
+            }
+
+            $param = $request->getParam('sort') ?? 'desc';
+            $sort = new Sort($param);
+        } catch (\InvalidArgumentException $e) {
             return $this->responder->invalid($response, '/');
         }
 
         try {
-            $data['comments'] = $this->comment->getComments($thread_id);
+            $data['comments'] = $this->comment->getComments((int)$thread_id, $sort);
         } catch (FetchFailedException $e) {
             $this->logger->error($e->getMessage(), ['exception' => $e]);
             return $this->responder->fetchFailed($response);
@@ -62,6 +71,7 @@ class ThreadAction
         $data['name'] = $request->getAttribute($nameKey);
         $data['value'] = $request->getAttribute($valueKey);
         $data['thread_id'] = $thread_id;
+        $data['sort'] = $sort;
         $data['user_id'] = $this->auth->getUserId();
         $data['is_admin'] = $this->auth->isAdmin();
         $data['loggedIn'] = $this->auth->isLoggedIn();

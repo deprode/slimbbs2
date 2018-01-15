@@ -27,6 +27,7 @@
                 <label for="comment">コメント: <input type="text" name="comment"></label>
                 <label for="picture">画像: <input type="file" name="picture" id="picture" accept="image/png, image/gif, image/jpeg"></label>
                 <input type="hidden" name="thread_id" value="{{ thread_id }}">
+                <input type="hidden" name="sort" value="{{ sort }}">
                 <input type="hidden" name="user_id" value="{{ user_id }}">
                 <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
                 <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
@@ -37,6 +38,16 @@
     <div class="row">
         <article class="comments column column-50">
             {% if comments %}
+                <div>
+                    <form action="{{ path_for('thread') }}" method="get" class="form--inline">
+                        <input type="hidden" name="thread_id" value="{{ thread_id }}">
+                        <select name="sort">
+                            <option value="asc" {% if sort == "asc" %}selected{% endif %}>古い順</option>
+                            <option value="desc" {% if sort == "desc" %}selected{% endif %}>新しい順</option>
+                        </select>
+                        <input type="submit" value="並び順を変更" class="button--small">
+                    </form>
+                </div>
             {% for comment in comments %}
                 <section class="comment">
                     <header class="comment__header">

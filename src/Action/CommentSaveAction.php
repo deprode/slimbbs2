@@ -10,6 +10,7 @@ use App\Domain\StorageService;
 use App\Exception\SaveFailedException;
 use App\Exception\UploadFailedException;
 use App\Model\Comment;
+use App\Model\Sort;
 use App\Responder\SaveResponder;
 use Psr\Log\LoggerInterface;
 use Slim\Http\Request;
@@ -58,7 +59,12 @@ class CommentSaveAction
         }
 
         $data = $request->getParsedBody();
-        $url = $request->getUri()->getPath() . (empty(intval($data['thread_id'])) ? '' : '?thread_id=' . intval($data['thread_id']));
+        try {
+            $sort = new Sort($data['sort'] ?? 'desc');
+        } catch (\InvalidArgumentException $e) {
+            $sort = new Sort('desc');
+        }
+        $url = $request->getUri()->getPath() . (empty(intval($data['thread_id'])) ? '' : '?thread_id=' . intval($data['thread_id']) . '&sort=' . $sort->value());
 
         try {
             $comment = new Comment();

@@ -6,6 +6,7 @@ use App\Exception\DeleteFailedException;
 use App\Exception\FetchFailedException;
 use App\Exception\SaveFailedException;
 use App\Model\Comment;
+use App\Model\Sort;
 
 class CommentService
 {
@@ -16,7 +17,7 @@ class CommentService
         $this->db = $db;
     }
 
-    public function getComments(int $thread_id = null): array
+    public function getComments(int $thread_id = null, Sort $sort = null): array
     {
         $sql = <<<COMMENTS
 SELECT
@@ -27,11 +28,15 @@ LEFT JOIN
   `users`
   ON `comments`.`user_id` = `users`.`user_id`
 WHERE
-  `thread_id` = :thread_id;
+  `thread_id` = :thread_id
+ORDER BY 
+  `comments`.`comment_id` {$sort->value()};
 COMMENTS;
 
         try {
-            return $this->db->fetchAll($sql, [':thread_id' => ['value' => $thread_id, 'type' => \PDO::PARAM_INT]]);
+            return $this->db->fetchAll($sql, [
+                ':thread_id' => ['value' => $thread_id, 'type' => \PDO::PARAM_INT]
+            ]);
         } catch (\PDOException $e) {
             throw new FetchFailedException();
         }

@@ -62,7 +62,7 @@ class ThreadTest extends BaseTestCase
 
     public function postReply($user_id = "1")
     {
-        return $this->runApp('POST', '/thread', ['comment' => 'comment_test', 'thread_id' => "1", 'user_id' => (string)$user_id]);
+        return $this->runApp('POST', '/thread', ['comment' => 'comment_test', 'thread_id' => "1", 'user_id' => (string)$user_id, 'sort' => 'desc']);
     }
 
     public function testスレッドに返信()
@@ -76,6 +76,15 @@ class ThreadTest extends BaseTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('comment_test', (string)$response->getBody());
         $this->assertContains('コメントを保存しました。', (string)$response->getBody());
+    }
+
+    public function testソート順の記憶()
+    {
+        $this->postReply();
+
+        $response = $this->runApp('GET', '/thread?thread_id=1');
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertContains('<option value="desc" selected>', (string)$response->getBody());
     }
 
     public function test返信のValidationエラー()

@@ -5,6 +5,7 @@ namespace Test\Unit;
 use App\Domain\CommentService;
 use App\Domain\DatabaseService;
 use App\Model\Comment;
+use App\Model\Sort;
 
 class CommentServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,10 +39,10 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetComments()
     {
-        $comments = $this->comment->getComments(1);
+        $comments = $this->comment->getComments(1, new Sort('desc'));
         $this->assertEquals($this->data, $comments);
 
-        $this->comment->getComments(1);
+        $this->comment->getComments(1, new Sort('desc'));
     }
 
     /**

@@ -64,3 +64,10 @@ input.button--small {
 .comment__footer form {
     margin-bottom: 0;
 }
+
+.form--inline input,
+.form--inline button,
+.form--inline select{
+    display: inline-block;
+    width: auto;
+}
