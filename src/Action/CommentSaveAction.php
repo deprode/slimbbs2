@@ -48,7 +48,7 @@ class CommentSaveAction
         }
 
         $files = $request->getUploadedFiles();
-        if (!empty($files['picture'])) {
+        if (!empty($files['picture']->file)) {
             try {
                 $filename = $this->storage->upload($files['picture']);
             } catch (UploadFailedException $e) {
