@@ -30,6 +30,18 @@ a.button
     border-color: darkgreen;
 }
 
+@media screen and (min-width: 600px) {
+    .search .search__query {
+        min-width: 40%;
+    }
+}
+
+.search .search__query ,
+.search .search__button {
+    vertical-align: bottom;
+    margin-bottom: 0;
+}
+
 button.button--small,
 input.button--small {
     font-size: 1.2rem;
