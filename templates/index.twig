@@ -10,20 +10,23 @@
             <li>{{ deleted }}</li>
         {% endif %}
     </div>
-    <form action="{{ path_for('home') }}" method="post">
-        <label>コメント：<input type="text" name="comment"></label>
-        <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
-        <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
-        <input type="hidden" name="user_id" value="{{ user_id }}">
-        <input type="submit" value="スレッドを作成" class="button">
-    </form>
-    <article class="search column">
+    <div class="create-thread">
+        <h2>スレッドを作る</h2>
+        <form action="{{ path_for('home') }}" method="post">
+            <label>コメント：<input type="text" name="comment"></label>
+            <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
+            <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
+            <input type="hidden" name="user_id" value="{{ user_id }}">
+            <input type="submit" value="作成" class="button">
+        </form>
+    </div>
+    <div class="search column">
         <h2 class="search__title">コメントを探す</h2>
         <form action="{{ path_for('search') }}" method="get" class="form--inline">
             <label for="query" class="hidden">検索するコメント</label><input type="text" name="query" class="search__query">
             <input type="submit" value="検索" class="button search__button">
         </form>
-    </article>
+    </div>
     <article class="threads">
         <h2>スレッド一覧</h2>
         {% for thread in threads %}
