@@ -1,0 +1,12 @@
+<header>
+    <nav class="global-header">
+        <article class="global-header__top">
+            <a href="{{ path_for('home') }}" class="button">Top</a>
+        </article>
+        <article class="global-header__auth">
+            {% if not loggedIn %}
+                <a href="{{ path_for('login') }}" class="button auth__login">ログイン</a>
+            {% endif %}
+        </article>
+    </nav>
+</header>

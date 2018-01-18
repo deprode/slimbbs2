@@ -53,6 +53,7 @@ class SearchAction
         $data['value'] = $request->getAttribute($valueKey);
         $data['comments'] = $comment;
         $data['is_admin'] = $this->auth->isAdmin();
+        $data['loggedIn'] = $this->auth->isLoggedIn();
         $data['query'] = $query;
 
         return $this->responder->comments($response, $data);

@@ -2,11 +2,6 @@
 
 {% block title %}Toppage{% endblock %}
 {% block contents %}
-    {% if not loggedIn %}
-        <a href="{{ path_for('login') }}">ログイン</a>
-    {% else %}
-        <a href="{{ path_for('logout') }}">ログアウト</a>
-    {% endif %}
     <div class="message">
         {% if saved %}
             <li>{{ saved }}</li>

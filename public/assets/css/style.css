@@ -7,19 +7,23 @@ img {
 }
 
 button,
-input[type='submit'] {
+input[type='submit'],
+a.button
+{
     background-color: darkgreen;
     border: 0.1rem solid darkgreen;
 }
 
 button,
-input[type='submit'][disabled]:hover {
+input[type='submit'][disabled]:hover,
+a.button
+{
     background-color: darkgreen;
     border: 0.1rem solid darkgreen;
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .search .search__query:focus {
@@ -36,7 +40,8 @@ input.button--small {
 }
 
 .container {
-    margin: 2rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 
 .comment {
@@ -65,9 +70,25 @@ input.button--small {
     margin-bottom: 0;
 }
 
+.form--inline label,
 .form--inline input,
 .form--inline button,
 .form--inline select{
     display: inline-block;
     width: auto;
+}
+
+
+.global-header {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 6rem;
+}
+.global-footer {
+    padding-top: 6rem;
+}
+
+.auth__login,
+.auth__logout {
+    width: 100%;
 }

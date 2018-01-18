@@ -1,0 +1,11 @@
+<footer class="global-footer">
+    <div class="clearfix">
+        <nav class="auth float-right">
+            {% if not loggedIn %}
+                <a href="{{ path_for('login') }}" class="button auth__login">ログイン</a>
+            {% else %}
+                <a href="{{ path_for('logout') }}" class="button auth__logout">ログアウト</a>
+            {% endif %}
+        </nav>
+    </div>
+</footer>
