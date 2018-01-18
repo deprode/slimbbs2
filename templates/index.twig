@@ -17,6 +17,13 @@
         <input type="hidden" name="user_id" value="{{ user_id }}">
         <input type="submit" value="スレッドを作成" class="button">
     </form>
+    <article class="search column">
+        <h2 class="search__title">コメントを探す</h2>
+        <form action="{{ path_for('search') }}" method="get" class="form--inline">
+            <label for="query"><input type="text" name="query" class="search__query"></label>
+            <input type="submit" value="検索" class="button">
+        </form>
+    </article>
     <article class="threads">
         <h2>スレッド一覧</h2>
         {% for thread in threads %}
@@ -27,13 +34,4 @@
             </section>
         {% endfor %}
     </article>
-    <div class="row">
-        <article class="search column column-50">
-            <h2>検索フォーム</h2>
-            <form action="{{ path_for('search') }}" method="get">
-                <label for="query"><input type="text" name="query" class="search__query"></label>
-                <input type="submit" value="検索">
-            </form>
-        </article>
-    </div>
 {% endblock %}

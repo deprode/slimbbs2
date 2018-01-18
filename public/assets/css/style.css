@@ -44,6 +44,17 @@ input.button--small {
     padding-bottom: 2rem;
 }
 
+@media screen and (min-width: 600px) {
+    .container {
+        max-width: 80%;
+    }
+}
+@media screen and (min-width: 1080px) {
+    .container {
+        max-width: 80rem;
+    }
+}
+
 .comment {
     background: #f0f0f0;
     margin: .1rem;
