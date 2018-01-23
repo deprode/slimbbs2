@@ -5,10 +5,22 @@ namespace Tests\Unit\Responder;
 use App\Responder\HomeResponder;
 use PHPUnit\Framework\TestCase;
 use Slim\Http\Response;
+use Slim\Router;
 use Slim\Views\Twig;
+use Slim\Views\TwigExtension;
 
 class HomeResponderTest extends TestCase
 {
+    private $view;
+
+    public function setUp()
+    {
+        $router = $this->createMock(Router::class);
+        $router->expects($this->any())->method('pathFor')->willReturn('/');
+        $this->view = new Twig(__DIR__ . '/../../../templates');
+        $this->view->addExtension(new TwigExtension($router, __DIR__ . '/../../../templates'));
+    }
+
     public function testIndex()
     {
         $response = new Response();
@@ -27,7 +39,7 @@ class HomeResponderTest extends TestCase
 
     public function testFetchFailed()
     {
-        $responder = new HomeResponder(new Twig(__DIR__ . '/../../../templates'));
+        $responder = new HomeResponder($this->view);
         $response = $responder->fetchFailed(new Response());
 
         $this->assertEquals(400, $response->getStatusCode());

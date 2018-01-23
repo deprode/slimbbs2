@@ -5,11 +5,23 @@ namespace Tests\Unit\Responder;
 use App\Responder\SearchResponder;
 use PHPUnit\Framework\TestCase;
 use Slim\Http\Response;
+use Slim\Router;
 use Slim\Views\Twig;
+use Slim\Views\TwigExtension;
 
 
 class SearchResponderTest extends TestCase
 {
+    private $view;
+
+    public function setUp()
+    {
+        $router = $this->createMock(Router::class);
+        $router->expects($this->any())->method('pathFor')->willReturn('/');
+        $this->view = new Twig(__DIR__ . '/../../../templates');
+        $this->view->addExtension(new TwigExtension($router, __DIR__ . '/../../../templates'));
+    }
+
     public function testShowComments()
     {
         $response = new Response();
@@ -27,7 +39,7 @@ class SearchResponderTest extends TestCase
 
     public function testEmptyQuery()
     {
-        $responder = new SearchResponder(new Twig(__DIR__ . '/../../../templates'));
+        $responder = new SearchResponder($this->view);
         $response = $responder->emptyQuery(new Response(), '/');
 
         $this->assertEquals(302, $response->getStatusCode());
@@ -35,7 +47,7 @@ class SearchResponderTest extends TestCase
 
     public function testFetchFailed()
     {
-        $responder = new SearchResponder(new Twig(__DIR__ . '/../../../templates'));
+        $responder = new SearchResponder($this->view);
         $response = $responder->fetchFailed(new Response());
 
         $this->assertEquals(400, $response->getStatusCode());

@@ -40,7 +40,7 @@ class LoginBrowserTest extends \PHPUnit_Framework_TestCase
     public function testLogin()
     {
         $this->driver->get('http://localhost:8080/');
-        $this->driver->findElement(WebDriverBy::xpath('/html/body/div/a'))->click();
+        $this->driver->findElement(WebDriverBy::xpath('/html/body/div/header/nav/article[2]/a'))->click();
 
         $this->driver->wait()->until(
             WebDriverExpectedCondition::titleContains('Twitter')
