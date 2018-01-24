@@ -184,7 +184,12 @@ DELETE;
     public function addLike(int $thread_id, int $comment_id): bool
     {
         $sql = <<<SQL
-UPDATE `comments` SET `like_count` = `like_count` + 1 WHERE `thread_id` = :thread_id AND `comment_id` = :comment_id;
+UPDATE
+  `comments`
+SET
+  `like_count` = `like_count` + 1
+WHERE
+  `thread_id` = :thread_id AND `comment_id` = :comment_id;
 SQL;
 
         try {
