@@ -7,6 +7,10 @@ class LogoutTest extends BaseTestCase
     public function setUp()
     {
         parent::setUp();
+
+        $_SESSION = [];
+        $_SESSION['user_id'] = getenv('USER_ID');
+        $_SESSION['admin_id'] = getenv('ADMIN_ID');
     }
 
     public function testLogout()

@@ -27,7 +27,8 @@ class SearchTest extends BaseTestCase
         }
 
         $_SESSION = [];
-        $_SESSION['user_id'] = 1;
+        $_SESSION['user_id'] = getenv('USER_ID');
+        $_SESSION['admin_id'] = getenv('ADMIN_ID');
 
         $this->runApp('POST', '/', ['comment' => 'サンプル コメント テスト', 'user_id' => '1']);
     }
@@ -60,7 +61,7 @@ class SearchTest extends BaseTestCase
 
     public function test検索後コメント削除()
     {
-        $_SESSION['user_id'] = 2;
+        $_SESSION['user_id'] = getenv('ADMIN_ID');
 
         $response = $this->runApp('DELETE', '/thread', ['thread_id' => '1', 'comment_id' => '1', 'query' => 'aaaa']);
         $this->assertEquals(303, $response->getStatusCode());

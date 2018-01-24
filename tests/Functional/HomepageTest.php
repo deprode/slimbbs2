@@ -26,7 +26,8 @@ class HomepageTest extends BaseTestCase
         }
 
         $_SESSION = [];
-        $_SESSION['user_id'] = 1;
+        $_SESSION['user_id'] = getenv('USER_ID');
+        $_SESSION['admin_id'] = getenv('ADMIN_ID');
     }
 
     public function testトップページの表示()

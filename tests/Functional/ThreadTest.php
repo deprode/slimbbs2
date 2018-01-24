@@ -32,7 +32,8 @@ class ThreadTest extends BaseTestCase
         }
 
         $_SESSION = [];
-        $_SESSION['user_id'] = 1;
+        $_SESSION['user_id'] = getenv('USER_ID');
+        $_SESSION['admin_id'] = getenv('ADMIN_ID');
 
         $this->runApp('POST', '/', ['comment' => 'thread_test', 'user_id' => '1']);
     }
@@ -202,7 +203,7 @@ class ThreadTest extends BaseTestCase
     public function test管理者で削除()
     {
         $this->postReply("0");
-        $_SESSION['user_id'] = 2;
+        $_SESSION['user_id'] = getenv('ADMIN_ID');
 
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
@@ -220,7 +221,7 @@ class ThreadTest extends BaseTestCase
 
     public function test管理者でスレッド削除()
     {
-        $_SESSION['user_id'] = 2;
+        $_SESSION['user_id'] = getenv('ADMIN_ID');
 
         $response = $this->runApp('DELETE', '/thread', ['thread_id' => '1', 'comment_id' => '1']);
         $this->assertEquals(303, $response->getStatusCode());

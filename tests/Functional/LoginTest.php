@@ -10,6 +10,8 @@ class LoginTest extends BaseTestCase
         parent::setUp();
 
         $_SESSION = [];
+        $_SESSION['user_id'] = getenv('USER_ID');
+        $_SESSION['admin_id'] = getenv('ADMIN_ID');
     }
 
     public function testLogin()
