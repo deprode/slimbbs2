@@ -16,15 +16,13 @@ class CommentDeleteAction
 {
     private $log;
     private $comment;
-    private $auth;
     private $message;
     private $responder;
 
-    public function __construct(LoggerInterface $log, CommentService $comment, AuthService $auth, MessageService $message, DeleteResponder $responder)
+    public function __construct(LoggerInterface $log, CommentService $comment, MessageService $message, DeleteResponder $responder)
     {
         $this->log = $log;
         $this->comment = $comment;
-        $this->auth = $auth;
         $this->message = $message;
         $this->responder = $responder;
     }
@@ -40,15 +38,17 @@ class CommentDeleteAction
         $data = $request->getParsedBody();
 
         // Validation
-        if ($request->getAttribute('has_errors') || $this->auth->getUserId() == 0) {
+        $user_id = $request->getAttribute('userId');
+        $is_anonymous = $user_id == 0;
+        if ($request->getAttribute('has_errors') || $is_anonymous) {
             return $this->responder->invalid($response);
         }
 
         try {
-            if ($this->auth->isAdmin()) {
+            if ($request->getAttribute('isAdmin')) {
                 $delete = $this->comment->deleteCommentByAdmin($data['comment_id']);
             } else {
-                $delete = $this->comment->deleteComment($data['comment_id'], $this->auth->getUserId());
+                $delete = $this->comment->deleteComment($data['comment_id'], $user_id);
             }
 
             if ($delete) {

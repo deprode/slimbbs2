@@ -75,6 +75,11 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
         // Register middleware
         if ($this->withMiddleware) {
             require __DIR__ . '/../../src/middleware.php';
+        } else {
+            $request = $request->withAttribute('userId', $_SESSION['user_id']);
+            $request = $request->withAttribute('adminId', $_SESSION['admin_id']);
+            $request = $request->withAttribute('isAdmin', (int)($_SESSION['user_id'] == $_SESSION['admin_id']));
+            $request = $request->withAttribute('isLoggedIn', (int)($_SESSION['user_id'] != 0));
         }
 
         // Register routes

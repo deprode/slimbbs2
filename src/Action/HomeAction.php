@@ -17,16 +17,14 @@ final class HomeAction
     private $logger;
     private $csrf;
     private $thread;
-    private $auth;
     private $message;
     private $responder;
 
-    public function __construct(LoggerInterface $logger, Csrf $csrf, ThreadService $thread, AuthService $auth, MessageService $message, HomeResponder $responder)
+    public function __construct(LoggerInterface $logger, Csrf $csrf, ThreadService $thread, MessageService $message, HomeResponder $responder)
     {
         $this->logger = $logger;
         $this->csrf = $csrf;
         $this->thread = $thread;
-        $this->auth = $auth;
         $this->message = $message;
         $this->responder = $responder;
     }
@@ -35,7 +33,7 @@ final class HomeAction
     {
         $this->logger->info("Slimbbs '/' route");
 
-        $data['loggedIn'] = $this->auth->isLoggedIn();
+        $data['loggedIn'] = $request->getAttribute('isLoggedIn');
 
         try {
             $data['threads'] = $this->thread->getThreads();
@@ -51,7 +49,7 @@ final class HomeAction
         $data['valueKey'] = $valueKey;
         $data['name'] = $request->getAttribute($nameKey);
         $data['value'] = $request->getAttribute($valueKey);
-        $data['user_id'] = $this->auth->getUserId();
+        $data['user_id'] = $request->getAttribute('userId');
         $data['saved'] = $this->message->getMessage('SavedThread');
         $data['deleted'] = $this->message->getMessage('DeletedThread') ?? $this->message->getMessage('DeletedComment');
 

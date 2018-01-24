@@ -88,7 +88,7 @@ $container['s3'] = function ($c) {
 // Action factories
 // -----------------------------------------------------------------------------
 $container['App\Action\HomeAction'] = function ($c) {
-    return new App\Action\HomeAction($c->get('logger'), $c->get('csrf'), $c->get('ThreadService'), $c->get('AuthService'), $c->get('MessageService'), $c->get('HomeResponder'));
+    return new App\Action\HomeAction($c->get('logger'), $c->get('csrf'), $c->get('ThreadService'), $c->get('MessageService'), $c->get('HomeResponder'));
 };
 
 $container['App\Action\SaveAction'] = function ($c) {
@@ -104,11 +104,11 @@ $container['App\Action\LogoutAction'] = function ($c) {
 };
 
 $container['App\Action\SearchAction'] = function ($c) {
-    return new App\Action\SearchAction($c->get('logger'), $c->get('csrf'), $c->get('AuthService'), $c->get('CommentService'), $c->get('SearchResponder'));
+    return new App\Action\SearchAction($c->get('logger'), $c->get('csrf'), $c->get('CommentService'), $c->get('SearchResponder'));
 };
 
 $container['App\Action\ThreadAction'] = function ($c) {
-    return new App\Action\ThreadAction($c->get('logger'), $c->get('csrf'), $c->get('CommentService'), $c->get('AuthService'), $c->get('MessageService'), $c->get('ThreadResponder'), $c->get('settings')['s3']);
+    return new App\Action\ThreadAction($c->get('logger'), $c->get('csrf'), $c->get('CommentService'), $c->get('MessageService'), $c->get('ThreadResponder'), $c->get('settings')['s3']);
 };
 
 $container['App\Action\CommentSaveAction'] = function ($c) {
@@ -120,7 +120,7 @@ $container['App\Action\CommentUpdateAction'] = function ($c) {
 };
 
 $container['App\Action\CommentDeleteAction'] = function ($c) {
-    return new App\Action\CommentDeleteAction($c->get('logger'), $c->get('CommentService'), $c->get('AuthService'), $c->get('MessageService'), $c->get('DeleteResponder'));
+    return new App\Action\CommentDeleteAction($c->get('logger'), $c->get('CommentService'), $c->get('MessageService'), $c->get('DeleteResponder'));
 };
 
 $container['App\Action\LikeAction'] = function ($c) {

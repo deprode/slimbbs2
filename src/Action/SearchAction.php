@@ -16,15 +16,13 @@ class SearchAction
 {
     private $logger;
     private $csrf;
-    private $auth;
     private $comment;
     private $responder;
 
-    public function __construct(LoggerInterface $logger, Csrf $csrf, AuthService $auth, CommentService $comment, SearchResponder $responder)
+    public function __construct(LoggerInterface $logger, Csrf $csrf, CommentService $comment, SearchResponder $responder)
     {
         $this->logger = $logger;
         $this->csrf = $csrf;
-        $this->auth = $auth;
         $this->comment = $comment;
         $this->responder = $responder;
     }
@@ -52,8 +50,8 @@ class SearchAction
         $data['name'] = $request->getAttribute($nameKey);
         $data['value'] = $request->getAttribute($valueKey);
         $data['comments'] = $comment;
-        $data['is_admin'] = $this->auth->isAdmin();
-        $data['loggedIn'] = $this->auth->isLoggedIn();
+        $data['is_admin'] = $request->getAttribute('isAdmin');
+        $data['loggedIn'] = $request->getAttribute('isLoggedIn');
         $data['query'] = $query;
 
         return $this->responder->comments($response, $data);

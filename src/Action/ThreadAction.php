@@ -18,17 +18,15 @@ class ThreadAction
     private $logger;
     private $csrf;
     private $comment;
-    private $auth;
     private $message;
     private $responder;
     private $settings;
 
-    public function __construct(LoggerInterface $logger, Csrf $csrf, CommentService $comment, AuthService $auth, MessageService $message, ThreadResponder $responder, array $settings)
+    public function __construct(LoggerInterface $logger, Csrf $csrf, CommentService $comment, MessageService $message, ThreadResponder $responder, array $settings)
     {
         $this->logger = $logger;
         $this->csrf = $csrf;
         $this->comment = $comment;
-        $this->auth = $auth;
         $this->message = $message;
         $this->responder = $responder;
         $this->settings = $settings;
@@ -37,7 +35,6 @@ class ThreadAction
     public function index(Request $request, Response $response)
     {
         $this->logger->info("Slimbbs '/' route");
-
 
         try {
             $thread_id = $request->getParam('thread_id');
@@ -72,9 +69,9 @@ class ThreadAction
         $data['value'] = $request->getAttribute($valueKey);
         $data['thread_id'] = $thread_id;
         $data['sort'] = $sort;
-        $data['user_id'] = $this->auth->getUserId();
-        $data['is_admin'] = $this->auth->isAdmin();
-        $data['loggedIn'] = $this->auth->isLoggedIn();
+        $data['user_id'] = $request->getAttribute('userId');
+        $data['is_admin'] = $request->getAttribute('isAdmin');
+        $data['loggedIn'] = $request->getAttribute('isLoggedIn');
         $data['saved'] = $this->message->getMessage('SavedComment');
         $data['deleted'] = $this->message->getMessage('DeletedComment');
         $data['region'] = $this->settings['region'];

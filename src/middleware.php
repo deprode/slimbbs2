@@ -12,3 +12,5 @@ $app->add(function (ServerRequestInterface $request, ResponseInterface $response
 
     return $next($request, $response);
 });
+
+$app->add(new \App\Middleware\AuthMiddleware($container->get('AuthService')));
