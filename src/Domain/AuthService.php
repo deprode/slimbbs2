@@ -60,7 +60,7 @@ class AuthService
 
     public function isAdmin(): bool
     {
-        return $this->admin_id === (int)$this->getUserId();
+        return $this->getAdminId() === $this->getUserId();
     }
 
     public function isLoggedIn(): bool
