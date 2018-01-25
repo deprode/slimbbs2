@@ -3,7 +3,6 @@
 namespace App\Action;
 
 
-use App\Domain\AuthService;
 use App\Domain\CommentService;
 use App\Domain\MessageService;
 use App\Exception\DeleteFailedException;

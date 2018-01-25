@@ -3,7 +3,6 @@
 namespace App\Action;
 
 
-use App\Domain\AuthService;
 use App\Domain\CommentService;
 use App\Exception\FetchFailedException;
 use App\Responder\SearchResponder;

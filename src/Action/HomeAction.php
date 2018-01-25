@@ -2,7 +2,6 @@
 
 namespace App\Action;
 
-use App\Domain\AuthService;
 use App\Domain\MessageService;
 use App\Domain\ThreadService;
 use App\Exception\FetchFailedException;
