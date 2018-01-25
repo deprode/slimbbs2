@@ -16,7 +16,8 @@ class AuthMiddleware
         $this->auth = $auth;
     }
 
-    public function AddAuth(ServerRequestInterface $request): ServerRequestInterface {
+    public function AddAuth(ServerRequestInterface $request): ServerRequestInterface
+    {
         $request = $request->withAttribute('userId', $this->auth->getUserId());
         $request = $request->withAttribute('adminId', $this->auth->getAdminId());
         $request = $request->withAttribute('isAdmin', (int)$this->auth->isAdmin());

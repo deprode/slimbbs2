@@ -56,7 +56,7 @@ WHERE
   `comment` LIKE :query;
 COMMENTS;
         try {
-            return $this->db->fetchAll($sql, [':query' => ['value' => '%'.$query.'%', 'type' => \PDO::PARAM_STR]]);
+            return $this->db->fetchAll($sql, [':query' => ['value' => '%' . $query . '%', 'type' => \PDO::PARAM_STR]]);
         } catch (\PDOException $e) {
             throw new FetchFailedException();
         }
@@ -129,7 +129,7 @@ UPDATE_COMMENT;
 
         $values = [
             ':thread_id'  => ['value' => $thread_id, 'type' => \PDO::PARAM_INT],
-            ':comment_id'  => ['value' => $comment_id, 'type' => \PDO::PARAM_INT],
+            ':comment_id' => ['value' => $comment_id, 'type' => \PDO::PARAM_INT],
             ':comment'    => ['value' => $comment, 'type' => \PDO::PARAM_STR],
             ':updated_at' => ['value' => date_create()->format('Y-m-d H:i:s'), 'type' => \PDO::PARAM_STR],
         ];
@@ -194,7 +194,7 @@ SQL;
 
         try {
             $updated = $this->db->execute($sql, [
-                ':thread_id' => ['value' => $thread_id, 'type' => \PDO::PARAM_INT],
+                ':thread_id'  => ['value' => $thread_id, 'type' => \PDO::PARAM_INT],
                 ':comment_id' => ['value' => $comment_id, 'type' => \PDO::PARAM_INT]
             ]);
         } catch (\PDOException $e) {

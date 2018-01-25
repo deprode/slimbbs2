@@ -75,8 +75,8 @@ $container['flash'] = function () {
 $container['s3'] = function ($c) {
     $settings = $c->get('settings')['s3'];
     return new \Aws\S3\S3Client([
-        'version' => 'latest',
-        'region'  => $settings['region'],
+        'version'     => 'latest',
+        'region'      => $settings['region'],
         'credentials' => [
             'key'    => $settings['key'],
             'secret' => $settings['secret'],
@@ -265,7 +265,7 @@ $container['App\Validation\CommentUpdateValidation'] = function ($c) {
     $updateValidators = [
         'thread_id'  => \Respect\Validation\Validator::intVal()->digit()->notEmpty()->setName('スレッドID'),
         'comment_id' => \Respect\Validation\Validator::intVal()->digit()->notEmpty()->setName('コメントID'),
-        'comment' => \Respect\Validation\Validator::stringType()->notEmpty()->length(null, 400)->setName('本文')
+        'comment'    => \Respect\Validation\Validator::stringType()->notEmpty()->length(null, 400)->setName('本文')
     ];
     return new \DavidePastore\Slim\Validation\Validation($updateValidators, $translator);
 };

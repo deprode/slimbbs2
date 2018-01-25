@@ -13,7 +13,7 @@ abstract class Enum
     {
         $ref = new \ReflectionObject($this);
         $consts = $ref->getConstants();
-        if (! in_array($value, $consts, true)) {
+        if (!in_array($value, $consts, true)) {
             throw new \InvalidArgumentException;
         }
 
