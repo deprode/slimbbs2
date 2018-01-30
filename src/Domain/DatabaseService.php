@@ -57,4 +57,19 @@ class DatabaseService
         return $prepare->rowCount();
     }
 
+    public function beginTransaction(): bool
+    {
+        return $this->db->beginTransaction();
+    }
+
+    public function rollback(): bool
+    {
+        return $this->db->rollBack();
+    }
+
+    public function commit(): bool
+    {
+        return $this->db->commit();
+    }
+
 }

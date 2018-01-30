@@ -1,0 +1,21 @@
+{% extends "base.twig" %}
+
+{% block title %}Quit{% endblock %}
+{% block contents %}
+    <div>
+        <h2>退会する</h2>
+        <section class="quit">
+            <p>以下の情報が削除されます。元に戻すことはできません。</p>
+            <ul>
+                <li>ログイン中に書き込んだ全ての投稿</li>
+                <li>ユーザー情報</li>
+            </ul>
+            <form action="{{ path_for('quit') }}" method="post">
+                <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
+                <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
+                <input type="hidden" name="_METHOD" value="DELETE">
+                <input type="submit" value="退会する" class="button">
+            </form>
+        </section>
+    </div>
+{% endblock %}

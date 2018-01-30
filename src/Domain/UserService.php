@@ -3,6 +3,7 @@
 namespace App\Domain;
 
 
+use App\Exception\DeleteFailedException;
 use App\Exception\SaveFailedException;
 use App\Model\User;
 
@@ -56,5 +57,38 @@ SAVE;
         } catch (\PDOException $e) {
             throw new SaveFailedException();
         }
+    }
+
+    public function deleteAccount(int $user_id): bool
+    {
+        if ($user_id <= 0) {
+            return false;
+        }
+
+        $delete_user = <<<DELETE
+DELETE FROM
+  `users`
+WHERE
+  `users`.`user_id` = :user_id;
+DELETE;
+
+        $delete_comment = <<<DELETE
+DELETE FROM
+  `comments`
+WHERE
+  `comments`.`user_id` = :user_id;
+DELETE;
+
+        try {
+            $this->db->beginTransaction();
+            $this->db->execute($delete_comment, [':user_id' => ['value' => $user_id, 'type' => \PDO::PARAM_INT]]);
+            $this->db->execute($delete_user, [':user_id' => ['value' => $user_id, 'type' => \PDO::PARAM_INT]]);
+            $this->db->commit();
+        } catch (\PDOException $e) {
+            $this->db->rollback();
+            throw new DeleteFailedException();
+        }
+
+        return true;
     }
 }

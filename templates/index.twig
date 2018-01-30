@@ -9,6 +9,9 @@
         {% if deleted %}
             <li>{{ deleted }}</li>
         {% endif %}
+        {% if account %}
+            <li>{{ account }}</li>
+        {% endif %}
     </div>
     <div class="create-thread">
         <h2>スレッドを作る</h2>
@@ -43,4 +46,10 @@
             <p>スレッドはまだありません。</p>
         {% endif %}
     </article>
+    {% if loggedIn %}
+        <hr>
+        <nav class="float-left">
+            <a href="{{ path_for('quit') }}">退会する</a>
+        </nav>
+    {% endif %}
 {% endblock %}

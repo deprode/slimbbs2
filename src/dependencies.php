@@ -126,6 +126,14 @@ $container['App\Action\CommentDeleteAction'] = function ($c) {
 $container['App\Action\LikeAction'] = function ($c) {
     return new App\Action\LikeAction($c->get('logger'), $c->get('CommentService'), $c->get('MessageService'));
 };
+
+$container['App\Action\QuitAction'] = function ($c) {
+    return new App\Action\QuitAction($c->get('csrf'), $c->get('QuitResponder'));
+};
+
+$container['App\Action\AccountDeleteAction'] = function ($c) {
+    return new App\Action\AccountDeleteAction($c->get('MessageService'), $c->get('UserService'), $c->get('AuthService'), $c->get('QuitedResponder'));
+};
 // -----------------------------------------------------------------------------
 // Domain factories
 // -----------------------------------------------------------------------------
@@ -185,6 +193,14 @@ $container['DeleteResponder'] = function ($c) {
 
 $container['SearchResponder'] = function ($c) {
     return new App\Responder\SearchResponder($c->get('view'));
+};
+
+$container['QuitResponder'] = function ($c) {
+    return new App\Responder\QuitResponder($c->get('view'));
+};
+
+$container['QuitedResponder'] = function ($c) {
+    return new App\Responder\QuitedResponder($c->get('view'));
 };
 // -----------------------------------------------------------------------------
 // Validation factories

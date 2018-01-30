@@ -39,3 +39,11 @@ $app->put('/thread', 'App\Action\CommentUpdateAction:update')
 $app->post('/like', 'App\Action\LikeAction:add')
     ->setName('add_like')
     ->add($container->get('App\Validation\CommentLikeValidation'));
+
+$app->get('/quit', 'App\Action\QuitAction:index')
+    ->setName('quit');
+
+
+$app->delete('/quit', 'App\Action\AccountDeleteAction:delete')
+    ->setName('quit')
+    ->add($container->get('App\Validation\CommentLikeValidation'));

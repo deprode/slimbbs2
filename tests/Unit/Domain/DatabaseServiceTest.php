@@ -54,4 +54,31 @@ class DatabaseServiceTest extends \PHPUnit_Framework_TestCase
         $this->prepare->expects($this->once())->method('execute')->will($this->throwException(new \PDOException()));
         $this->database->execute($sql);
     }
+
+    public function testBeginTransaction()
+    {
+        $pdo = $this->createMock(\PDO::class);
+        $pdo->method('beginTransaction')->willReturn(true);
+        $pdo->expects($this->once())->method('beginTransaction');
+        $database = new DatabaseService($pdo);
+        $database->beginTransaction();
+    }
+
+    public function testCommit()
+    {
+        $pdo = $this->createMock(\PDO::class);
+        $pdo->method('commit')->willReturn(true);
+        $pdo->expects($this->once())->method('commit');
+        $database = new DatabaseService($pdo);
+        $database->commit();
+    }
+
+    public function testRollback()
+    {
+        $pdo = $this->createMock(\PDO::class);
+        $pdo->method('rollback')->willReturn(true);
+        $pdo->expects($this->once())->method('rollback');
+        $database = new DatabaseService($pdo);
+        $database->rollback();
+    }
 }

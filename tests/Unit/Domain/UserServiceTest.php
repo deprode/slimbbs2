@@ -56,4 +56,22 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $this->comment->saveUser($this->data));
     }
+
+    /**
+     * @expectedException \App\Exception\DeleteFailedException
+     */
+    public function testDeleteAccount()
+    {
+        // 先に匿名をはじいているかテスト
+        $this->comment = new UserService(new DatabaseService($this->createMock(\PDO::class)));
+        $this->assertFalse($this->comment->deleteAccount(0));
+
+        $dbs = $this->createMock(DatabaseService::class);
+        $dbs->expects($this->at(0))->method('execute')->willReturn(1);
+        $dbs->expects($this->at(1))->method('execute')->will($this->throwException(new \PDOException()));
+        $this->comment = new UserService($dbs);
+
+        $this->assertTrue($this->comment->deleteAccount(1));
+        $this->comment->deleteAccount(1);
+    }
 }
