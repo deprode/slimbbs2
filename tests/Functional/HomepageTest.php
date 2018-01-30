@@ -8,7 +8,7 @@ class HomepageTest extends BaseTestCase
     {
         parent::setUp();
 
-        $dns = 'mysql:host='.getenv('MYSQL_HOST').';port='.getenv('MYSQL_PORT').';dbname='.getenv('MYSQL_DATABASE');
+        $dns = 'mysql:host=' . getenv('MYSQL_HOST') . ';port=' . getenv('MYSQL_PORT') . ';dbname=' . getenv('MYSQL_DATABASE');
         try {
             $db_connection = new \PDO($dns, getenv('MYSQL_USER'), getenv('MYSQL_PASSWORD'));
             $db_connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
@@ -54,6 +54,14 @@ class HomepageTest extends BaseTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('<link rel="stylesheet" href="//cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">', (string)$response->getBody());
     }
+
+    public function test投稿がないときの表示()
+    {
+        $response = $this->runApp('GET', '/');
+        $this->assertNotContains('検索', (string)$response->getBody());
+        $this->assertContains('スレッドはまだありません。', (string)$response->getBody());
+    }
+
 
     public function test投稿()
     {
