@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: deprode
- * Date: 2018/01/24
- * Time: 14:36
- */
 
 namespace Tests\Unit\Middleware;
 

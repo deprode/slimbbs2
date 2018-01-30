@@ -2,12 +2,11 @@
 
 namespace Tests\Functional;
 
+use Dotenv\Dotenv;
 use Slim\App;
+use Slim\Http\Environment;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use Slim\Http\Environment;
-
-use Dotenv\Dotenv;
 
 /**
  * Class BaseTestCase
@@ -37,16 +36,16 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
         $environment = Environment::mock(
             [
                 'REQUEST_METHOD' => $requestMethod,
-                'REQUEST_URI' => $requestUri
+                'REQUEST_URI'    => $requestUri
             ]
         );
 
-        $env_file = __DIR__. '/../.env';
+        $env_file = __DIR__ . '/../.env';
         if (is_readable($env_file)) {
             $dot_env = new Dotenv(__DIR__ . '/../');
             $dot_env->load();
         }
-        putenv('MYSQL_HOST='.getenv('MYSQL_LOCAL_HOST'));
+        putenv('MYSQL_HOST=' . getenv('MYSQL_LOCAL_HOST'));
 
         // Set up a request object based on the environment
         $request = Request::createFromEnvironment($environment);
@@ -79,7 +78,7 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
             $request = $request->withAttribute('userId', $_SESSION['user_id']);
             $request = $request->withAttribute('adminId', $_SESSION['admin_id']);
             $request = $request->withAttribute('isAdmin', (int)($_SESSION['user_id'] == $_SESSION['admin_id']));
-            $request = $request->withAttribute('isLoggedIn', (int)($_SESSION['user_id'] != 0));
+            $request = $request->withAttribute('isLoggedIn', (int)($_SESSION['user_id'] !== null));
         }
 
         // Register routes
@@ -96,11 +95,11 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $env_file = __DIR__. '/../.env';
+        $env_file = __DIR__ . '/../.env';
         if (is_readable($env_file)) {
             $dot_env = new Dotenv(__DIR__ . '/../');
             $dot_env->load();
         }
-        putenv('MYSQL_HOST='.getenv('MYSQL_LOCAL_HOST'));
+        putenv('MYSQL_HOST=' . getenv('MYSQL_LOCAL_HOST'));
     }
 }
