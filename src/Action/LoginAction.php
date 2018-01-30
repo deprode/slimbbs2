@@ -39,7 +39,7 @@ class LoginAction
         $oauth_token = $request->getParam('oauth_token');
         $oauth_verifier = $request->getParam('oauth_verifier');
 
-        if ($this->oauth->verifyToken($oauth_token, $oauth_verifier)) {
+        if ($oauth_verifier && $this->oauth->verifyToken($oauth_token, $oauth_verifier)) {
 
             try {
                 $this->oauth->oAuth($oauth_verifier);
