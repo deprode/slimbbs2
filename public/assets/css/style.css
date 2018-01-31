@@ -8,16 +8,14 @@ img {
 
 button,
 input[type='submit'],
-a.button
-{
+a.button {
     background-color: darkgreen;
     border: 0.1rem solid darkgreen;
 }
 
 button,
 input[type='submit'][disabled]:hover,
-a.button
-{
+a.button {
     background-color: darkgreen;
     border: 0.1rem solid darkgreen;
 }
@@ -36,7 +34,7 @@ a.button
     }
 }
 
-.search .search__query ,
+.search .search__query,
 .search .search__button {
     vertical-align: bottom;
     margin-bottom: 0;
@@ -61,9 +59,58 @@ input.button--small {
         max-width: 80%;
     }
 }
+
 @media screen and (min-width: 1080px) {
     .container {
         max-width: 80rem;
+    }
+}
+
+.thread {
+    display: block;
+}
+
+.thread thead {
+    display: none;
+}
+
+.thread .cell:before {
+    content: attr(data-title) " ";
+}
+
+.thread .cell {
+    display: block;
+    max-width: 30rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media screen and (min-width: 425px) {
+    .thread {
+        display: table;
+        table-layout: fixed;
+    }
+
+    .thread thead {
+        display: table-header-group;
+    }
+
+    .thread .cell:before {
+        content: "";
+    }
+
+    .thread .cell {
+        display: table-cell;
+    }
+
+    .thread .cell--scroll {
+        overflow-x: scroll;
+        text-overflow: initial;
+    }
+
+    .thread .cell--scroll::-webkit-scrollbar {
+        display: none;
     }
 }
 
@@ -96,17 +143,17 @@ input.button--small {
 .form--inline label,
 .form--inline input,
 .form--inline button,
-.form--inline select{
+.form--inline select {
     display: inline-block;
     width: auto;
 }
-
 
 .global-header {
     display: flex;
     justify-content: space-between;
     padding-bottom: 6rem;
 }
+
 .global-footer {
     padding-top: 6rem;
 }

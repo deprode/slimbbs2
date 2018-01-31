@@ -26,13 +26,17 @@ class ThreadService
 
         $sql = <<<THREADS
 SELECT
-  `threads`.`thread_id`, `comments`.`comment`, `comments`.`created_at`, `threads`.`updated_at`
+  `threads`.`thread_id`, `comments`.`comment`, `users`.`user_name`, `threads`.`count`, `threads`.`updated_at`
 FROM
   `threads`
 LEFT JOIN
   `comments`
   ON
     `threads`.`comment_id` = `comments`.`comment_id`
+LEFT JOIN
+  `users`
+  ON
+    `users`.`user_id` = `comments`.`user_id`
 ORDER BY 
   `threads`.`updated_at` $sort_value;
 THREADS;

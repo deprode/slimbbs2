@@ -43,13 +43,40 @@
                 </select>
                 <input type="submit" value="検索" class="button search__button">
             </form>
-            {% for thread in threads %}
-                <section class="thread">
-                    <a href="{{ path_for('thread', {}, {'thread_id': thread.thread_id}) }}">
-                        {% if thread.comment %}{{ thread.comment }}{% else %}[削除済み]{% endif %}
-                    </a>Updated: {{ thread.updated_at }}
-                </section>
-            {% endfor %}
+            <table class="thread">
+                <thead>
+                <tr>
+                    <th>スレッド</th>
+                    <th>ユーザー</th>
+                    <th>更新日</th>
+                    <th>コメント数</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for thread in threads %}
+                    <tr>
+                        <td class="cell cell--scroll">
+                            <a href="{{ path_for('thread', {}, {'thread_id': thread.thread_id}) }}">
+                                {% if thread.comment %}
+                                    {{ thread.comment }}
+                                {% else %}
+                                    [削除済み]
+                                {% endif %}
+                            </a>
+                        </td>
+                        <td class="cell" data-title="ユーザ">
+                            {% if thread.user_name %}
+                                {{ thread.user_name }}
+                            {% else %}
+                                匿名
+                            {% endif %}
+                        </td>
+                        <td class="cell cell--scroll" data-title="更新日">{{ thread.updated_at }}</td>
+                        <td class="cell" data-title="コメント数">{{ thread.count }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         {% else %}
             <p>スレッドはまだありません。</p>
         {% endif %}
