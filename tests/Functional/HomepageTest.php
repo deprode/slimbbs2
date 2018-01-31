@@ -62,7 +62,6 @@ class HomepageTest extends BaseTestCase
         $this->assertContains('スレッドはまだありません。', (string)$response->getBody());
     }
 
-
     public function test投稿()
     {
         // *注: CSRF(middleware)を切ってテストしています。
@@ -121,5 +120,38 @@ class HomepageTest extends BaseTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('スレッドを作成しました', (string)$response->getBody());
         $this->assertContains('スレッドは削除されました', (string)$response->getBody());
+    }
+
+    public function testスレッドのソート新しい順()
+    {
+        $this->runApp('POST', '/', ['comment' => '古い投稿', 'user_id' => '1']);
+        sleep(1);
+        $this->runApp('POST', '/', ['comment' => '新しい投稿', 'user_id' => '1']);
+
+        $response = $this->runApp('GET', '/?sort=new');
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $body = (string)$response->getBody();
+
+        $new_pos = mb_strpos($body, '新しい投稿');
+        $old_pos = mb_strpos($body, '古い投稿');
+
+        $this->assertTrue($new_pos < $old_pos);
+    }
+
+    public function testスレッドのソート古い順()
+    {
+        $this->runApp('POST', '/', ['comment' => '古い投稿', 'user_id' => '1']);
+        sleep(1);
+        $this->runApp('POST', '/', ['comment' => '新しい投稿', 'user_id' => '1']);
+
+        $response = $this->runApp('GET', '/?sort=old');
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $body = (string)$response->getBody();
+        $old_pos = mb_strpos($body, '古い投稿');
+        $new_pos = mb_strpos($body, '新しい投稿');
+
+        $this->assertTrue($new_pos > $old_pos);
     }
 }

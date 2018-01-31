@@ -35,11 +35,19 @@
     <article class="threads">
         <h2>スレッド一覧</h2>
         {% if threads %}
+            <form action="{{ path_for('home') }}" method="get" class="form--inline">
+                <label for="sort" class="hidden">ソート順</label>
+                <select name="sort">
+                    <option value="new"{% if sort == 'new' %} selected{% endif %}>新しい順</option>
+                    <option value="old"{% if sort == 'old' %} selected{% endif %}>古い順</option>
+                </select>
+                <input type="submit" value="検索" class="button search__button">
+            </form>
             {% for thread in threads %}
                 <section class="thread">
                     <a href="{{ path_for('thread', {}, {'thread_id': thread.thread_id}) }}">
                         {% if thread.comment %}{{ thread.comment }}{% else %}[削除済み]{% endif %}
-                    </a> {{ thread.created_at }}
+                    </a>Updated: {{ thread.updated_at }}
                 </section>
             {% endfor %}
         {% else %}

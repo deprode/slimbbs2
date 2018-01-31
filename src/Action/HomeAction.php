@@ -34,8 +34,9 @@ final class HomeAction
 
         $data['loggedIn'] = $request->getAttribute('isLoggedIn');
 
+        $sort = $request->getParam('sort');
         try {
-            $data['threads'] = $this->thread->getThreads();
+            $data['threads'] = $this->thread->getThreads($sort);
         } catch (FetchFailedException $e) {
             $this->logger->error($e->getMessage(), ['exception' => $e]);
             return $this->responder->fetchFailed($response);
@@ -48,6 +49,7 @@ final class HomeAction
         $data['valueKey'] = $valueKey;
         $data['name'] = $request->getAttribute($nameKey);
         $data['value'] = $request->getAttribute($valueKey);
+        $data['sort'] = $sort;
         $data['user_id'] = $request->getAttribute('userId');
         $data['saved'] = $this->message->getMessage('SavedThread');
         $data['deleted'] = $this->message->getMessage('DeletedThread') ?? $this->message->getMessage('DeletedComment');

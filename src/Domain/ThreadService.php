@@ -13,17 +13,28 @@ class ThreadService
         $this->db = $db;
     }
 
-    public function getThreads(): array
+    public function getSortValue($key = 'new'): string
     {
+        $values = ['new' => 'DESC', 'old' => 'ASC'];
+
+        return isset($values[$key]) ? $values[$key] : $values['new'];
+    }
+
+    public function getThreads($sort_key = 'new'): array
+    {
+        $sort_value = $this->getSortValue($sort_key);
+
         $sql = <<<THREADS
 SELECT
-  `threads`.`thread_id`, `comment`, `created_at`
+  `threads`.`thread_id`, `comments`.`comment`, `comments`.`created_at`, `threads`.`updated_at`
 FROM
   `threads`
 LEFT JOIN
   `comments`
   ON
-    `threads`.`comment_id` = `comments`.`comment_id`;
+    `threads`.`comment_id` = `comments`.`comment_id`
+ORDER BY 
+  `threads`.`updated_at` $sort_value;
 THREADS;
 
         try {
