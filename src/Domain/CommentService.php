@@ -7,9 +7,12 @@ use App\Exception\FetchFailedException;
 use App\Exception\SaveFailedException;
 use App\Model\Comment;
 use App\Model\Sort;
+use App\Traits\TimeElapsed;
 
 class CommentService
 {
+    use TimeElapsed;
+
     private $db;
 
     public function __construct(DatabaseService $db)
@@ -40,6 +43,17 @@ COMMENTS;
         } catch (\PDOException $e) {
             throw new FetchFailedException();
         }
+    }
+
+    public function convertTime(array $comments = []): array
+    {
+        for ($i = 0; $i < count($comments); $i++) {
+            if (isset($comments[$i]['created_at'])) {
+                $comments[$i]['created_at'] = $this->timeToString(new \DateTime($comments[$i]['created_at']));
+            }
+        }
+
+        return $comments;
     }
 
     public function searchComments(string $query): array

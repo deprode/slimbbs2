@@ -48,4 +48,24 @@ class ThreadServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('DESC', $this->thread->getSortValue('hoge'));
     }
 
+    public function testConvertTime()
+    {
+        $data = '3日前';
+
+        $service = $this->getMockBuilder(ThreadService::class)
+            ->setMethods(['timeToString'])
+            ->setConstructorArgs([$this->createMock(DatabaseService::class)])
+            ->getMock();
+
+        $service->expects($this->any())->method('timeToString')->willReturn($data);
+
+        $threads = [
+            0 => ['updated_at' => '2018-01-01 00:00:00']
+        ];
+
+        $result = $service->convertTime($threads);
+
+        $this->assertEquals([0 => ['updated_at' => '3日前']], $result);
+    }
+
 }

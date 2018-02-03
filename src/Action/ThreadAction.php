@@ -48,7 +48,8 @@ class ThreadAction
         }
 
         try {
-            $data['comments'] = $this->comment->getComments((int)$thread_id, $sort);
+            $data['comments'] = $this->comment->convertTime($this->comment->getComments((int)$thread_id, $sort));
+
         } catch (FetchFailedException $e) {
             $this->logger->error($e->getMessage(), ['exception' => $e]);
             return $this->responder->fetchFailed($response);

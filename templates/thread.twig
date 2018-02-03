@@ -3,24 +3,25 @@
 {% block title %}Thread{% endblock %}
 {% block contents %}
     {% if saved or deleted %}
-    <div class="row">
-        <div class="message column">
-            <ul>
-                {% if saved %}
-                    <li>{{ saved }}</li>
-                {% endif %}
-                {% if deleted %}
-                    <li>{{ deleted }}</li>
-                {% endif %}
-            </ul>
+        <div class="row">
+            <div class="message column">
+                <ul>
+                    {% if saved %}
+                        <li>{{ saved }}</li>
+                    {% endif %}
+                    {% if deleted %}
+                        <li>{{ deleted }}</li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-    </div>
     {% endif %}
     <div class="row">
         <div class="column">
             <form action="{{ path_for('thread_save') }}" method="post" id="comment_form" enctype="multipart/form-data">
                 <label for="comment">コメント: <input type="text" name="comment"></label>
-                <label for="picture">画像: <input type="file" name="picture" id="picture" accept="image/png, image/gif, image/jpeg"></label>
+                <label for="picture">画像: <input type="file" name="picture" id="picture"
+                                                accept="image/png, image/gif, image/jpeg"></label>
                 <input type="hidden" name="thread_id" value="{{ thread_id }}">
                 <input type="hidden" name="sort" value="{{ sort }}">
                 <input type="hidden" name="user_id" value="{{ user_id }}">
@@ -43,77 +44,85 @@
                         <input type="submit" value="並び順を変更" class="button--small">
                     </form>
                 </div>
-            {% for comment in comments %}
-                <section class="comment">
-                    <header class="comment__header">
-                        {% set isSigned = comment.user_name and comment.user_image_url %}
-                        <div>
-                            {% if isSigned %}
-                                <img src="{{ comment.user_image_url }}" alt="{{ comment.user_name }}">
-                            {% else %}
-                                <img src="http://via.placeholder.com/64x64" alt="匿名ユーザー">
+                {% for comment in comments %}
+                    <section class="comment">
+                        <header class="comment__header">
+                            {% set isSigned = comment.user_name and comment.user_image_url %}
+                            <div>
+                                {% if isSigned %}
+                                    <img src="{{ comment.user_image_url }}" alt="{{ comment.user_name }}">
+                                {% else %}
+                                    <img src="http://via.placeholder.com/64x64" alt="匿名ユーザー">
+                                {% endif %}
+                            </div>
+                            <div>
+                                {% if isSigned %}
+                                    {{ comment.user_name }}:
+                                {% else %}
+                                    匿名ユーザー:
+                                {% endif %}
+                            </div>
+                            <div>
+                                {{ comment.created_at }}
+                            </div>
+                            <div>
+                                そうだね&#215;<span id="like-{{ comment.comment_id }}_like">{{ comment.like_count }}</span>
+                            </div>
+                        </header>
+                        <main class="comment__main">
+                            <div id="{{ comment.comment_id }}">
+                                {{ comment.comment | trim }}
+                            </div>
+                            {% if comment.photo_url %}
+                                <div class="photo">
+                                    <img src="https://s3-{{ region }}.amazonaws.com/{{ bucket }}/{{ comment.photo_url }}"
+                                         alt="{{ comment.comment }}">
+                                </div>
                             {% endif %}
-                        </div>
-                        <div>
-                            {% if isSigned %}
-                                {{ comment.user_name }}:
-                            {% else %}
-                                匿名ユーザー:
+                            {% if (isSigned and comment.user_id == user_id) %}
+                                <div class="hidden">
+                                    <form action="{{ path_for('update_comment') }}" method="post"
+                                          id="edit-{{ comment.comment_id }}-to" class="js-edit-form">
+                                        <label for="comment"><input type="text" name="comment"
+                                                                    value="{{ comment.comment }}"></label>
+                                        <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
+                                        <input type="hidden" name="thread_id" value="{{ thread_id }}">
+                                        <input type="hidden" name="_METHOD" value="PUT">
+                                        <input type="submit" value="変更" class="button--small js-update"
+                                               data-comment="{{ comment.comment_id }}"
+                                               id="update-{{ comment.comment_id }}">
+                                    </form>
+                                    <button class="js-cancel button--small" id="cancel-{{ comment.comment_id }}"
+                                            data-comment="{{ comment.comment_id }}">キャンセル
+                                    </button>
+                                </div>
                             {% endif %}
-                        </div>
-                        <div>
-                            {{ comment.created_at }}
-                        </div>
-                        <div>
-                            そうだね&#215;<span id="like-{{ comment.comment_id }}_like">{{ comment.like_count }}</span>
-                        </div>
-                    </header>
-                    <main class="comment__main">️
-                        <div id="{{ comment.comment_id }}">
-                            {{ comment.comment }}
-                        </div>
-                        {% if comment.photo_url %}
-                        <div class="photo">
-                            <img src="https://s3-{{ region }}.amazonaws.com/{{ bucket }}/{{ comment.photo_url }}" alt="{{ comment.comment }}">
-                        </div>
-                        {% endif %}
-                        {% if (isSigned and comment.user_id == user_id) %}
-                        <div class="hidden">
-                            <form action="{{ path_for('update_comment') }}" method="post" id="edit-{{ comment.comment_id }}-to" class="js-edit-form">
-                                <label for="comment"><input type="text" name="comment" value="{{ comment.comment }}"></label>
-                                <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
-                                <input type="hidden" name="thread_id" value="{{ thread_id }}">
-                                <input type="hidden" name="_METHOD" value="PUT">
-                                <input type="submit" value="変更" class="button--small js-update" data-comment="{{ comment.comment_id }}" id="update-{{ comment.comment_id }}">
-                            </form>
-                            <button class="js-cancel button--small" id="cancel-{{ comment.comment_id }}" data-comment="{{ comment.comment_id }}">キャンセル</button>
-                        </div>
-                        {% endif %}
-                    </main>
-                    <footer class="comment__footer">
-                    {% if is_admin or (isSigned and comment.user_id == user_id) %}
-                        <form action="{{ path_for('delete_comment') }}" method="post">
-                            <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
-                            <input type="hidden" name="thread_id" value="{{ thread_id }}">
-                            <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
-                            <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
-                            <input type="hidden" name="_METHOD" value="DELETE">
-                            <input type="submit" value="削除" class="button--small">
-                        </form>
-                    {% endif %}
-                    {% if (isSigned and comment.user_id == user_id) %}
-                        <button class="button--small js-edit" id="edit-{{ comment.comment_id }}">編集</button>
-                    {% endif %}
-                    {% if loggedIn %}
-                        <form action="javascript: void(0);" method="post" id="like-{{ comment.comment_id }}" class="js-like">
-                            <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
-                            <input type="hidden" name="thread_id" value="{{ thread_id }}">
-                            <input type="submit" value="そうだね" class="button--small">
-                        </form>
-                    {% endif %}
-                    </footer>
-                </section>
-            {% endfor %}
+                        </main>
+                        <footer class="comment__footer">
+                            {% if is_admin or (isSigned and comment.user_id == user_id) %}
+                                <form action="{{ path_for('delete_comment') }}" method="post">
+                                    <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
+                                    <input type="hidden" name="thread_id" value="{{ thread_id }}">
+                                    <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
+                                    <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
+                                    <input type="hidden" name="_METHOD" value="DELETE">
+                                    <input type="submit" value="削除" class="button--small">
+                                </form>
+                            {% endif %}
+                            {% if (isSigned and comment.user_id == user_id) %}
+                                <button class="button--small js-edit" id="edit-{{ comment.comment_id }}">編集</button>
+                            {% endif %}
+                            {% if loggedIn %}
+                                <form action="javascript: void(0);" method="post" id="like-{{ comment.comment_id }}"
+                                      class="js-like">
+                                    <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
+                                    <input type="hidden" name="thread_id" value="{{ thread_id }}">
+                                    <input type="submit" value="そうだね" class="button--small">
+                                </form>
+                            {% endif %}
+                        </footer>
+                    </section>
+                {% endfor %}
             {% else %}
                 コメントがありません。
             {% endif %}

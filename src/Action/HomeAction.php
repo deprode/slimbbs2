@@ -36,7 +36,8 @@ final class HomeAction
 
         $sort = $request->getParam('sort');
         try {
-            $data['threads'] = $this->thread->getThreads($sort);
+            $threads = $this->thread->getThreads($sort);
+            $data['threads'] = $this->thread->convertTime($threads);
         } catch (FetchFailedException $e) {
             $this->logger->error($e->getMessage(), ['exception' => $e]);
             return $this->responder->fetchFailed($response);

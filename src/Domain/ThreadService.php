@@ -3,9 +3,12 @@
 namespace App\Domain;
 
 use App\Exception\FetchFailedException;
+use App\Traits\TimeElapsed;
 
 class ThreadService
 {
+    use TimeElapsed;
+
     private $db;
 
     public function __construct(DatabaseService $db)
@@ -46,5 +49,16 @@ THREADS;
         } catch (\PDOException $e) {
             throw new FetchFailedException();
         }
+    }
+
+    public function convertTime(array $threads = []): array
+    {
+        for ($i = 0; $i < count($threads); $i++) {
+            if (isset($threads[$i]['updated_at'])) {
+                $threads[$i]['updated_at'] = $this->timeToString(new \DateTime($threads[$i]['updated_at']));
+            }
+        }
+
+        return $threads;
     }
 }

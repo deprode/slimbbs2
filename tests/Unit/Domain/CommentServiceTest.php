@@ -10,6 +10,7 @@ use App\Model\Sort;
 class CommentServiceTest extends \PHPUnit_Framework_TestCase
 {
     private $comment;
+    private $error_comment;
     private $data;
 
     protected function setUp()
@@ -27,11 +28,14 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
         ];
 
         $dbs = $this->createMock(DatabaseService::class);
-        $dbs->expects($this->at(0))->method('fetchAll')->willReturn($this->data);
-        $dbs->expects($this->at(1))->method('fetchAll')->will($this->throwException(new \PDOException()));
-        $dbs->expects($this->at(0))->method('execute')->willReturn(1);
-        $dbs->expects($this->at(1))->method('execute')->will($this->throwException(new \PDOException()));
+        $dbs->expects($this->any())->method('fetchAll')->willReturn($this->data);
+        $dbs->expects($this->any())->method('execute')->willReturn(1);
         $this->comment = new CommentService($dbs);
+
+        $dbs = $this->createMock(DatabaseService::class);
+        $dbs->expects($this->any())->method('fetchAll')->will($this->throwException(new \PDOException()));
+        $dbs->expects($this->any())->method('execute')->will($this->throwException(new \PDOException()));
+        $this->error_comment = new CommentService($dbs);
     }
 
     /**
@@ -42,7 +46,29 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
         $comments = $this->comment->getComments(1, new Sort('desc'));
         $this->assertEquals($this->data, $comments);
 
-        $this->comment->getComments(1, new Sort('desc'));
+        $this->error_comment->getComments(1, new Sort('desc'));
+    }
+
+    public function testConvertTime()
+    {
+        $this->comment = null;
+
+        $data = '3日前';
+
+        $this->comment = $this->getMockBuilder(CommentService::class)
+            ->setMethods(['timeToString'])
+            ->setConstructorArgs([$this->createMock(DatabaseService::class)])
+            ->getMock();
+
+        $this->comment->expects($this->any())->method('timeToString')->willReturn($data);
+
+        $comments = [
+            0 => ['created_at' => '2018-01-01 00:00:00']
+        ];
+
+        $result = $this->comment->convertTime($comments);
+
+        $this->assertEquals([0 => ['created_at' => '3日前']], $result);
     }
 
     /**
@@ -53,7 +79,7 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
         $comments = $this->comment->searchComments('comment');
         $this->assertEquals($this->data, $comments);
 
-        $this->comment->searchComments(1);
+        $this->error_comment->searchComments(1);
     }
 
     /**
@@ -66,7 +92,7 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
         $comment->comment = 'aaaa';
         $this->assertEquals(1, $this->comment->saveThread($comment));
 
-        $this->comment->saveThread($comment);
+        $this->error_comment->saveThread($comment);
     }
 
     /**
@@ -81,7 +107,7 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
         $comment->photo_url = 'https://examnple.com/picture';
         $this->assertEquals(1, $this->comment->saveComment($comment));
 
-        $this->comment->saveComment($comment);
+        $this->error_comment->saveComment($comment);
     }
 
     /**
@@ -90,7 +116,7 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
     public function testUpdateComment()
     {
         $this->assertEquals(1, $this->comment->updateComment(1, 1, 'hoge'));
-        $this->comment->updateComment(1, 1, 'hoge');
+        $this->error_comment->updateComment(1, 1, 'hoge');
     }
 
     /**
@@ -99,7 +125,7 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
     public function testDeleteComment()
     {
         $this->assertTrue($this->comment->deleteComment(1, 1));
-        $this->assertTrue($this->comment->deleteComment(1, 1));
+        $this->error_comment->deleteComment(1, 1);
     }
 
     /**
@@ -108,7 +134,7 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
     public function testDeleteCommentByAdmin()
     {
         $this->assertTrue($this->comment->deleteCommentByAdmin(1, 1));
-        $this->assertTrue($this->comment->deleteCommentByAdmin(1, 1));
+        $this->error_comment->deleteCommentByAdmin(1, 1);
     }
 
     /**
@@ -117,6 +143,6 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
     public function testAddLike()
     {
         $this->assertTrue($this->comment->addLike(1, 1));
-        $this->assertTrue($this->comment->addLike(1, 1));
+        $this->error_comment->addLike(1, 1);
     }
 }
