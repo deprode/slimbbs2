@@ -50,9 +50,11 @@
                             {% set isSigned = comment.user_name and comment.user_image_url %}
                             <div>
                                 {% if isSigned %}
-                                    <img src="{{ comment.user_image_url }}" alt="{{ comment.user_name }}">
+                                    <img class="comment__header__icon" src="{{ comment.user_image_url }}"
+                                         alt="{{ comment.user_name }}">
                                 {% else %}
-                                    <img src="http://via.placeholder.com/64x64" alt="匿名ユーザー">
+                                    <img class="comment__header__icon" src="http://via.placeholder.com/64x64"
+                                         alt="匿名ユーザー">
                                 {% endif %}
                             </div>
                             <div>

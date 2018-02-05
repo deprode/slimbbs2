@@ -136,6 +136,10 @@ input.button--small {
     padding: .8rem 0;
 }
 
+.comment__header__icon {
+    border-radius: 50%;
+}
+
 .comment__footer form {
     margin-bottom: 0;
 }
