@@ -96,16 +96,20 @@
                             {% endif %}
                         </main>
                         <footer class="comment__footer">
-                            {% if is_admin or (isSigned and comment.user_id == user_id) %}
-                                <form action="{{ path_for('delete_comment') }}" method="post">
-                                    <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
-                                    <input type="hidden" name="thread_id" value="{{ thread_id }}">
-                                    <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
-                                    <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
-                                    <input type="hidden" name="_METHOD" value="DELETE">
-                                    <input type="submit" value="削除" class="button--small">
-                                </form>
-                            {% endif %}
+                            <div class="comment__footer_delete">
+                                {% if is_admin or (isSigned and comment.user_id == user_id) %}
+                                    <form action="{{ path_for('delete_comment') }}" method="post">
+                                        <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
+                                        <input type="hidden" name="thread_id" value="{{ thread_id }}">
+                                        <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
+                                        <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
+                                        <input type="hidden" name="_METHOD" value="DELETE">
+                                        <input type="submit" value="削除" class="button--small">
+                                    </form>
+                                {% else %}
+                                    &nbsp;
+                                {% endif %}
+                            </div>
                             {% if (isSigned and comment.user_id == user_id) %}
                                 <button class="button--small js-edit" id="edit-{{ comment.comment_id }}">編集</button>
                             {% endif %}
