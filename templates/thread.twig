@@ -65,9 +65,6 @@
                             <div>
                                 {{ comment.created_at }}
                             </div>
-                            <div>
-                                そうだね&#215;<span id="like-{{ comment.comment_id }}_like">{{ comment.like_count }}</span>
-                            </div>
                         </header>
                         <main class="comment__main">
                             <div id="{{ comment.comment_id }}">
@@ -113,12 +110,22 @@
                                 <button class="button--small js-edit" id="edit-{{ comment.comment_id }}">編集</button>
                             {% endif %}
                             {% if loggedIn %}
-                                <form action="javascript: void(0);" method="post" id="like-{{ comment.comment_id }}"
-                                      class="js-like">
-                                    <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
-                                    <input type="hidden" name="thread_id" value="{{ thread_id }}">
-                                    <input type="submit" value="そうだね" class="button--small">
-                                </form>
+                                <div>
+                                    <form action="javascript: void(0);" method="post" id="like-{{ comment.comment_id }}"
+                                          class="js-like">
+                                        <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
+                                        <input type="hidden" name="thread_id" value="{{ thread_id }}">
+                                        <input type="submit" value="そうだね &#215;{{ comment.like_count }}"
+                                               class="button--small" id="like-{{ comment.comment_id }}--submit">
+                                        <input type="hidden" name="" id="like-{{ comment.comment_id }}--data"
+                                               data-like="{{ comment.like_count }}">
+                                    </form>
+                                </div>
+                            {% else %}
+                                <div>
+                                    そうだね&#215;<span
+                                            id="like-{{ comment.comment_id }}_like">{{ comment.like_count }}</span>
+                                </div>
                             {% endif %}
                         </footer>
                     </section>
