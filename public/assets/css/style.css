@@ -60,13 +60,13 @@ input.button--small {
 
 @media screen and (min-width: 600px) {
     .container {
-        max-width: 80%;
+        max-width: 60%;
     }
 }
 
 @media screen and (min-width: 1080px) {
     .container {
-        max-width: 80rem;
+        max-width: 60rem;
     }
 }
 
