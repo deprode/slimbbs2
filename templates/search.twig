@@ -10,28 +10,37 @@
                         <header class="comment__header">
                             {% set isSigned = comment.user_name and comment.user_image_url %}
                             <div>
-                                {% if isSigned %}
-                                    <img src="{{ comment.user_image_url }}" alt="{{ comment.user_name }}">
-                                {% else %}
-                                    <img src="http://via.placeholder.com/48x48" alt="匿名ユーザー">
-                                {% endif %}
+                                <div class="comment__header__wrap">
+                                    {% if isSigned %}
+                                        <img class="comment__header__wrap__icon" src="{{ comment.user_image_url }}"
+                                             alt="{{ comment.user_name }}">
+                                    {% else %}
+                                        <img class="comment__header__wrap__icon" src="http://via.placeholder.com/48x48"
+                                             alt="匿名ユーザー">
+                                    {% endif %}
+                                </div>
+                                <div class="comment__header__username">
+                                    {% if isSigned %}
+                                        @{{ comment.user_name }}
+                                    {% else %}
+                                        匿名ユーザー
+                                    {% endif %}
+                                </div>
                             </div>
-                            <div>
-                                {% if isSigned %}
-                                    {{ comment.user_name }}:
-                                {% else %}
-                                    匿名ユーザー:
-                                {% endif %}
-                            </div>
-                            <div>
+                            <div class="comment__header__createdat">
                                 {{ comment.created_at }}
                             </div>
-                            <div>
-                                そうだね&#215;<span id="{{ comment.comment_id }}_like">{{ comment.like_count }}</span>
-                            </div>
                         </header>
-                        <main class="comment__main">️
-                            {{ comment.comment }}
+                        <main class="comment__main">
+                            <div id="{{ comment.comment_id }}">
+                                {{ comment.comment | trim }}
+                            </div>
+                            {% if comment.photo_url %}
+                                <div class="comment_main__photo">
+                                    <img src="https://s3-{{ region }}.amazonaws.com/{{ bucket }}/{{ comment.photo_url }}"
+                                         alt="{{ comment.comment }}">
+                                </div>
+                            {% endif %}
                         </main>
                         <footer class="comment__footer">
                             {% if is_admin %}
@@ -45,6 +54,13 @@
                                     <input type="submit" value="削除" class="button--small">
                                 </form>
                             {% endif %}
+                            <div>
+                                <a href="{{ path_for('thread', {}, {'thread_id': comment.thread_id}) }}">スレッドを見る</a>
+                            </div>
+                            <div>
+                                そうだね&#215;<span
+                                        id="like-{{ comment.comment_id }}_like">{{ comment.like_count }}</span>
+                            </div>
                         </footer>
                     </section>
                 {% endfor %}
