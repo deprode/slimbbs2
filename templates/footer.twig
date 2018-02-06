@@ -5,7 +5,7 @@
                 {% if not loggedIn %}
                     <a href="{{ path_for('login') }}" class="button auth__login">ログイン</a>
                 {% else %}
-                    <a href="{{ path_for('logout') }}" class="button auth__logout">ログアウト</a>
+                    <a href="{{ path_for('logout') }}" class="auth__logout">ログアウト</a>
                 {% endif %}
             </nav>
         {% endif %}
