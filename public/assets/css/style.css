@@ -140,16 +140,19 @@ input.button--small {
 }
 
 .comment {
-    margin: .1rem;
-    padding: 1.5rem;
+    padding: 1rem 1.5rem;
     border: 1px solid #e0e0e0;
     background: #fefefe;
 }
 
 .comment__main {
-    margin: 1rem 0;
-    padding: 1rem 0;
     background: #ffffff;
+    margin: 0.2rem 0 1.5rem 0;
+    padding: 0.5rem 0;
+}
+
+.comment_main__photo {
+    margin: 1rem;
 }
 
 .comment__header,
@@ -162,8 +165,26 @@ input.button--small {
     padding: .8rem 0;
 }
 
-.comment__header__icon {
+.comment__header__wrap {
+    display: inline-block;
+}
+
+.comment__header__wrap__icon {
     border-radius: 50%;
+}
+
+.comment__header__username {
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 2rem;
+    margin-top: -4.1rem;
+    font-size: 1.6rem;
+    font-weight: bold;
+}
+
+.comment__header__createdat {
+    display: inline-block;
+    font-size: 1.4rem;
 }
 
 .comment__footer form {

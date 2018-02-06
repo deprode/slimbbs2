@@ -47,24 +47,24 @@
                         <header class="comment__header">
                             {% set isSigned = comment.user_name and comment.user_image_url %}
                             <div>
-                                {% if isSigned %}
-                                    <img class="comment__header__icon" src="{{ comment.user_image_url }}"
-                                         alt="{{ comment.user_name }}">
-                                {% else %}
-                                    <img class="comment__header__icon" src="http://via.placeholder.com/64x64"
-                                         alt="匿名ユーザー">
-                                {% endif %}
-                            </div>
-                            <div>
-                                {% if isSigned %}
-                                    {{ comment.user_name }}:
-                                {% else %}
-                                    匿名ユーザー:
-                                {% endif %}
-                                        <img class="comment__header__icon" src="http://via.placeholder.com/48x48"
+                                <div class="comment__header__wrap">
+                                    {% if isSigned %}
+                                        <img class="comment__header__wrap__icon" src="{{ comment.user_image_url }}"
+                                             alt="{{ comment.user_name }}">
+                                    {% else %}
+                                        <img class="comment__header__wrap__icon" src="http://via.placeholder.com/48x48"
                                              alt="匿名ユーザー">
+                                    {% endif %}
+                                </div>
+                                <div class="comment__header__username">
+                                    {% if isSigned %}
+                                        @{{ comment.user_name }}
+                                    {% else %}
+                                        匿名ユーザー
+                                    {% endif %}
+                                </div>
                             </div>
-                            <div>
+                            <div class="comment__header__createdat">
                                 {{ comment.created_at }}
                             </div>
                         </header>
@@ -73,7 +73,7 @@
                                 {{ comment.comment | trim }}
                             </div>
                             {% if comment.photo_url %}
-                                <div class="photo">
+                                <div class="comment_main__photo">
                                     <img src="https://s3-{{ region }}.amazonaws.com/{{ bucket }}/{{ comment.photo_url }}"
                                          alt="{{ comment.comment }}">
                                 </div>
