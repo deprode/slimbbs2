@@ -10,6 +10,14 @@ img {
     max-width: 100%;
 }
 
+select,
+select:focus,
+select:hover {
+    -webkit-appearance: menulist;
+    -moz-appearance: menulist;
+    background: none;
+}
+
 .button,
 button,
 input[type='button'],
@@ -47,6 +55,18 @@ input[type='submit'][disabled]:focus,
 input[type='submit'][disabled]:hover {
     background-color: darkgreen;
     border: 0.1rem solid darkgreen;
+}
+
+input[type='email']:focus,
+input[type='number']:focus,
+input[type='password']:focus,
+input[type='search']:focus,
+input[type='tel']:focus,
+input[type='text']:focus,
+input[type='url']:focus,
+textarea:focus,
+select:focus {
+    border-color: darkgreen;
 }
 
 .global-header__top__home,
@@ -123,6 +143,10 @@ input.button--small {
     background: #fefefe;
 }
 
+.content form {
+    margin-bottom: .5rem;
+}
+
 .message {
     margin: 2rem 0;
     font-weight: bold;
@@ -145,6 +169,7 @@ input.button--small {
 
 .thread {
     display: block;
+    margin: 2rem 0;
 }
 
 .thread thead {
@@ -243,12 +268,33 @@ input.button--small {
     margin-bottom: 0;
 }
 
+.comment__cancel {
+    margin-left: 3rem;
+}
+
+.comment_delete[type=submit] {
+    background-color: #d9534f;
+    border: 1px solid #d43f3a;
+}
+
+.form--inline {
+    margin-bottom: 0;
+}
+
+.form--inline fieldset,
+.form--inline input,
+.form--inline select,
+.form--inline textarea {
+    margin-bottom: .5rem;
+}
+
 .form--inline label,
 .form--inline input,
 .form--inline button,
 .form--inline select {
     display: inline-block;
     width: auto;
+    vertical-align: top;
 }
 
 .global-header {

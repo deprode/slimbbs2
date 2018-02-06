@@ -88,10 +88,11 @@
                                         <input type="submit" value="変更" class="button--small js-update"
                                                data-comment="{{ comment.comment_id }}"
                                                id="update-{{ comment.comment_id }}">
+                                        <button class="js-cancel comment__cancel button--small"
+                                                id="cancel-{{ comment.comment_id }}"
+                                                data-comment="{{ comment.comment_id }}">キャンセル
+                                        </button>
                                     </form>
-                                    <button class="js-cancel button--small" id="cancel-{{ comment.comment_id }}"
-                                            data-comment="{{ comment.comment_id }}">キャンセル
-                                    </button>
                                 </div>
                             {% endif %}
                         </main>
@@ -104,7 +105,7 @@
                                         <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
                                         <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
                                         <input type="hidden" name="_METHOD" value="DELETE">
-                                        <input type="submit" value="削除" class="button--small">
+                                        <input type="submit" value="削除" class="comment_delete button--small">
                                     </form>
                                 {% else %}
                                     &nbsp;
@@ -168,6 +169,7 @@
         let cancel_buttons = document.querySelectorAll('button.js-cancel');
         Array.from(cancel_buttons).forEach((button) => {
             button.addEventListener('click', (envet) => {
+                event.preventDefault();
                 hideEditBox('edit-' + document.getElementById(event.target.id).dataset.comment);
             });
         });
