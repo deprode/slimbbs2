@@ -44,7 +44,8 @@ class ThreadTest extends BaseTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('thread_test', (string)$response->getBody());
         $this->assertContains('testuser', (string)$response->getBody());
-        $this->assertContains('<img src="http://via.placeholder.com/48x48" alt="testuser">', (string)$response->getBody());
+        $this->assertContains('<img class="comment__header__wrap__icon" src="http://via.placeholder.com/48x48"
+                                             alt="testuser">', (string)$response->getBody());
     }
 
     public function testスレッドの表示失敗()
@@ -245,7 +246,7 @@ class ThreadTest extends BaseTestCase
 
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains('そうだね&#215;<span id="like-1_like">1</span>', (string)$response->getBody());
+        $this->assertContains('そうだね &#215;1', (string)$response->getBody());
     }
 
     public function test匿名でそうだねが出ない()
