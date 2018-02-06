@@ -18,7 +18,7 @@ class DatabaseServiceTest extends \PHPUnit_Framework_TestCase
             'user_id'        => 1,
             'created_at'     => '2017-12-06 13:42:28',
             'user_name'      => 'testuser',
-            'user_image_url' => 'http://via.placeholder.com/64x64'
+            'user_image_url' => 'http://via.placeholder.com/48x48'
         ];
 
         $pdo = $this->createMock(\PDO::class);

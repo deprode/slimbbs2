@@ -8,7 +8,7 @@ class ThreadTest extends BaseTestCase
     {
         parent::setUp();
 
-        $dns = 'mysql:host='.getenv('MYSQL_HOST').';port='.getenv('MYSQL_PORT').';dbname='.getenv('MYSQL_DATABASE');
+        $dns = 'mysql:host=' . getenv('MYSQL_HOST') . ';port=' . getenv('MYSQL_PORT') . ';dbname=' . getenv('MYSQL_DATABASE');
         try {
             $db_connection = new \PDO($dns, getenv('MYSQL_USER'), getenv('MYSQL_PASSWORD'));
             $db_connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
@@ -22,7 +22,7 @@ class ThreadTest extends BaseTestCase
             $sql = 'TRUNCATE TABLE `users`';
             $prepare = $db_connection->prepare($sql);
             $prepare->execute();
-            $sql = 'INSERT INTO `users` (`user_id`, `user_name`, `user_image_url`, `access_token`, `access_secret`) VALUES (1, "testuser", "http://via.placeholder.com/64x64", "dummy_token", "dummy_secret")';
+            $sql = 'INSERT INTO `users` (`user_id`, `user_name`, `user_image_url`, `access_token`, `access_secret`) VALUES (1, "testuser", "http://via.placeholder.com/48x48", "dummy_token", "dummy_secret")';
             $prepare = $db_connection->prepare($sql);
             $prepare->execute();
 
@@ -44,7 +44,7 @@ class ThreadTest extends BaseTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('thread_test', (string)$response->getBody());
         $this->assertContains('testuser', (string)$response->getBody());
-        $this->assertContains('<img src="http://via.placeholder.com/64x64" alt="testuser">', (string)$response->getBody());
+        $this->assertContains('<img src="http://via.placeholder.com/48x48" alt="testuser">', (string)$response->getBody());
     }
 
     public function testスレッドの表示失敗()
@@ -114,11 +114,11 @@ class ThreadTest extends BaseTestCase
     {
         $_FILES = [
             'picture' => [
-                'name' => 'dummy.png',
-                'type' => 'image/png',
+                'name'     => 'dummy.png',
+                'type'     => 'image/png',
                 'tmp_name' => __DIR__ . '/../data/dummy.png',
-                'error' => 0,
-                'size' => 13188
+                'error'    => 0,
+                'size'     => 13188
             ]
         ];
 

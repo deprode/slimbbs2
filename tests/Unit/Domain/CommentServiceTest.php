@@ -24,7 +24,7 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
             'comment'        => 'sample comment test',
             'photo_url'      => 'http://via.placeholder.com/32x32',
             'user_name'      => 'testuser',
-            'user_image_url' => 'http://via.placeholder.com/64x64'
+            'user_image_url' => 'http://via.placeholder.com/48x48'
         ];
 
         $dbs = $this->createMock(DatabaseService::class);

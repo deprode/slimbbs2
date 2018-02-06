@@ -18,7 +18,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
         $this->data = new User();
         $this->data->user_id = 1;
         $this->data->user_name = 'testuser';
-        $this->data->user_image_url = 'http://via.placeholder.com/64x64';
+        $this->data->user_image_url = 'http://via.placeholder.com/48x48';
         $this->data->access_token = 'token';
         $this->data->access_secret = 'secret';
     }
@@ -32,7 +32,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
         $user_info = [
             'id_str'            => '1',
             'screen_name'       => 'testuser',
-            'profile_image_url' => 'http://via.placeholder.com/64x64'
+            'profile_image_url' => 'http://via.placeholder.com/48x48'
         ];
         $access_token = [
             'token'  => 'token',
