@@ -2,17 +2,27 @@
 
 {% block title %}Toppage{% endblock %}
 {% block contents %}
-    <div class="message">
-        {% if saved %}
-            <li>{{ saved }}</li>
-        {% endif %}
-        {% if deleted %}
-            <li>{{ deleted }}</li>
-        {% endif %}
-        {% if account %}
-            <li>{{ account }}</li>
-        {% endif %}
-    </div>
+    {% if saved %}
+        <div class="message content">
+            <ul>
+                <li>{{ saved }}</li>
+            </ul>
+        </div>
+    {% endif %}
+    {% if deleted %}
+        <div class="message content">
+            <ul>
+                <li>{{ deleted }}</li>
+            </ul>
+        </div>
+    {% endif %}
+    {% if account %}
+        <div class="message content">
+            <ul>
+                <li>{{ account }}</li>
+            </ul>
+        </div>
+    {% endif %}
     <div class="create-thread">
         <h2>スレッドを作る</h2>
         <form action="{{ path_for('home') }}" method="post" class="create-thread__form">

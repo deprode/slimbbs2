@@ -76,6 +76,12 @@ input.button--small {
     background: #fefefe;
 }
 
+.message {
+    margin: 2rem 0;
+    font-weight: bold;
+    color: #000000;
+}
+
 .create-thread,
 .search,
 .threads,
@@ -84,7 +90,6 @@ input.button--small {
     padding: 2rem 2rem 1.5rem;
     border: 1px solid #e0e0e0;
     background: #fefefe;
-
 }
 
 .create-thread__form {

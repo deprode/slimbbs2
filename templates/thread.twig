@@ -3,17 +3,15 @@
 {% block title %}Thread{% endblock %}
 {% block contents %}
     {% if saved or deleted %}
-        <div class="row">
-            <div class="message column">
-                <ul>
-                    {% if saved %}
-                        <li>{{ saved }}</li>
-                    {% endif %}
-                    {% if deleted %}
-                        <li>{{ deleted }}</li>
-                    {% endif %}
-                </ul>
-            </div>
+        <div class="message content">
+            <ul>
+                {% if saved %}
+                    <li>{{ saved }}</li>
+                {% endif %}
+                {% if deleted %}
+                    <li>{{ deleted }}</li>
+                {% endif %}
+            </ul>
         </div>
     {% endif %}
     <div class="content">
