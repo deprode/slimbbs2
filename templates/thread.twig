@@ -122,8 +122,8 @@
                                         <input type="hidden" name="thread_id" value="{{ thread_id }}">
                                         <input type="submit" value="そうだね &#215;{{ comment.like_count }}"
                                                class="button--small" id="like-{{ comment.comment_id }}--submit">
-                                        <input type="hidden" name="" id="like-{{ comment.comment_id }}--data"
-                                               data-like="{{ comment.like_count }}">
+                                        <span class="hidden" id="like-{{ comment.comment_id }}--data"
+                                              data-like="{{ comment.like_count }}">
                                     </form>
                                 </div>
                             {% else %}
