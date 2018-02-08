@@ -8,7 +8,7 @@ use App\Model\User;
 
 class UserServiceTest extends \PHPUnit_Framework_TestCase
 {
-    private $comment;
+    private $user;
     private $data;
 
     protected function setUp()
@@ -27,7 +27,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     {
         $dbs = $this->createMock(DatabaseService::class);
         $dbs->expects($this->any())->method('execute')->willReturn(1);
-        $this->comment = new UserService($dbs);
+        $this->user = new UserService($dbs);
 
         $user_info = [
             'id_str'            => '1',
@@ -39,7 +39,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
             'secret' => 'secret'
         ];
 
-        $this->assertEquals($this->data, $this->comment->convertUser((object)$user_info, $access_token));
+        $this->assertEquals($this->data, $this->user->convertUser((object)$user_info, $access_token));
     }
 
     /**
@@ -50,11 +50,11 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
         $dbs = $this->createMock(DatabaseService::class);
         $dbs->expects($this->at(0))->method('execute')->willReturn(1);
         $dbs->expects($this->at(1))->method('execute')->will($this->throwException(new \PDOException()));
-        $this->comment = new UserService($dbs);
+        $this->user = new UserService($dbs);
 
-        $this->assertEquals(1, $this->comment->saveUser($this->data));
+        $this->assertEquals(1, $this->user->saveUser($this->data));
 
-        $this->assertEquals(1, $this->comment->saveUser($this->data));
+        $this->assertEquals(1, $this->user->saveUser($this->data));
     }
 
     /**
@@ -63,15 +63,15 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     public function testDeleteAccount()
     {
         // 先に匿名をはじいているかテスト
-        $this->comment = new UserService(new DatabaseService($this->createMock(\PDO::class)));
-        $this->assertFalse($this->comment->deleteAccount(0));
+        $this->user = new UserService(new DatabaseService($this->createMock(\PDO::class)));
+        $this->assertFalse($this->user->deleteAccount(0));
 
         $dbs = $this->createMock(DatabaseService::class);
         $dbs->expects($this->at(0))->method('execute')->willReturn(1);
         $dbs->expects($this->at(1))->method('execute')->will($this->throwException(new \PDOException()));
-        $this->comment = new UserService($dbs);
+        $this->user = new UserService($dbs);
 
-        $this->assertTrue($this->comment->deleteAccount(1));
-        $this->comment->deleteAccount(1);
+        $this->assertTrue($this->user->deleteAccount(1));
+        $this->user->deleteAccount(1);
     }
 }
