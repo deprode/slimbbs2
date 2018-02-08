@@ -91,10 +91,4 @@
             <p>スレッドはまだありません。</p>
         {% endif %}
     </article>
-    {% if loggedIn %}
-        <hr>
-        <nav class="float-left">
-            <a href="{{ path_for('quit') }}">退会する</a>
-        </nav>
-    {% endif %}
 {% endblock %}

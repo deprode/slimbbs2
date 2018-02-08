@@ -4,6 +4,7 @@ namespace App\Domain;
 
 
 use App\Exception\DeleteFailedException;
+use App\Exception\FetchFailedException;
 use App\Exception\SaveFailedException;
 use App\Model\User;
 
@@ -14,6 +15,32 @@ class UserService
     public function __construct(DatabaseService $db)
     {
         $this->db = $db;
+    }
+
+    public function getUser(string $user_name): array
+    {
+        $sql = <<<SQL
+SELECT
+  `user_id`, `user_name`, `user_image_url`
+FROM
+  `users`
+WHERE
+  `user_name` = :user_name;
+SQL;
+
+        $values = [
+            ':user_name' => ['value' => $user_name, 'type' => \PDO::PARAM_STR],
+        ];
+
+        try {
+            $data = $this->db->fetchAll($sql, $values);
+            if (count($data) !== 1) {
+                throw new \PDOException();
+            }
+            return $data[0];
+        } catch (\PDOException $e) {
+            throw new FetchFailedException();
+        }
     }
 
     public function convertUser($user_info = [], $access_token = []): User

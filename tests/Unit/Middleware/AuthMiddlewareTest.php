@@ -15,11 +15,12 @@ class AuthMiddlewareTest extends \PHPUnit_Framework_TestCase
     {
         $_SESSION = [];
         $_SESSION['user_id'] = 1;
+        $_SESSION['user_name'] = 'username';
 
         $environment = Environment::mock(
             [
                 'REQUEST_METHOD' => 'GET',
-                'REQUEST_URI' => '/',
+                'REQUEST_URI'    => '/',
             ]
         );
 
@@ -32,5 +33,6 @@ class AuthMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(100, $request->getAttribute('adminId'));
         $this->assertEquals(0, $request->getAttribute('isAdmin'));
         $this->assertEquals(1, $request->getAttribute('isLoggedIn'));
+        $this->assertEquals('username', $request->getAttribute('username'));
     }
 }

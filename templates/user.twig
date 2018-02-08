@@ -1,0 +1,22 @@
+{% extends "base.twig" %}
+
+{% block title %}User{% endblock %}
+{% block contents %}
+    {% if name %}
+        <div class="content profile">
+            <img src="{{ image_url }}" alt="{{ name }}" class="profile__icon">
+            <h2 class="profile__name">@{{ name }}</h2>
+            <p class="profile__links">
+                <a href="https://twitter.com/{{ name }}">Twitter</a>
+            </p>
+        </div>
+        <section>
+            {% include "comments.twig" with { 'comments': comments, 'is_admin': is_admin } %}
+        </section>
+        {% if name == username %}
+            <div class="content quit">
+                <a href="{{ path_for('quit') }}">退会する</a>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}

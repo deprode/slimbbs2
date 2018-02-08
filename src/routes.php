@@ -43,7 +43,9 @@ $app->post('/like', 'App\Action\LikeAction:add')
 $app->get('/quit', 'App\Action\QuitAction:index')
     ->setName('quit');
 
-
 $app->delete('/quit', 'App\Action\AccountDeleteAction:delete')
     ->setName('quit')
     ->add($container->get('App\Validation\CommentLikeValidation'));
+
+$app->get('/user[/{name}]', 'App\Action\UserAction:index')
+    ->setName('user');

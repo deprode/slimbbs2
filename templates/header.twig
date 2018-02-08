@@ -7,6 +7,9 @@
             <article class="global-header__auth">
                 {% if not loggedIn %}
                     <a href="{{ path_for('login') }}" class="button auth__login">ログイン</a>
+                {% else %}
+                    <a href="{{ path_for('user') }}"
+                       class="global-header__top__user">マイページ</a>
                 {% endif %}
             </article>
         {% endif %}

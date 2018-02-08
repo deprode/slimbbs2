@@ -43,6 +43,11 @@ class AuthService
         $this->session->set('user_img', $user->user_image_url);
     }
 
+    public function getUsername(): string
+    {
+        return $this->session->get('user_name') ?? '';
+    }
+
     public function getUserId(): int
     {
         return $this->session->get('user_id') ?? 0;

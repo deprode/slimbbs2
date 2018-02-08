@@ -134,6 +134,10 @@ $container['App\Action\QuitAction'] = function ($c) {
 $container['App\Action\AccountDeleteAction'] = function ($c) {
     return new App\Action\AccountDeleteAction($c->get('MessageService'), $c->get('UserService'), $c->get('AuthService'), $c->get('QuitedResponder'));
 };
+
+$container['App\Action\UserAction'] = function ($c) {
+    return new App\Action\UserAction($c->get('UserService'), $c->get('CommentService'), $c->get('UserResponder'));
+};
 // -----------------------------------------------------------------------------
 // Domain factories
 // -----------------------------------------------------------------------------
@@ -201,6 +205,10 @@ $container['QuitResponder'] = function ($c) {
 
 $container['QuitedResponder'] = function ($c) {
     return new App\Responder\QuitedResponder($c->get('view'));
+};
+
+$container['UserResponder'] = function ($c) {
+    return new App\Responder\UserResponder($c->get('view'));
 };
 // -----------------------------------------------------------------------------
 // Validation factories

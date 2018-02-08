@@ -23,6 +23,23 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
         $this->data->access_secret = 'secret';
     }
 
+    public function testGetUser()
+    {
+        $data = [
+            [
+                'user_id'        => '1',
+                'user_name'      => 'testuser',
+                'user_image_url' => 'http://via.placeholder.com/48x48',
+            ]
+        ];
+
+        $dbs = $this->createMock(DatabaseService::class);
+        $dbs->expects($this->any())->method('fetchAll')->willReturn($data);
+        $this->user = new UserService($dbs);
+
+        $this->assertEquals($data[0], $this->user->getUser('user_name'));
+    }
+
     public function testConvertUser()
     {
         $dbs = $this->createMock(DatabaseService::class);

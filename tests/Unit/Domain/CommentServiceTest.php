@@ -18,13 +18,15 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->data = [
-            'comment_id'     => 1,
-            'user_id'        => 1,
-            'created_at'     => '2017-12-06 13:42:28',
-            'comment'        => 'sample comment test',
-            'photo_url'      => 'http://via.placeholder.com/32x32',
-            'user_name'      => 'testuser',
-            'user_image_url' => 'http://via.placeholder.com/48x48'
+            [
+                'comment_id'     => 1,
+                'user_id'        => 1,
+                'created_at'     => '2017-12-06 13:42:28',
+                'comment'        => 'sample comment test',
+                'photo_url'      => 'http://via.placeholder.com/32x32',
+                'user_name'      => 'testuser',
+                'user_image_url' => 'http://via.placeholder.com/48x48'
+            ]
         ];
 
         $dbs = $this->createMock(DatabaseService::class);
@@ -47,6 +49,17 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->data, $comments);
 
         $this->error_comment->getComments(1, new Sort('desc'));
+    }
+
+    /**
+     * @expectedException \App\Exception\FetchFailedException
+     */
+    public function testGetCommentsByUser()
+    {
+        $comments = $this->comment->getCommentsByUser(1);
+        $this->assertEquals($this->data, $comments);
+
+        $this->error_comment->getCommentsByUser(1);
     }
 
     public function testConvertTime()

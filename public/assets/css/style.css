@@ -70,6 +70,7 @@ select:focus {
 }
 
 .global-header__top__home,
+.global-header__top__user,
 .auth__logout,
 .search__button[type='submit'],
 .comments__sort__button[type='submit'] {
@@ -310,4 +311,31 @@ input.button--small {
 .auth__login,
 .auth__logout {
     width: 100%;
+}
+
+.profile {
+    padding: 2rem 1.5rem 0;
+    margin-bottom: 2rem;
+}
+
+.profile__icon {
+    border-radius: 50%;
+}
+
+.profile__name {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 0 4rem 1rem;
+    font-size: 2.4rem;
+}
+
+.profile__links {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 0 3.2rem 1rem;
+    font-size: 1.4rem;
+}
+
+.quit {
+    margin-top: 2rem;
 }

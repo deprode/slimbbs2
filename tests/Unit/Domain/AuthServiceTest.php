@@ -56,6 +56,14 @@ class AuthServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('http://example.com', $_SESSION['user_img']);
     }
 
+    public function testUsername()
+    {
+        $_SESSION = ['user_name' => 'username'];
+        $this->assertEquals('username', $this->auth->getUsername());
+        $_SESSION = [];
+        $this->assertEquals('', $this->auth->getUsername());
+    }
+
     public function testUserId()
     {
         $_SESSION = ['user_id' => 1];

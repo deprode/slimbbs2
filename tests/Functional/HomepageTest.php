@@ -62,6 +62,19 @@ class HomepageTest extends BaseTestCase
         $this->assertContains('スレッドはまだありません。', (string)$response->getBody());
     }
 
+    public function testマイページの表示()
+    {
+        $response = $this->runApp('GET', '/');
+        $this->assertContains('マイページ', (string)$response->getBody());
+    }
+
+    public function test匿名でのマイページの表示()
+    {
+        $_SESSION['user_id'] = null;
+        $response = $this->runApp('GET', '/');
+        $this->assertNotContains('マイページ', (string)$response->getBody());
+    }
+
     public function test投稿()
     {
         // *注: CSRF(middleware)を切ってテストしています。

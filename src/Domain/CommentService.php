@@ -45,6 +45,31 @@ COMMENTS;
         }
     }
 
+    public function getCommentsByUser(int $user_id): array
+    {
+        $sql = <<<COMMENTS
+SELECT
+  `comments`.`comment_id`, `comments`.`thread_id`, `comments`.`user_id`, `comments`.`like_count`, `comments`.`comment`, `comments`.`photo_url`, `comments`.`created_at`, `users`.`user_name`, `users`.`user_image_url`
+FROM
+  `comments`
+LEFT JOIN
+  `users`
+  ON `comments`.`user_id` = `users`.`user_id`
+WHERE
+  `comments`.`user_id` = :user_id
+ORDER BY
+  `comments`.`comment_id` DESC
+COMMENTS;
+
+        try {
+            return $this->db->fetchAll($sql, [
+                ':user_id' => ['value' => $user_id, 'type' => \PDO::PARAM_INT]
+            ]);
+        } catch (\PDOException $e) {
+            throw new FetchFailedException();
+        }
+    }
+
     public function convertTime(array $comments = []): array
     {
         for ($i = 0; $i < count($comments); $i++) {
