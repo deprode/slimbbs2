@@ -4,21 +4,21 @@
 {% block contents %}
     {% if saved %}
         <div class="message content">
-            <ul>
+            <ul class="message__lists">
                 <li>{{ saved }}</li>
             </ul>
         </div>
     {% endif %}
     {% if deleted %}
         <div class="message content">
-            <ul>
+            <ul class="message__lists">
                 <li>{{ deleted }}</li>
             </ul>
         </div>
     {% endif %}
     {% if account %}
         <div class="message content">
-            <ul>
+            <ul class="message__lists">
                 <li>{{ account }}</li>
             </ul>
         </div>

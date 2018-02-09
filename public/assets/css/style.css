@@ -149,9 +149,14 @@ input.button--small {
 }
 
 .message {
-    margin: 2rem 0;
+    margin: 2rem 0 0;
+    padding-bottom: 1rem;
     font-weight: bold;
     color: #000000;
+}
+
+.message__lists {
+    margin-bottom: 0;
 }
 
 .create-thread,
