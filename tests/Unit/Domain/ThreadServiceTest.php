@@ -28,11 +28,14 @@ class ThreadServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetThreads()
     {
         $dbs = $this->createMock(DatabaseService::class);
-        $dbs->expects($this->at(0))->method('fetchAll')->willReturn($this->data);
-        $dbs->expects($this->at(1))->method('fetchAll')->will($this->throwException(new \PDOException()));
+        $dbs->expects($this->any())->method('fetchAll')->willReturn($this->data);
         $this->thread = new ThreadService($dbs);
 
         $this->assertEquals($this->data, $this->thread->getThreads());
+
+        $error_dbs = $this->createMock(DatabaseService::class);
+        $error_dbs->expects($this->any())->method('fetchAll')->will($this->throwException(new \PDOException()));
+        $this->thread = new ThreadService($error_dbs);
 
         $this->assertEquals($this->data, $this->thread->getThreads());
     }

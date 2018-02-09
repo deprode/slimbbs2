@@ -65,13 +65,16 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     public function testSaveUser()
     {
         $dbs = $this->createMock(DatabaseService::class);
-        $dbs->expects($this->at(0))->method('execute')->willReturn(1);
-        $dbs->expects($this->at(1))->method('execute')->will($this->throwException(new \PDOException()));
+        $dbs->expects($this->any())->method('execute')->willReturn(1);
         $this->user = new UserService($dbs);
 
         $this->assertEquals(1, $this->user->saveUser($this->data));
 
-        $this->assertEquals(1, $this->user->saveUser($this->data));
+        $error_dbs = $this->createMock(DatabaseService::class);
+        $error_dbs->expects($this->any())->method('execute')->will($this->throwException(new \PDOException()));
+        $this->user = new UserService($error_dbs);
+
+        $this->user->saveUser($this->data);
     }
 
     /**
@@ -85,10 +88,14 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
 
         $dbs = $this->createMock(DatabaseService::class);
         $dbs->expects($this->at(0))->method('execute')->willReturn(1);
-        $dbs->expects($this->at(1))->method('execute')->will($this->throwException(new \PDOException()));
         $this->user = new UserService($dbs);
 
         $this->assertTrue($this->user->deleteAccount(1));
+
+        $error_dbs = $this->createMock(DatabaseService::class);
+        $error_dbs->expects($this->any())->method('execute')->will($this->throwException(new \PDOException()));
+        $this->user = new UserService($error_dbs);
+
         $this->user->deleteAccount(1);
     }
 }
