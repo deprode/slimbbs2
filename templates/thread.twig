@@ -117,13 +117,13 @@
                             {% if loggedIn %}
                                 <div>
                                     <form action="javascript: void(0);" method="post" id="like-{{ comment.comment_id }}"
-                                          class="js-like">
+                                          class="js-like" data-like="{{ comment.like_count }}">
                                         <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
                                         <input type="hidden" name="thread_id" value="{{ thread_id }}">
-                                        <input type="submit" value="そうだね &#215;{{ comment.like_count }}"
-                                               class="button--small" id="like-{{ comment.comment_id }}--submit">
-                                        <span class="hidden" id="like-{{ comment.comment_id }}--data"
-                                              data-like="{{ comment.like_count }}">
+                                        <input type="submit" :value="soudane"
+                                               class="button--small" id="like-{{ comment.comment_id }}--submit"
+                                               @click="addLike"
+                                               :disabled="unsent">
                                     </form>
                                 </div>
                             {% else %}
@@ -142,17 +142,14 @@
     </div>
 {% endblock %}
 {% block javascript %}
-    <script src="{{ base_url() }}/assets/js/like.js"></script>
-    <script src="{{ base_url() }}/assets/js/edit.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
     <script>
         const add_like_path = '' + '{{ path_for('add_like') }}';
         const update_path = '' + '{{ path_for('update_comment') }}';
-        let forms = document.querySelectorAll('form.js-like');
-        Array.from(forms).forEach((form) => {
-            form.addEventListener('click', (envet) => {
-                addLike(event.target.parentElement.id);
-            });
-        });
+    </script>
+    <script src="{{ base_url() }}/assets/js/like.js"></script>
+    <script src="{{ base_url() }}/assets/js/edit.js"></script>
+    <script>
         let edit_forms = document.querySelectorAll('button.js-edit');
         Array.from(edit_forms).forEach((form) => {
             form.addEventListener('click', (envet) => {
