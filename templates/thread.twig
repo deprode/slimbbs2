@@ -41,7 +41,8 @@
                     </form>
                 </div>
                 {% for comment in comments %}
-                    <section class="comment">
+                    <section class="comment js-comment" id="js-form--{{ comment.comment_id }}"
+                             data-comment="{{ comment.comment | trim }}">
                         <header class="comment__header">
                             {% set isSigned = comment.user_name and comment.user_image_url %}
                             <div>
@@ -67,8 +68,8 @@
                             </div>
                         </header>
                         <main class="comment__main">
-                            <div id="{{ comment.comment_id }}">
-                                {{ comment.comment | trim }}
+                            <div id="{{ comment.comment_id }}" v-show="!editing">
+                                ${ comment }
                             </div>
                             {% if comment.photo_url %}
                                 <div class="comment_main__photo">
@@ -77,20 +78,20 @@
                                 </div>
                             {% endif %}
                             {% if (isSigned and comment.user_id == user_id) %}
-                                <div class="hidden">
+                                <div v-if="editing">
                                     <form action="{{ path_for('update_comment') }}" method="post"
-                                          id="edit-{{ comment.comment_id }}-to" class="js-edit-form">
+                                          class="js-edit-form">
                                         <label for="comment"><input type="text" name="comment"
-                                                                    value="{{ comment.comment }}"></label>
+                                                                    v-model="comment"></label>
                                         <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
                                         <input type="hidden" name="thread_id" value="{{ thread_id }}">
                                         <input type="hidden" name="_METHOD" value="PUT">
                                         <input type="submit" value="変更" class="button--small js-update"
                                                data-comment="{{ comment.comment_id }}"
-                                               id="update-{{ comment.comment_id }}">
-                                        <button class="js-cancel comment__cancel button--small"
-                                                id="cancel-{{ comment.comment_id }}"
-                                                data-comment="{{ comment.comment_id }}">キャンセル
+                                               id="update-{{ comment.comment_id }}"
+                                               @click="editEnd">
+                                        <button class="comment__cancel button--small"
+                                                @click="editCancel">キャンセル
                                         </button>
                                     </form>
                                 </div>
@@ -112,7 +113,9 @@
                                 {% endif %}
                             </div>
                             {% if (isSigned and comment.user_id == user_id) %}
-                                <button class="button--small js-edit" id="edit-{{ comment.comment_id }}">編集</button>
+                                <button class="button--small"
+                                        @click="editStart" v-if="!editing">編集
+                                </button>
                             {% endif %}
                             {% if loggedIn %}
                                 <div>
@@ -149,26 +152,4 @@
     </script>
     <script src="{{ base_url() }}/assets/js/like.js"></script>
     <script src="{{ base_url() }}/assets/js/edit.js"></script>
-    <script>
-        let edit_forms = document.querySelectorAll('button.js-edit');
-        Array.from(edit_forms).forEach((form) => {
-            form.addEventListener('click', (envet) => {
-                showEditBox(event.target.id);
-            });
-        });
-        let update_buttons = document.querySelectorAll('input.js-update');
-        Array.from(update_buttons).forEach((button) => {
-            button.addEventListener('click', (envet) => {
-                event.preventDefault();
-                updateComment(document.getElementById(event.target.id).dataset.comment);
-            });
-        });
-        let cancel_buttons = document.querySelectorAll('button.js-cancel');
-        Array.from(cancel_buttons).forEach((button) => {
-            button.addEventListener('click', (envet) => {
-                event.preventDefault();
-                hideEditBox('edit-' + document.getElementById(event.target.id).dataset.comment);
-            });
-        });
-    </script>
 {% endblock %}

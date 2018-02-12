@@ -1,40 +1,56 @@
 "use strict";
 
-function toggleEditBox(element) {
-    element.classList.toggle('hidden');
-}
+let comments = document.querySelectorAll('section.js-comment');
+Array.from(comments).forEach((comment) => {
+    const comment_str = document.getElementById(comment.id).dataset.comment;
+    new Vue({
+        delimiters: ['${', '}'],
+        el: '#' + comment.id,
+        data: {
+            form_id: comment.id,
+            comment: comment_str,
+            edit: false,
+            pre_comment: comment_str
+        },
+        computed: {
+            editing: function () {
+                return this.edit;
+            }
+        },
+        methods: {
+            editStart: function () {
+                this.edit = true;
+                this.pre_comment = this.comment;
+            },
+            editCancel: function (event) {
+                event.preventDefault();
+                this.edit = false;
+                this.comment = this.pre_comment;
+            },
+            editEnd: function (event) {
+                event.preventDefault();
+                this.edit = false;
 
-function showEditBox(id) {
-    toggleEditBox(document.getElementById(id + '-to').parentElement);
-    toggleEditBox(document.getElementById(id));
-}
+                const form = document.getElementById(event.target.id).parentElement;
 
-function hideEditBox(id) {
-    toggleEditBox(document.getElementById(id + '-to').parentElement);
-    toggleEditBox(document.getElementById(id));
-}
+                fetch(update_path, {
+                    method: 'POST',
+                    headers: {'X-Requested-With': 'XMLHttpRequest'},
+                    body: new FormData(form)
+                })
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw Error(response.statusText);
+                        }
+                    })
+                    .catch((e) => {
+                        console.error(e);
+                        this.edit = true;
+                        this.comment = this.pre_comment;
+                    });
 
-function updateComment(comment_id) {
-    const form = document.getElementById('edit-' + comment_id + '-to');
-    toggleEditBox(form.parentElement);
-    toggleEditBox(document.getElementById('edit-' + comment_id));
-    const pre_comment = document.getElementById(comment_id).textContent;
-    document.getElementById(comment_id).textContent = form.elements.comment.value;
-
-    fetch(update_path, {
-        method: 'POST',
-        headers: { 'X-Requested-With': 'XMLHttpRequest' },
-        body: new FormData(form)
-    })
-    .then((response) => {
-        if (!response.ok) {
-            throw Error(response.statusText);
+                this.pre_comment = this.comment;
+            }
         }
-    })
-    .catch((e) => {
-        console.error(e);
-        document.getElementById(comment_id).textContent = pre_comment;
-        toggleEditBox(document.getElementById(comment_id + '-to').parentElement);
-        toggleEditBox(document.getElementById(comment_id));
     });
-}
+});
