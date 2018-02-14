@@ -92,6 +92,14 @@ Array.from(comments).forEach((comment) => {
             },
             disabledButton: function () {
                 this.unsent = true;
+            },
+            //---------
+            // delete
+            deleteConfirm: function (event) {
+                const answer = confirm('このコメントを削除しますか？');
+                if (answer === false) {
+                    event.preventDefault();
+                }
             }
         }
     });

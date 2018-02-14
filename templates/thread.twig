@@ -106,7 +106,8 @@
                                         <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
                                         <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
                                         <input type="hidden" name="_METHOD" value="DELETE">
-                                        <input type="submit" value="削除" class="comment_delete button--small">
+                                        <input type="submit" value="削除" class="comment_delete button--small"
+                                               @click="deleteConfirm">
                                     </form>
                                 {% else %}
                                     &nbsp;
