@@ -16,7 +16,7 @@
     {% endif %}
     <div class="content">
         <form action="{{ path_for('thread_save') }}" method="post" id="comment_form" enctype="multipart/form-data">
-            <label for="comment">コメント: <input type="text" name="comment"></label>
+            <label for="comment">コメント: <textarea name="comment"></textarea></label>
             <label for="picture">画像: <input type="file" name="picture" id="picture"
                                             accept="image/png, image/gif, image/jpeg"></label>
             <input type="hidden" name="thread_id" value="{{ thread_id }}">
@@ -42,7 +42,7 @@
                 </div>
                 {% for comment in comments %}
                     <section class="comment js-comment" id="js-form--{{ comment.comment_id }}"
-                             data-comment="{{ comment.comment | trim }}">
+                             data-comment="{{- comment.comment | trim }}">
                         <header class="comment__header">
                             {% set isSigned = comment.user_name and comment.user_image_url %}
                             <div>
@@ -68,8 +68,8 @@
                             </div>
                         </header>
                         <main class="comment__main">
-                            <div id="{{ comment.comment_id }}" v-show="!editing">
-                                ${ comment }
+                            <div id="{{ comment.comment_id }}" v-show="!editing"
+                                 v-html="comment.replace(/\n/g,'<br/>')">
                             </div>
                             {% if comment.photo_url %}
                                 <div class="comment_main__photo">
@@ -81,8 +81,10 @@
                                 <div v-if="editing">
                                     <form action="{{ path_for('update_comment') }}" method="post"
                                           class="js-edit-form">
-                                        <label for="comment"><input type="text" name="comment"
-                                                                    v-model="comment"></label>
+                                        <label for="comment">
+                                            <textarea name="comment"
+                                                      v-model="comment"></textarea>
+                                        </label>
                                         <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
                                         <input type="hidden" name="thread_id" value="{{ thread_id }}">
                                         <input type="hidden" name="_METHOD" value="PUT">
