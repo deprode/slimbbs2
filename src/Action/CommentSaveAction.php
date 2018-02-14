@@ -43,9 +43,24 @@ class CommentSaveAction
             return $this->responder->csrfInvalid($response);
         }
 
+        $data = $request->getParsedBody();
+        try {
+            $sort = new Sort($data['sort'] ?? 'desc');
+        } catch (\InvalidArgumentException $e) {
+            $sort = new Sort('desc');
+        }
+
+        if (isset($data['thread_id']) && intval($data['thread_id'])) {
+            $url = $request->getUri()->getPath();
+            $url .= (empty(intval($data['thread_id'])) ? '' : '?thread_id=' . intval($data['thread_id']));
+            $url .= ($sort->value() == 'desc') ? '' : '&sort=' . $sort->value();
+        } else {
+            $url = $request->getUri()->getPath();
+        }
+
         // Validation
         if ($request->getAttribute('has_errors')) {
-            return $this->responder->invalid($response, $request->getUri()->getPath());
+            return $this->responder->invalid($response, $url);
         }
 
         $files = $request->getUploadedFiles();
@@ -57,14 +72,6 @@ class CommentSaveAction
                 return $this->responder->uploadFailed($response);
             }
         }
-
-        $data = $request->getParsedBody();
-        try {
-            $sort = new Sort($data['sort'] ?? 'desc');
-        } catch (\InvalidArgumentException $e) {
-            $sort = new Sort('desc');
-        }
-        $url = $request->getUri()->getPath() . (empty(intval($data['thread_id'])) ? '' : '?thread_id=' . intval($data['thread_id']) . '&sort=' . $sort->value());
 
         try {
             $comment = new Comment();
