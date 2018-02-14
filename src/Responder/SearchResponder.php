@@ -27,7 +27,7 @@ class SearchResponder
 
     public function fetchFailed(Response $response): ResponseInterface
     {
-        $error_msg = "検索データの取得に失敗しました。元の画面から、もう一度やり直してください。";
+        $error_msg = "検索データの取得に失敗しました。トップページから、検索し直してください。";
         $response = $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
         return $response->withStatus(400);
     }

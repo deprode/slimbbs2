@@ -43,7 +43,7 @@ class HomeResponderTest extends TestCase
         $response = $responder->fetchFailed(new Response());
 
         $this->assertEquals(400, $response->getStatusCode());
-        $this->assertContains('スレッドの取得に失敗しました。元の画面から、もう一度やり直してください。', (string)$response->getBody());
+        $this->assertContains('スレッドの取得に失敗しました。しばらく時間をおいてから、再度読み込んでください。', (string)$response->getBody());
     }
 
 }

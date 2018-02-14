@@ -51,6 +51,6 @@ class ThreadResponderTest extends TestCase
         $response = $responder->fetchFailed(new Response());
 
         $this->assertEquals(400, $response->getStatusCode());
-        $this->assertContains('コメントの取得に失敗しました。元の画面から、もう一度やり直してください。', (string)$response->getBody());
+        $this->assertContains('コメントの取得に失敗しました。スレッドが削除されたかもしれません。', (string)$response->getBody());
     }
 }

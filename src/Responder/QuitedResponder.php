@@ -23,7 +23,7 @@ class QuitedResponder
 
     public function deleteFailed(Response $response): ResponseInterface
     {
-        $error_msg = "アカウント削除に失敗しました。元の画面から、もう一度やり直してください。";
+        $error_msg = "アカウント削除に失敗しました。お手数ですが、もう一度やり直してください。";
         $response = $this->view->render($response, 'error.twig', [
             'error_message' => $error_msg,
             'redirect'      => 'quit',

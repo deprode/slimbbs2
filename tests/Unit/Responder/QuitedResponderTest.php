@@ -41,7 +41,7 @@ class QuitedResponderTest extends \PHPUnit_Framework_TestCase
         $response = $responder->deleteFailed(new Response());
 
         $this->assertEquals(400, $response->getStatusCode());
-        $this->assertContains('アカウント削除に失敗しました。元の画面から、もう一度やり直してください。', (string)$response->getBody());
+        $this->assertContains('アカウント削除に失敗しました。お手数ですが、もう一度やり直してください。', (string)$response->getBody());
     }
 
     public function testRedirect()
