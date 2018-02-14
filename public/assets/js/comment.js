@@ -10,11 +10,11 @@ Array.from(comments).forEach((comment) => {
         el: '#' + comment.id,
         data: {
             form_id: comment.id,
-            comment: comment_str,
+            comment: comment_str || '',
             edit: false,
             pre_comment: comment_str,
-            like_form_id: like_form.id,
-            count: document.getElementById(like_form.id).dataset.like,
+            like_form_id: like_form ? like_form.id : '',
+            count: like_form ? document.getElementById(like_form.id).dataset.like : 0,
             unsent: false
         },
         computed: {
