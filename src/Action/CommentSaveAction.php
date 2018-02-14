@@ -69,7 +69,7 @@ class CommentSaveAction
                 $filename = $this->storage->upload($files['picture']);
             } catch (UploadFailedException $e) {
                 $this->logger->error($e->getMessage(), ['exception' => $e]);
-                return $this->responder->uploadFailed($response);
+                return $this->responder->uploadFailed($response, $url);
             }
         }
 
@@ -82,7 +82,7 @@ class CommentSaveAction
             $this->comment->saveComment($comment);
         } catch (SaveFailedException $e) {
             $this->logger->error($e->getMessage(), ['exception' => $e]);
-            return $this->responder->saveFailed($response);
+            return $this->responder->saveFailed($response, $url);
         }
 
         $this->message->setMessage('SavedComment');

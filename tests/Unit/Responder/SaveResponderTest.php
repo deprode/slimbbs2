@@ -5,7 +5,6 @@ namespace Tests\Unit;
 use App\Responder\SaveResponder;
 use PHPUnit\Framework\TestCase;
 use Slim\Http\Response;
-use Slim\Route;
 use Slim\Router;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
@@ -44,19 +43,21 @@ class SaveResponderTest extends TestCase
     public function testUploadFailed()
     {
         $responder = new SaveResponder($this->view);
-        $response = $responder->uploadFailed(new Response());
+        $response = $responder->uploadFailed(new Response(), '/failed');
 
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertContains('画像のアップロードに失敗しました。元の画面から、もう一度やり直してください。', (string)$response->getBody());
+        $this->assertContains('/failed', (string)$response->getBody());
     }
 
     public function testSaveFailed()
     {
         $responder = new SaveResponder($this->view);
-        $response = $responder->saveFailed(new Response());
+        $response = $responder->saveFailed(new Response(), '/failed');
 
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertContains('保存に失敗しました。元の画面から、もう一度やり直してください。', (string)$response->getBody());
+        $this->assertContains('/failed', (string)$response->getBody());
     }
 
     public function testSaveSuccess()
