@@ -149,7 +149,7 @@ input.button--small {
 }
 
 .message {
-    margin: 2rem 0 0;
+    margin: 2rem 0;
     padding-bottom: 1rem;
     font-weight: bold;
     color: #000000;
