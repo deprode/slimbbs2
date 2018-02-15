@@ -45,9 +45,9 @@ class CommentDeleteAction
 
         try {
             if ($request->getAttribute('isAdmin')) {
-                $delete = $this->comment->deleteCommentByAdmin($data['comment_id']);
+                $delete = $this->comment->deleteCommentByAdmin($data['thread_id'], $data['comment_id']);
             } else {
-                $delete = $this->comment->deleteComment($data['comment_id'], $user_id);
+                $delete = $this->comment->deleteComment($data['thread_id'], $data['comment_id'], $user_id);
             }
 
             if ($delete) {

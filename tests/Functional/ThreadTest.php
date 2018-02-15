@@ -172,6 +172,17 @@ class ThreadTest extends BaseTestCase
         $this->assertContains('スレッドは削除されました。', (string)$response->getBody());
     }
 
+    public function testスレッドの削除後IDがずれないか()
+    {
+        $this->runApp('DELETE', '/thread', ['thread_id' => '1', 'comment_id' => '1']);
+        $this->runApp('POST', '/', ['comment' => 'thread_test', 'user_id' => '1']);
+
+        $response = $this->runApp('GET', '/thread?thread_id=2');
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertContains('thread_test', (string)$response->getBody());
+    }
+
     public function test投稿の削除の失敗()
     {
         $this->postReply();

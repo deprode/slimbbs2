@@ -81,4 +81,13 @@ class DatabaseServiceTest extends \PHPUnit_Framework_TestCase
         $database = new DatabaseService($pdo);
         $this->assertTrue($database->rollback());
     }
+
+    public function testLastInsertId()
+    {
+        $pdo = $this->createMock(\PDO::class);
+        $pdo->method('lastInsertId')->willReturn("1");
+        $pdo->expects($this->once())->method('lastInsertId');
+        $database = new DatabaseService($pdo);
+        $this->assertEquals("1", $database->lastInsertId());
+    }
 }

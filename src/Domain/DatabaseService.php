@@ -72,4 +72,8 @@ class DatabaseService
         return $this->db->commit();
     }
 
+    public function lastInsertId(string $name = ''): string
+    {
+        return $this->db->lastInsertId($name);
+    }
 }
