@@ -61,7 +61,7 @@ class DatabaseServiceTest extends \PHPUnit_Framework_TestCase
         $pdo->method('beginTransaction')->willReturn(true);
         $pdo->expects($this->once())->method('beginTransaction');
         $database = new DatabaseService($pdo);
-        $database->beginTransaction();
+        $this->assertTrue($database->beginTransaction());
     }
 
     public function testCommit()
@@ -70,7 +70,7 @@ class DatabaseServiceTest extends \PHPUnit_Framework_TestCase
         $pdo->method('commit')->willReturn(true);
         $pdo->expects($this->once())->method('commit');
         $database = new DatabaseService($pdo);
-        $database->commit();
+        $this->assertTrue($database->commit());
     }
 
     public function testRollback()
@@ -79,6 +79,6 @@ class DatabaseServiceTest extends \PHPUnit_Framework_TestCase
         $pdo->method('rollback')->willReturn(true);
         $pdo->expects($this->once())->method('rollback');
         $database = new DatabaseService($pdo);
-        $database->rollback();
+        $this->assertTrue($database->rollback());
     }
 }
