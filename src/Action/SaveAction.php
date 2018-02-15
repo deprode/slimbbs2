@@ -56,7 +56,7 @@ class SaveAction
             $this->comment->saveThread($comment);
         } catch (SaveFailedException $e) {
             $this->logger->error($e->getMessage(), ['exception' => $e]);
-            return $this->responder->saveFailed($response);
+            return $this->responder->saveFailed($response, '/');
         }
 
         $this->message->setMessage('SavedThread');
