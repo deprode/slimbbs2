@@ -59,7 +59,7 @@ class SaveAction
             return $this->responder->saveFailed($response, '/');
         }
 
-        $this->message->setMessage('SavedThread');
+        $this->message->setMessage($this->message::INFO, 'SavedThread');
         return $this->responder->saved($response, '/');
     }
 }

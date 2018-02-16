@@ -9,7 +9,11 @@ use Slim\Flash\Messages;
 class MessageService
 {
     private $flash;
-    const DEFAULT_KEY = 'Message';
+    const DEFAULT_KEY   = '';
+    const DEFAULT_VALUE = 'Message';
+
+    const INFO  = 'Info';
+    const ERROR = 'Error';
 
     public function __construct(Messages $flash)
     {
@@ -33,9 +37,9 @@ class MessageService
         return '';
     }
 
-    public function setMessage($key = self::DEFAULT_KEY): void
+    public function setMessage($key = self::DEFAULT_KEY, $value = self::DEFAULT_VALUE): void
     {
-        $message = $this->message($key);
+        $message = $this->message($value);
         if (!empty($message)) {
             $this->flash->addMessage($key, $message);
         }

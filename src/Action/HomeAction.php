@@ -52,8 +52,9 @@ final class HomeAction
         $data['value'] = $request->getAttribute($valueKey);
         $data['sort'] = $sort;
         $data['user_id'] = $request->getAttribute('userId');
-        $data['saved'] = $this->message->getMessage('SavedThread');
-        $data['deleted'] = $this->message->getMessage('DeletedThread') ?? $this->message->getMessage('DeletedComment');
+
+        $data['info'] = $this->message->getMessage($this->message::INFO);
+        $data['error'] = $this->message->getMessage($this->message::ERROR);
 
         // Render index view
         return $this->responder->index($response, $data);

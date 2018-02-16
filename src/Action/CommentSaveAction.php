@@ -85,7 +85,7 @@ class CommentSaveAction
             return $this->responder->saveFailed($response, $url);
         }
 
-        $this->message->setMessage('SavedComment');
+        $this->message->setMessage($this->message::INFO, 'SavedComment');
         return $this->responder->saved($response, $url);
     }
 }

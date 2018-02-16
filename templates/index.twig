@@ -2,18 +2,17 @@
 
 {% block title %}Toppage{% endblock %}
 {% block contents %}
-    {% if saved or deleted or account %}
+    {% if info %}
         <div class="message content">
             <ul class="message__lists">
-                {% if saved %}
-                    <li>{{ saved }}</li>
-                {% endif %}
-                {% if deleted %}
-                    <li>{{ deleted }}</li>
-                {% endif %}
-                {% if account %}
-                    <li>{{ account }}</li>
-                {% endif %}
+                <li>{{ info }}</li>
+            </ul>
+        </div>
+    {% endif %}
+    {% if error %}
+        <div class="message message--error content">
+            <ul class="message__lists">
+                <li>{{ error }}</li>
             </ul>
         </div>
     {% endif %}

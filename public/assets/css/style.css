@@ -153,6 +153,11 @@ input.button--small {
     padding-bottom: 1rem;
     font-weight: bold;
     color: #000000;
+    border-color: rgba(96, 183, 96, 1.0);
+}
+
+.message--error {
+    border-color: #d43f3a;
 }
 
 .message__lists {

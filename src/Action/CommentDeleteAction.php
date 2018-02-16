@@ -51,7 +51,7 @@ class CommentDeleteAction
             }
 
             if ($delete) {
-                $this->message->setMessage('DeletedComment');
+                $this->message->setMessage($this->message::INFO, 'DeletedComment');
             }
         } catch (DeleteFailedException $e) {
             $this->log->error($e->getMessage(), ['exception' => $e]);

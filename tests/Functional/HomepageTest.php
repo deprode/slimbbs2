@@ -127,8 +127,8 @@ class HomepageTest extends BaseTestCase
     public function testメッセージ表示()
     {
         $_SESSION['slimFlash'] = [];
-        $_SESSION['slimFlash']['SavedThread'][0] = 'スレッドを作成しました';
-        $_SESSION['slimFlash']['DeletedThread'][0] = 'スレッドは削除されました';
+        $_SESSION['slimFlash']['Info'][0] = 'スレッドを作成しました';
+        $_SESSION['slimFlash']['Error'][0] = 'スレッドは削除されました';
 
         $response = $this->runApp('GET', '/');
         $this->assertEquals(200, $response->getStatusCode());

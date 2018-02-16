@@ -56,7 +56,7 @@ class ThreadAction
         }
 
         if (empty($data['comments'])) {
-            $this->message->setMessage('DeletedThread');
+            $this->message->setMessage($this->message::INFO, 'DeletedThread');
             return $this->responder->invalid($response, '/');
         }
 
@@ -72,8 +72,7 @@ class ThreadAction
         $data['user_id'] = $request->getAttribute('userId');
         $data['is_admin'] = $request->getAttribute('isAdmin');
         $data['loggedIn'] = $request->getAttribute('isLoggedIn');
-        $data['saved'] = $this->message->getMessage('SavedComment');
-        $data['deleted'] = $this->message->getMessage('DeletedComment');
+        $data['info'] = $this->message->getMessage($this->message::INFO);
         $data['region'] = $this->settings['region'];
         $data['bucket'] = $this->settings['bucket'];
 
