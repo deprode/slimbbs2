@@ -157,6 +157,7 @@ input.button--small {
 
 .message__lists {
     margin-bottom: 0;
+    list-style: none;
 }
 
 .create-thread,

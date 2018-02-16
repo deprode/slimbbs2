@@ -2,24 +2,18 @@
 
 {% block title %}Toppage{% endblock %}
 {% block contents %}
-    {% if saved %}
+    {% if saved or deleted or account %}
         <div class="message content">
             <ul class="message__lists">
-                <li>{{ saved }}</li>
-            </ul>
-        </div>
-    {% endif %}
-    {% if deleted %}
-        <div class="message content">
-            <ul class="message__lists">
-                <li>{{ deleted }}</li>
-            </ul>
-        </div>
-    {% endif %}
-    {% if account %}
-        <div class="message content">
-            <ul class="message__lists">
-                <li>{{ account }}</li>
+                {% if saved %}
+                    <li>{{ saved }}</li>
+                {% endif %}
+                {% if deleted %}
+                    <li>{{ deleted }}</li>
+                {% endif %}
+                {% if account %}
+                    <li>{{ account }}</li>
+                {% endif %}
             </ul>
         </div>
     {% endif %}
@@ -37,7 +31,8 @@
         <div class="search column">
             <h2 class="search__title">コメントを探す</h2>
             <form action="{{ path_for('search') }}" method="get" class="form--inline">
-                <label for="query" class="hidden">検索するコメント</label><input type="text" name="query" class="search__query">
+                <label for="query" class="hidden">検索するコメント</label>
+                <input type="text" name="query" class="search__query">
                 <input type="submit" value="検索" class="button search__button">
             </form>
         </div>
