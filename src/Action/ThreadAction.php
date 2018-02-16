@@ -73,6 +73,7 @@ class ThreadAction
         $data['is_admin'] = $request->getAttribute('isAdmin');
         $data['loggedIn'] = $request->getAttribute('isLoggedIn');
         $data['info'] = $this->message->getMessage($this->message::INFO);
+        $data['error'] = $this->message->getMessage($this->message::ERROR);
         $data['region'] = $this->settings['region'];
         $data['bucket'] = $this->settings['bucket'];
 

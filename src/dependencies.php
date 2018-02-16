@@ -192,7 +192,7 @@ $container['ThreadResponder'] = function ($c) {
 };
 
 $container['DeleteResponder'] = function ($c) {
-    return new App\Responder\DeleteResponder($c->get('view'));
+    return new App\Responder\DeleteResponder($c->get('MessageService'));
 };
 
 $container['SearchResponder'] = function ($c) {

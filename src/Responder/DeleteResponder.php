@@ -3,38 +3,35 @@
 namespace App\Responder;
 
 
+use App\Domain\MessageService;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Response;
-use Slim\Views\Twig;
 
 class DeleteResponder
 {
-    private $view;
+    private $message;
 
-    public function __construct(Twig $view)
+    public function __construct(MessageService $message)
     {
-        $this->view = $view;
+        $this->message = $message;
     }
 
     public function csrfInvalid(Response $response): ResponseInterface
     {
-        $error_msg = "削除に失敗しました。元の画面から、もう一度やり直してください。";
-        $response = $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
-        return $response->withStatus(400);
+        $this->message->setMessage($this->message::ERROR, 'CommentDeleteFailed');
+        return $response->withRedirect('/', 302);
     }
 
     public function invalid(Response $response): ResponseInterface
     {
-        $error_msg = "削除に失敗しました。元の画面から、もう一度やり直してください。";
-        $response = $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
-        return $response->withStatus(400);
+        $this->message->setMessage($this->message::ERROR, 'CommentDeleteFailed');
+        return $response->withRedirect('/', 302);
     }
 
-    public function deleteFailed(Response $response): ResponseInterface
+    public function deleteFailed(Response $response, string $redirect): ResponseInterface
     {
-        $error_msg = "削除に失敗しました。元の画面から、もう一度やり直してください。";
-        $response = $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
-        return $response->withStatus(400);
+        $this->message->setMessage($this->message::ERROR, 'CommentDeleteFailed');
+        return $response->withRedirect($redirect, 303);
     }
 
     public function deleted(Response $response, string $redirect): Response

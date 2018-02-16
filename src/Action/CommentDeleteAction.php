@@ -43,6 +43,8 @@ class CommentDeleteAction
             return $this->responder->invalid($response);
         }
 
+        $url = $this->getRedirectUrl($request->getUri()->getPath(), $data);
+
         try {
             if ($request->getAttribute('isAdmin')) {
                 $delete = $this->comment->deleteCommentByAdmin($data['thread_id'], $data['comment_id']);
@@ -55,10 +57,9 @@ class CommentDeleteAction
             }
         } catch (DeleteFailedException $e) {
             $this->log->error($e->getMessage(), ['exception' => $e]);
-            return $this->responder->deleteFailed($response);
+            return $this->responder->deleteFailed($response, $url);
         }
 
-        $url = $this->getRedirectUrl($request->getUri()->getPath(), $data);
         return $this->responder->deleted($response, $url);
     }
 

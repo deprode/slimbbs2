@@ -154,8 +154,8 @@ class ThreadTest extends BaseTestCase
         $this->postReply();
 
         $response = $this->runApp('DELETE', '/thread', ['thread_id' => '1', 'comment_id' => '2']);
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertContains('削除に失敗しました。', (string)$response->getBody());
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('/', (string)$response->getHeader('location')[0]);
     }
 
     public function testスレッドの削除()
@@ -188,8 +188,11 @@ class ThreadTest extends BaseTestCase
         $this->postReply();
 
         $response = $this->runApp('DELETE', '/thread', ['thread_id' => '1', 'comment_id' => '0']);
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertContains('Error', (string)$response->getBody());
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('/', (string)$response->getHeader('location')[0]);
+
+        $response = $this->runApp('GET', '/');
+        $this->assertContains('削除に失敗しました。', (string)$response->getBody());
 
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
@@ -203,13 +206,13 @@ class ThreadTest extends BaseTestCase
         $this->postReply("0");
 
         $response = $this->runApp('DELETE', '/thread', ['thread_id' => '1', 'comment_id' => '2']);
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertContains('Error', (string)$response->getBody());
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('/', (string)$response->getHeader('location')[0]);
 
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('comment_test', (string)$response->getBody());
-        $this->assertNotContains('削除', (string)$response->getBody());
+        $this->assertContains('削除に失敗しました。', (string)$response->getBody());
     }
 
     public function test管理者で削除()
@@ -277,5 +280,17 @@ class ThreadTest extends BaseTestCase
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('comment_test2', (string)$response->getBody());
+    }
+
+    public function testメッセージ表示()
+    {
+        $_SESSION['slimFlash'] = [];
+        $_SESSION['slimFlash']['Info'][0] = 'スレッドを作成しました';
+        $_SESSION['slimFlash']['Error'][0] = 'スレッドは削除されました';
+
+        $response = $this->runApp('GET', '/');
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertContains('スレッドを作成しました', (string)$response->getBody());
+        $this->assertContains('スレッドは削除されました', (string)$response->getBody());
     }
 }

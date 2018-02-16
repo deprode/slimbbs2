@@ -2,55 +2,53 @@
 
 namespace Tests\Unit\Responder;
 
+use App\Domain\MessageService;
 use App\Responder\DeleteResponder;
 use PHPUnit\Framework\TestCase;
+use Slim\Flash\Messages;
 use Slim\Http\Response;
-use Slim\Router;
-use Slim\Views\Twig;
-use Slim\Views\TwigExtension;
 
 class DeleteResponderTest extends TestCase
 {
-    private $view;
+    private $message;
 
     public function setUp()
     {
-        $router = $this->createMock(Router::class);
-        $router->expects($this->any())->method('pathFor')->willReturn('/');
-        $this->view = new Twig(__DIR__ . '/../../../templates');
-        $this->view->addExtension(new TwigExtension($router, __DIR__ . '/../../../templates'));
+        parent::setUp();
+        $_SESSION = [];
+        $this->message = new MessageService(new Messages());
     }
 
     public function testCsrfInvalid()
     {
-        $responder = new DeleteResponder($this->view);
+        $responder = new DeleteResponder($this->message);
         $response = $responder->csrfInvalid(new Response());
 
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertContains('削除に失敗しました。元の画面から、もう一度やり直してください。', (string)$response->getBody());
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('/', $response->getHeader('Location')[0]);
     }
 
     public function testInvalid()
     {
-        $responder = new DeleteResponder($this->view);
+        $responder = new DeleteResponder($this->message);
         $response = $responder->invalid(new Response());
 
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertContains('削除に失敗しました。元の画面から、もう一度やり直してください。', (string)$response->getBody());
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('/', $response->getHeader('Location')[0]);
     }
 
     public function testDeleteFailed()
     {
-        $responder = new DeleteResponder($this->view);
-        $response = $responder->deleteFailed(new Response());
+        $responder = new DeleteResponder($this->message);
+        $response = $responder->deleteFailed(new Response(), '/redirect');
 
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertContains('削除に失敗しました。元の画面から、もう一度やり直してください。', (string)$response->getBody());
+        $this->assertEquals(303, $response->getStatusCode());
+        $this->assertEquals('/redirect', $response->getHeader('Location')[0]);
     }
 
     public function testDeleted()
     {
-        $responder = new DeleteResponder($this->view);
+        $responder = new DeleteResponder($this->message);
         $response = $responder->deleted(new Response(), '/redirect');
 
         $this->assertEquals(303, $response->getStatusCode());

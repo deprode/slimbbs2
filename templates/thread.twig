@@ -9,6 +9,13 @@
             </ul>
         </div>
     {% endif %}
+    {% if error %}
+        <div class="message message--error content">
+            <ul class="message__lists">
+                <li>{{ error }}</li>
+            </ul>
+        </div>
+    {% endif %}
     <div class="content">
         <form action="{{ path_for('thread_save') }}" method="post" id="comment_form" enctype="multipart/form-data">
             <label for="comment">コメント: <textarea name="comment"></textarea></label>
