@@ -2,6 +2,7 @@
 
 namespace App\Responder;
 
+use App\Domain\MessageService;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Response;
 use Slim\Views\Twig;
@@ -9,10 +10,12 @@ use Slim\Views\Twig;
 class UserResponder
 {
     private $view;
+    private $message;
 
-    public function __construct(Twig $view)
+    public function __construct(Twig $view, MessageService $message)
     {
         $this->view = $view;
+        $this->message = $message;
     }
 
     public function nameEmpty(Response $response): ResponseInterface
@@ -27,8 +30,8 @@ class UserResponder
 
     public function fetchFailed(Response $response): ResponseInterface
     {
-        $error_msg = "コメントの取得に失敗しました。しばらく時間をおいて、もう一度やり直してください。";
-        $response = $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
-        return $response->withStatus(400);
+        $this->message->setMessage($this->message::ERROR, 'CommentFetchFailed');
+
+        return $response->withRedirect('/', 303);
     }
 }

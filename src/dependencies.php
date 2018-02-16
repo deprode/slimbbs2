@@ -208,7 +208,7 @@ $container['QuitedResponder'] = function ($c) {
 };
 
 $container['UserResponder'] = function ($c) {
-    return new App\Responder\UserResponder($c->get('view'));
+    return new App\Responder\UserResponder($c->get('view'), $c->get('MessageService'));
 };
 // -----------------------------------------------------------------------------
 // Validation factories
