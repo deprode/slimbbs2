@@ -188,7 +188,7 @@ $container['LoginResponder'] = function ($c) {
 };
 
 $container['ThreadResponder'] = function ($c) {
-    return new App\Responder\ThreadResponder($c->get('view'));
+    return new App\Responder\ThreadResponder($c->get('view'), $c->get('MessageService'));
 };
 
 $container['DeleteResponder'] = function ($c) {

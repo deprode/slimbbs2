@@ -52,7 +52,7 @@ class ThreadAction
 
         } catch (FetchFailedException $e) {
             $this->logger->error($e->getMessage(), ['exception' => $e]);
-            return $this->responder->fetchFailed($response);
+            return $this->responder->fetchFailed($response, '/');
         }
 
         if (empty($data['comments'])) {

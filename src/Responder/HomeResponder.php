@@ -22,6 +22,8 @@ class HomeResponder
 
     public function fetchFailed(Response $response): ResponseInterface
     {
+        // MEMO:Home画面へのリダイレクトにすると、無限にリダイレクトするため、エラー画面を表示
+
         $error_msg = "スレッドの取得に失敗しました。しばらく時間をおいてから、再度読み込んでください。";
         $response = $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
         return $response->withStatus(400);
