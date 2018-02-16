@@ -196,7 +196,7 @@ $container['DeleteResponder'] = function ($c) {
 };
 
 $container['SearchResponder'] = function ($c) {
-    return new App\Responder\SearchResponder($c->get('view'));
+    return new App\Responder\SearchResponder($c->get('view'), $c->get('MessageService'));
 };
 
 $container['QuitResponder'] = function ($c) {

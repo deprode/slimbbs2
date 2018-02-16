@@ -38,7 +38,7 @@ class SearchAction
             $comment = $this->comment->convertTime($this->comment->searchComments($query));
         } catch (FetchFailedException $e) {
             $this->logger->error($e);
-            return $this->responder->fetchFailed($response);
+            return $this->responder->fetchFailed($response, '/');
         }
 
         $data = [];
