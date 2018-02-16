@@ -184,7 +184,7 @@ $container['SaveResponder'] = function ($c) {
 };
 
 $container['LoginResponder'] = function ($c) {
-    return new App\Responder\LoginResponder($c->get('view'));
+    return new App\Responder\LoginResponder($c->get('MessageService'));
 };
 
 $container['ThreadResponder'] = function ($c) {

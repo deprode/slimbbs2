@@ -2,17 +2,17 @@
 
 namespace App\Responder;
 
+use App\Domain\MessageService;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Response;
-use Slim\Views\Twig;
 
 class LoginResponder
 {
-    private $view;
+    private $message;
 
-    public function __construct(Twig $view)
+    public function __construct(MessageService $message)
     {
-        $this->view = $view;
+        $this->message = $message;
     }
 
     public function success(Response $response, string $url): Response
@@ -22,15 +22,13 @@ class LoginResponder
 
     public function oAuthFailed(Response $response): ResponseInterface
     {
-        $error_msg = "ログインに失敗しました。時間をおいてから、もう一度やり直してください。";
-        $response = $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
-        return $response->withStatus(401);
+        $this->message->setMessage($this->message::ERROR, 'LoginFailed');
+        return $response->withRedirect('/', 303);
     }
 
     public function saveFailed(Response $response): ResponseInterface
     {
-        $error_msg = "ユーザー情報の保存に失敗しました。管理責任者までお問い合わせください。";
-        $response = $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
-        return $response->withStatus(500);
+        $this->message->setMessage($this->message::ERROR, 'UserSaveFailed');
+        return $response->withRedirect('/', 303);
     }
 }

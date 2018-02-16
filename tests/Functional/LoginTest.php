@@ -26,8 +26,8 @@ class LoginTest extends BaseTestCase
     {
         $response = $this->runApp('GET', '/login/callback', ['oauth_token' => '', 'oauth_verifier' => '']);
 
-        $this->assertEquals(401, $response->getStatusCode());
-        $this->assertContains('Error', (string)$response->getBody());
+        $this->assertEquals(303, $response->getStatusCode());
+        $this->assertEquals('/', $response->getHeader('Location')[0]);
     }
 
 }
