@@ -92,11 +92,12 @@ class ThreadTest extends BaseTestCase
     public function test返信のValidationエラー()
     {
         $response = $this->runApp('POST', '/thread', ['comment' => 'comment_test']);
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertContains('Error', (string)$response->getBody());
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('/thread', (string)$response->getHeader('location')[0]);
 
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
+        $this->assertContains('投稿に失敗しました。', (string)$response->getBody());
         $this->assertNotContains('comment_test', (string)$response->getBody());
         $this->assertNotContains('コメントを保存しました。', (string)$response->getBody());
     }
@@ -107,8 +108,13 @@ class ThreadTest extends BaseTestCase
         $this->postReply();
 
         $response = $this->runApp('POST', '/thread', ['comment' => 'comment_test']);
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertContains('投稿に失敗しました。', (string)$response->getBody());
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('/', (string)$response->getHeader('location')[0]);
+        $this->assertNotContains('投稿に失敗しました。', (string)$response->getBody());
+
+        $response = $this->runApp('GET', '/thread?thread_id=1');
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertContains('失敗しました。', (string)$response->getBody());
     }
 
     public function test画像の投稿()

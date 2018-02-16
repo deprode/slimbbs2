@@ -18,6 +18,10 @@ class Message
     const UserSaveFailed      = 'ユーザー情報の保存に失敗しました。管理責任者までお問い合わせください。';
     const SearchFailed        = '検索データの取得に失敗しました。トップページから、検索し直してください。';
     const CommentDeleteFailed = '削除に失敗しました。しばらく時間をおいて、もう一度やり直してください。';
+    const CsrfFailed          = '失敗しました。元の画面から、もう一度やり直してください。';
+    const CommentInvalid      = '投稿に失敗しました。投稿内容を見直して、もう一度やり直してください。';
+    const UploadFailed        = '画像のアップロードに失敗しました。元の画面から、もう一度やり直してください。';
+    const CommentSaveFailed   = '保存に失敗しました。元の画面から、もう一度やり直してください。';
 
     private $messages;
 

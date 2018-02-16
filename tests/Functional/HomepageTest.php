@@ -97,8 +97,11 @@ class HomepageTest extends BaseTestCase
         $this->withMiddleware = true;
         $response = $this->runApp('POST', '/', ['comment' => 'Test', 'user_id' => '1']);
 
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertContains('投稿に失敗しました。', (string)$response->getBody());
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('/', (string)$response->getHeader('location')[0]);
+
+        $response = $this->runApp('GET', '/');
+        $this->assertContains('失敗しました。', (string)$response->getBody());
     }
 
     public function test通らない投稿()
@@ -106,8 +109,13 @@ class HomepageTest extends BaseTestCase
         // *注: CSRF(middleware)を切ってテストしています。
         $response = $this->runApp('POST', '/', ['comment' => 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1', 'user_id' => '1']);
 
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertContains('Error', (string)$response->getBody());
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('/', (string)$response->getHeader('location')[0]);
+        $this->assertNotContains('投稿に失敗しました。', (string)$response->getBody());
+
+        $response = $this->runApp('GET', '/');
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertContains('投稿に失敗しました。', (string)$response->getBody());
     }
 
     public function test匿名投稿()

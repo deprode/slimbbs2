@@ -2,45 +2,41 @@
 
 namespace App\Responder;
 
+use App\Domain\MessageService;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Response;
-use Slim\Views\Twig;
 
 class SaveResponder
 {
-    private $view;
+    private $message;
 
-    public function __construct(Twig $view)
+    public function __construct(MessageService $message)
     {
-        $this->view = $view;
+        $this->message = $message;
     }
 
     public function csrfInvalid(Response $response): ResponseInterface
     {
-        $error_msg = "投稿に失敗しました。元の画面から、もう一度やり直してください。";
-        $response = $this->view->render($response, 'error.twig', ['error_message' => $error_msg]);
-        return $response->withStatus(400);
+        $this->message->setMessage($this->message::ERROR, 'CsrfFailed');
+        return $response->withRedirect('/', 302);
     }
 
     public function invalid(Response $response, string $redirect): ResponseInterface
     {
-        $error_msg = "投稿に失敗しました。投稿内容を見直して、もう一度やり直してください。";
-        $response = $this->view->render($response, 'error.twig', ['error_message' => $error_msg, 'redirect' => $redirect]);
-        return $response->withStatus(400);
+        $this->message->setMessage($this->message::ERROR, 'CommentInvalid');
+        return $response->withRedirect($redirect, 302);
     }
 
     public function uploadFailed(Response $response, string $redirect): ResponseInterface
     {
-        $error_msg = "画像のアップロードに失敗しました。元の画面から、もう一度やり直してください。";
-        $response = $this->view->render($response, 'error.twig', ['error_message' => $error_msg, 'redirect' => $redirect]);
-        return $response->withStatus(400);
+        $this->message->setMessage($this->message::ERROR, 'UploadFailed');
+        return $response->withRedirect($redirect, 303);
     }
 
     public function saveFailed(Response $response, string $redirect): ResponseInterface
     {
-        $error_msg = "保存に失敗しました。元の画面から、もう一度やり直してください。";
-        $response = $this->view->render($response, 'error.twig', ['error_message' => $error_msg, 'redirect' => $redirect]);
-        return $response->withStatus(400);
+        $this->message->setMessage($this->message::ERROR, 'CommentSaveFailed');
+        return $response->withRedirect($redirect, 303);
     }
 
     public function saved(Response $response, string $redirect): Response

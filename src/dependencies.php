@@ -180,7 +180,7 @@ $container['HomeResponder'] = function ($c) {
 };
 
 $container['SaveResponder'] = function ($c) {
-    return new App\Responder\SaveResponder($c->get('view'));
+    return new App\Responder\SaveResponder($c->get('MessageService'));
 };
 
 $container['LoginResponder'] = function ($c) {
