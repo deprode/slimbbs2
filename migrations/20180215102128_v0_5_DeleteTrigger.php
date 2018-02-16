@@ -20,6 +20,16 @@ class V05DeleteTrigger extends Migration
 ALTER TABLE `threads` CHANGE `thread_id` `thread_id` INT(11) NOT NULL AUTO_INCREMENT;
 SQL;
         $c['db']->query($query);
+
+        $query = <<<SQL
+ALTER TABLE `threads` CHANGE `user_id` `user_id` VARCHAR(50) NOT NULL;
+SQL;
+        $c['db']->query($query);
+
+        $query = <<<SQL
+ALTER TABLE `comments` CHANGE `user_id` `user_id` VARCHAR(50) NOT NULL;
+SQL;
+        $c['db']->query($query);
     }
 
     /**
@@ -53,6 +63,16 @@ SQL;
 
         $query = <<<SQL
 ALTER TABLE `threads` CHANGE `thread_id` `thread_id` INT(11) NOT NULL;
+SQL;
+        $c['db']->query($query);
+
+        $query = <<<SQL
+ALTER TABLE `threads` CHANGE `user_id` `user_id` INT(64) NOT NULL;
+SQL;
+        $c['db']->query($query);
+
+        $query = <<<SQL
+ALTER TABLE `comments` CHANGE `user_id` `user_id` INT(64) NOT NULL;
 SQL;
         $c['db']->query($query);
     }
