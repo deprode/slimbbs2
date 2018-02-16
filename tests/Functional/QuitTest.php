@@ -77,7 +77,10 @@ class QuitTest extends BaseTestCase
         $_SESSION['user_id'] = 0;
 
         $response = $this->runApp('DELETE', '/quit');
-        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertEquals(303, $response->getStatusCode());
+        $this->assertEquals('/quit', (string)$response->getHeader('location')[0]);
+
+        $response = $this->runApp('GET', '/quit');
         $this->assertContains('アカウント削除に失敗しました。', (string)$response->getBody());
     }
 }

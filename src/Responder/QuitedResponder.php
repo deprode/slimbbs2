@@ -3,6 +3,7 @@
 namespace App\Responder;
 
 
+use App\Domain\MessageService;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Response;
 use Slim\Views\Twig;
@@ -10,10 +11,12 @@ use Slim\Views\Twig;
 class QuitedResponder
 {
     private $view;
+    private $message;
 
-    public function __construct(Twig $view)
+    public function __construct(Twig $view, MessageService $message)
     {
         $this->view = $view;
+        $this->message = $message;
     }
 
     public function quited(Response $response): ResponseInterface
@@ -23,12 +26,8 @@ class QuitedResponder
 
     public function deleteFailed(Response $response): ResponseInterface
     {
-        $error_msg = "アカウント削除に失敗しました。お手数ですが、もう一度やり直してください。";
-        $response = $this->view->render($response, 'error.twig', [
-            'error_message' => $error_msg,
-            'redirect'      => 'quit',
-        ]);
-        return $response->withStatus(400);
+        $this->message->setMessage($this->message::ERROR, 'AccountDeleteFailed');
+        return $response->withRedirect('/quit', 303);
     }
 
     public function redirect(Response $response): ResponseInterface

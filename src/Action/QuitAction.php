@@ -3,6 +3,7 @@
 namespace App\Action;
 
 
+use App\Domain\MessageService;
 use App\Responder\QuitResponder;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Csrf\Guard as Csrf;
@@ -12,11 +13,13 @@ use Slim\Http\Response;
 class QuitAction
 {
     private $csrf;
+    private $message;
     private $responder;
 
-    public function __construct(Csrf $csrf, QuitResponder $responder)
+    public function __construct(Csrf $csrf, MessageService $message, QuitResponder $responder)
     {
         $this->csrf = $csrf;
+        $this->message = $message;
         $this->responder = $responder;
     }
 
@@ -36,6 +39,7 @@ class QuitAction
         $data['name'] = $request->getAttribute($nameKey);
         $data['value'] = $request->getAttribute($valueKey);
         $data['loggedIn'] = $request->getAttribute('isLoggedIn');
+        $data['error'] = $this->message->getMessage($this->message::ERROR);
 
         return $this->responder->quit($response, $data);
     }

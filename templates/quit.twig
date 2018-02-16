@@ -2,6 +2,13 @@
 
 {% block title %}Quit{% endblock %}
 {% block contents %}
+    {% if error %}
+        <div class="message message--error content">
+            <ul class="message__lists">
+                <li>{{ error }}</li>
+            </ul>
+        </div>
+    {% endif %}
     <div class="content">
         <h2>退会する</h2>
         <section class="quit">

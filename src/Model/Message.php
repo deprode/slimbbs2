@@ -22,6 +22,7 @@ class Message
     const CommentInvalid      = '投稿に失敗しました。投稿内容を見直して、もう一度やり直してください。';
     const UploadFailed        = '画像のアップロードに失敗しました。元の画面から、もう一度やり直してください。';
     const CommentSaveFailed   = '保存に失敗しました。元の画面から、もう一度やり直してください。';
+    const AccountDeleteFailed = 'アカウント削除に失敗しました。しばらく時間をおいて、もう一度やり直してください。';
 
     private $messages;
 

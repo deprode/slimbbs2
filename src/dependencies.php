@@ -128,7 +128,7 @@ $container['App\Action\LikeAction'] = function ($c) {
 };
 
 $container['App\Action\QuitAction'] = function ($c) {
-    return new App\Action\QuitAction($c->get('csrf'), $c->get('QuitResponder'));
+    return new App\Action\QuitAction($c->get('csrf'), $c->get('MessageService'), $c->get('QuitResponder'));
 };
 
 $container['App\Action\AccountDeleteAction'] = function ($c) {
@@ -204,7 +204,7 @@ $container['QuitResponder'] = function ($c) {
 };
 
 $container['QuitedResponder'] = function ($c) {
-    return new App\Responder\QuitedResponder($c->get('view'));
+    return new App\Responder\QuitedResponder($c->get('view'), $c->get('MessageService'));
 };
 
 $container['UserResponder'] = function ($c) {
