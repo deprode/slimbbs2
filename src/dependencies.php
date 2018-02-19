@@ -88,7 +88,7 @@ $container['s3'] = function ($c) {
 // Action factories
 // -----------------------------------------------------------------------------
 $container['App\Action\HomeAction'] = function ($c) {
-    return new App\Action\HomeAction($c->get('logger'), $c->get('csrf'), $c->get('ThreadService'), $c->get('MessageService'), $c->get('HomeResponder'));
+    return new App\Action\HomeAction($c->get('logger'), $c->get('HomeFilter'), $c->get('HomeResponder'));
 };
 
 $container['App\Action\SaveAction'] = function ($c) {
@@ -140,6 +140,13 @@ $container['App\Action\UserAction'] = function ($c) {
 };
 // -----------------------------------------------------------------------------
 // Domain factories
+// -----------------------------------------------------------------------------
+$container['HomeFilter'] = function ($c) {
+    return new App\Domain\HomeFilter($c->get('ThreadService'), $c->get('MessageService'), $c->get('csrf'));
+};
+
+// -----------------------------------------------------------------------------
+// Service(&Repositories) factories
 // -----------------------------------------------------------------------------
 $container['DatabaseService'] = function ($c) {
     return new App\Service\DatabaseService($c->get('db'));
