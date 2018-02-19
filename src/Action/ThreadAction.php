@@ -2,8 +2,8 @@
 
 namespace App\Action;
 
-use App\Domain\CommentService;
-use App\Domain\MessageService;
+use App\Service\CommentService;
+use App\Service\MessageService;
 use App\Exception\FetchFailedException;
 use App\Model\Sort;
 use App\Responder\ThreadResponder;

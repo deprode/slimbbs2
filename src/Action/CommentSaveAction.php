@@ -3,10 +3,10 @@
 namespace App\Action;
 
 
-use App\Domain\AuthService;
-use App\Domain\CommentService;
-use App\Domain\MessageService;
-use App\Domain\StorageService;
+use App\Service\AuthService;
+use App\Service\CommentService;
+use App\Service\MessageService;
+use App\Service\StorageService;
 use App\Exception\SaveFailedException;
 use App\Exception\UploadFailedException;
 use App\Model\Comment;

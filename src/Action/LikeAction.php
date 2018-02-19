@@ -3,8 +3,8 @@
 namespace App\Action;
 
 
-use App\Domain\CommentService;
-use App\Domain\MessageService;
+use App\Service\CommentService;
+use App\Service\MessageService;
 use App\Exception\SaveFailedException;
 use Psr\Log\LoggerInterface;
 use Slim\Http\Request;

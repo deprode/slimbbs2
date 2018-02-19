@@ -3,7 +3,7 @@
 namespace App\Action;
 
 
-use App\Domain\CommentService;
+use App\Service\CommentService;
 use App\Exception\FetchFailedException;
 use App\Responder\SearchResponder;
 use Psr\Log\LoggerInterface;

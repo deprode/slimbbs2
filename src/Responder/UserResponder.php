@@ -2,7 +2,7 @@
 
 namespace App\Responder;
 
-use App\Domain\MessageService;
+use App\Service\MessageService;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Response;
 use Slim\Views\Twig;

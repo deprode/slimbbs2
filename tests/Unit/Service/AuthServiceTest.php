@@ -13,7 +13,7 @@ class AuthServiceTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $_SESSION = [];
-        $this->auth = new \App\Domain\AuthService(new \RKA\Session(), 100);
+        $this->auth = new \App\Service\AuthService(new \RKA\Session(), 100);
     }
 
     public function testSetOAuthToken()

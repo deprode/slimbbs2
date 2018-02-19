@@ -2,8 +2,8 @@
 
 namespace Test\Unit;
 
-use App\Domain\CommentService;
-use App\Domain\DatabaseService;
+use App\Service\CommentService;
+use App\Service\DatabaseService;
 use App\Model\Comment;
 use App\Model\Sort;
 

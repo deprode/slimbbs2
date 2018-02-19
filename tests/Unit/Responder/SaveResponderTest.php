@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Domain\MessageService;
+use App\Service\MessageService;
 use App\Responder\SaveResponder;
 use PHPUnit\Framework\TestCase;
 use Slim\Flash\Messages;

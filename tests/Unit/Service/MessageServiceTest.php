@@ -2,7 +2,7 @@
 
 namespace Test\Unit;
 
-use App\Domain\MessageService;
+use App\Service\MessageService;
 use Slim\Flash\Messages;
 
 class MessageServiceTest extends \PHPUnit_Framework_TestCase

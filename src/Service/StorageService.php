@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain;
+namespace App\Service;
 
 use App\Exception\UploadFailedException;
 use Aws\S3\Exception\S3Exception;

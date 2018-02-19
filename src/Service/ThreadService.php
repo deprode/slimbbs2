@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain;
+namespace App\Service;
 
 use App\Exception\FetchFailedException;
 use App\Traits\TimeElapsed;

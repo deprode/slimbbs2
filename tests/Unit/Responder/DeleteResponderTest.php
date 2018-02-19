@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Responder;
 
-use App\Domain\MessageService;
+use App\Service\MessageService;
 use App\Responder\DeleteResponder;
 use PHPUnit\Framework\TestCase;
 use Slim\Flash\Messages;

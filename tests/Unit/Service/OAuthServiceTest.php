@@ -3,8 +3,8 @@
 namespace Test\Unit;
 
 use Abraham\TwitterOAuth\TwitterOAuth;
-use App\Domain\AuthService;
-use App\Domain\OAuthService;
+use App\Service\AuthService;
+use App\Service\OAuthService;
 use App\Exception\OAuthException;
 use App\Model\User;
 

@@ -2,8 +2,8 @@
 
 namespace App\Action;
 
-use App\Domain\OAuthService;
-use App\Domain\UserService;
+use App\Service\OAuthService;
+use App\Service\UserService;
 use App\Exception\OAuthException;
 use App\Exception\SaveFailedException;
 use App\Responder\LoginResponder;

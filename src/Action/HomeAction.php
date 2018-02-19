@@ -2,8 +2,8 @@
 
 namespace App\Action;
 
-use App\Domain\MessageService;
-use App\Domain\ThreadService;
+use App\Service\MessageService;
+use App\Service\ThreadService;
 use App\Exception\FetchFailedException;
 use App\Responder\HomeResponder;
 use Psr\Log\LoggerInterface;

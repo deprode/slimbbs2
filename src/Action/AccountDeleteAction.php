@@ -3,9 +3,9 @@
 namespace App\Action;
 
 
-use App\Domain\AuthService;
-use App\Domain\MessageService;
-use App\Domain\UserService;
+use App\Service\AuthService;
+use App\Service\MessageService;
+use App\Service\UserService;
 use App\Exception\DeleteFailedException;
 use App\Responder\QuitedResponder;
 use Psr\Http\Message\ResponseInterface;

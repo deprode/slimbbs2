@@ -2,7 +2,7 @@
 
 namespace Test\Unit;
 
-use App\Domain\DatabaseService;
+use App\Service\DatabaseService;
 
 class DatabaseServiceTest extends \PHPUnit_Framework_TestCase
 {

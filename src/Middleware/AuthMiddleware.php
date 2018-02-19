@@ -3,7 +3,7 @@
 namespace App\Middleware;
 
 
-use App\Domain\AuthService;
+use App\Service\AuthService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 

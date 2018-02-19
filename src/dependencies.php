@@ -142,35 +142,35 @@ $container['App\Action\UserAction'] = function ($c) {
 // Domain factories
 // -----------------------------------------------------------------------------
 $container['DatabaseService'] = function ($c) {
-    return new App\Domain\DatabaseService($c->get('db'));
+    return new App\Service\DatabaseService($c->get('db'));
 };
 
 $container['CommentService'] = function ($c) {
-    return new App\Domain\CommentService($c->get('DatabaseService'));
+    return new App\Service\CommentService($c->get('DatabaseService'));
 };
 
 $container['ThreadService'] = function ($c) {
-    return new App\Domain\ThreadService($c->get('DatabaseService'));
+    return new App\Service\ThreadService($c->get('DatabaseService'));
 };
 
 $container['UserService'] = function ($c) {
-    return new App\Domain\UserService($c->get('DatabaseService'));
+    return new App\Service\UserService($c->get('DatabaseService'));
 };
 
 $container['AuthService'] = function ($c) {
-    return new App\Domain\AuthService($c->get('session'), $c->get('settings')['admin_id']);
+    return new App\Service\AuthService($c->get('session'), $c->get('settings')['admin_id']);
 };
 
 $container['OAuthService'] = function ($c) {
-    return new App\Domain\OAuthService($c->get('twitter'), $c->get('AuthService'), $c->get('router')->pathFor('callback'));
+    return new App\Service\OAuthService($c->get('twitter'), $c->get('AuthService'), $c->get('router')->pathFor('callback'));
 };
 
 $container['MessageService'] = function ($c) {
-    return new App\Domain\MessageService($c->get('flash'));
+    return new App\Service\MessageService($c->get('flash'));
 };
 
 $container['StorageService'] = function ($c) {
-    return new App\Domain\StorageService($c->get('s3'), $c->get('settings')['s3']['bucket']);
+    return new App\Service\StorageService($c->get('s3'), $c->get('settings')['s3']['bucket']);
 };
 // -----------------------------------------------------------------------------
 // Responder factories

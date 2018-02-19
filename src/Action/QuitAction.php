@@ -3,7 +3,7 @@
 namespace App\Action;
 
 
-use App\Domain\MessageService;
+use App\Service\MessageService;
 use App\Responder\QuitResponder;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Csrf\Guard as Csrf;

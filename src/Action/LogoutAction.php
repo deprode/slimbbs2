@@ -2,7 +2,7 @@
 
 namespace App\Action;
 
-use App\Domain\AuthService;
+use App\Service\AuthService;
 use Psr\Log\LoggerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;

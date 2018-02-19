@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Middleware;
 
-use App\Domain\AuthService;
+use App\Service\AuthService;
 use App\Middleware\AuthMiddleware;
 use RKA\Session;
 use Slim\Http\Environment;

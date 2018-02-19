@@ -2,8 +2,8 @@
 
 namespace Test\Unit;
 
-use App\Domain\DatabaseService;
-use App\Domain\UserService;
+use App\Service\DatabaseService;
+use App\Service\UserService;
 use App\Model\User;
 
 class UserServiceTest extends \PHPUnit_Framework_TestCase
