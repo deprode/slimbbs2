@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Service;
+namespace App\Repository;
 
 use App\Exception\FetchFailedException;
+use App\Service\DatabaseService;
 use App\Traits\TimeElapsed;
 
 class ThreadService

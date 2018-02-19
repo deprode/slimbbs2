@@ -2,7 +2,7 @@
 
 namespace Test\Unit;
 
-use App\Service\CommentService;
+use App\Repository\CommentService;
 use App\Service\DatabaseService;
 use App\Model\Comment;
 use App\Model\Sort;

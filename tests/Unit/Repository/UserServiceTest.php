@@ -3,7 +3,7 @@
 namespace Test\Unit;
 
 use App\Service\DatabaseService;
-use App\Service\UserService;
+use App\Repository\UserService;
 use App\Model\User;
 
 class UserServiceTest extends \PHPUnit_Framework_TestCase

@@ -2,7 +2,7 @@
 
 namespace App\Action;
 
-use App\Service\CommentService;
+use App\Repository\CommentService;
 use App\Service\MessageService;
 use App\Exception\FetchFailedException;
 use App\Model\Sort;

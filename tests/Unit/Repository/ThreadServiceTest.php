@@ -2,8 +2,8 @@
 
 namespace Test\Unit;
 
+use App\Repository\ThreadService;
 use App\Service\DatabaseService;
-use App\Service\ThreadService;
 
 class ThreadServiceTest extends \PHPUnit_Framework_TestCase
 {

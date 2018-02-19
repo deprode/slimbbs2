@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Service;
+namespace App\Repository;
 
 use App\Exception\DeleteFailedException;
 use App\Exception\FetchFailedException;
 use App\Exception\SaveFailedException;
 use App\Model\Comment;
 use App\Model\Sort;
+use App\Service\DatabaseService;
 use App\Traits\TimeElapsed;
 
 class CommentService

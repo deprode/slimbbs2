@@ -4,8 +4,8 @@
 namespace App\Action;
 
 
-use App\Service\CommentService;
-use App\Service\UserService;
+use App\Repository\CommentService;
+use App\Repository\UserService;
 use App\Exception\FetchFailedException;
 use App\Responder\UserResponder;
 use Psr\Http\Message\ResponseInterface;

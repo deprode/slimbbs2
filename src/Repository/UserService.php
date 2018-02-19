@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Service;
+namespace App\Repository;
 
 
 use App\Exception\DeleteFailedException;
 use App\Exception\FetchFailedException;
 use App\Exception\SaveFailedException;
 use App\Model\User;
+use App\Service\DatabaseService;
 
 class UserService
 {

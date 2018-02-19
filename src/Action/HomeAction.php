@@ -2,10 +2,10 @@
 
 namespace App\Action;
 
-use App\Service\MessageService;
-use App\Service\ThreadService;
 use App\Exception\FetchFailedException;
+use App\Repository\ThreadService;
 use App\Responder\HomeResponder;
+use App\Service\MessageService;
 use Psr\Log\LoggerInterface;
 use Slim\Csrf\Guard as Csrf;
 use Slim\Http\Request;

@@ -146,15 +146,15 @@ $container['DatabaseService'] = function ($c) {
 };
 
 $container['CommentService'] = function ($c) {
-    return new App\Service\CommentService($c->get('DatabaseService'));
+    return new App\Repository\CommentService($c->get('DatabaseService'));
 };
 
 $container['ThreadService'] = function ($c) {
-    return new App\Service\ThreadService($c->get('DatabaseService'));
+    return new App\Repository\ThreadService($c->get('DatabaseService'));
 };
 
 $container['UserService'] = function ($c) {
-    return new App\Service\UserService($c->get('DatabaseService'));
+    return new App\Repository\UserService($c->get('DatabaseService'));
 };
 
 $container['AuthService'] = function ($c) {

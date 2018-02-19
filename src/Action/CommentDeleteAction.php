@@ -3,7 +3,7 @@
 namespace App\Action;
 
 
-use App\Service\CommentService;
+use App\Repository\CommentService;
 use App\Service\MessageService;
 use App\Exception\DeleteFailedException;
 use App\Responder\DeleteResponder;

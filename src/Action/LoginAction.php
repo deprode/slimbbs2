@@ -3,7 +3,7 @@
 namespace App\Action;
 
 use App\Service\OAuthService;
-use App\Service\UserService;
+use App\Repository\UserService;
 use App\Exception\OAuthException;
 use App\Exception\SaveFailedException;
 use App\Responder\LoginResponder;

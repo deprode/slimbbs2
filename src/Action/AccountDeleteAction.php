@@ -3,11 +3,11 @@
 namespace App\Action;
 
 
+use App\Exception\DeleteFailedException;
+use App\Repository\UserService;
+use App\Responder\QuitedResponder;
 use App\Service\AuthService;
 use App\Service\MessageService;
-use App\Service\UserService;
-use App\Exception\DeleteFailedException;
-use App\Responder\QuitedResponder;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;

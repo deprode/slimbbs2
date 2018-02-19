@@ -4,7 +4,7 @@ namespace App\Action;
 
 
 use App\Service\AuthService;
-use App\Service\CommentService;
+use App\Repository\CommentService;
 use App\Service\MessageService;
 use App\Service\StorageService;
 use App\Exception\SaveFailedException;
