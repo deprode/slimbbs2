@@ -37,18 +37,14 @@ class HomeFilterTest extends TestCase
 
         $message = $this->getMockBuilder(MessageService::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMessage'])
+            ->setMethods(['getInfoMessage', 'getErrorMessage'])
             ->getMock();
-
-        $messages = [
-            'Info'  => 'TestMessage',
-            'Error' => 'ErrorMessage',
-        ];
-        $message->expects($this->exactly(2))
-            ->method('getMessage')
-            ->willReturnCallback(function ($param) use ($messages) {
-                return $messages[$param] ?? '';
-            });
+        $message->expects($this->any())
+            ->method('getInfoMessage')
+            ->willReturn('TestMessage');
+        $message->expects($this->any())
+            ->method('getErrorMessage')
+            ->willReturn('ErrorMessage');
 
         $this->filter = new HomeFilter($thread, $message, new Guard());
 

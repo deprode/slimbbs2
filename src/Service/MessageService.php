@@ -37,6 +37,22 @@ class MessageService
         return '';
     }
 
+    public function getInfoMessage(): string
+    {
+        if ($this->flash->hasMessage(self::INFO)) {
+            return $this->flash->getFirstMessage(self::INFO);
+        }
+        return '';
+    }
+
+    public function getErrorMessage(): string
+    {
+        if ($this->flash->hasMessage(self::ERROR)) {
+            return $this->flash->getFirstMessage(self::ERROR);
+        }
+        return '';
+    }
+
     public function setMessage($key = self::DEFAULT_KEY, $value = self::DEFAULT_VALUE): void
     {
         $message = $this->message($value);

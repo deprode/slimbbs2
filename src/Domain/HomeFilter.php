@@ -51,8 +51,8 @@ class HomeFilter
         $data['user_id'] = $attributes['userId'] ?? '';
 
         // message
-        $data['info'] = $this->message->getMessage($this->message::INFO);
-        $data['error'] = $this->message->getMessage($this->message::ERROR);
+        $data['info'] = $this->message->getInfoMessage();
+        $data['error'] = $this->message->getErrorMessage();
 
         return $data;
     }
