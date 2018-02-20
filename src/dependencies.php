@@ -128,7 +128,7 @@ $container['App\Action\LikeAction'] = function ($c) {
 };
 
 $container['App\Action\QuitAction'] = function ($c) {
-    return new App\Action\QuitAction($c->get('csrf'), $c->get('MessageService'), $c->get('QuitResponder'));
+    return new App\Action\QuitAction($c->get('QuitFilter'), $c->get('QuitResponder'));
 };
 
 $container['App\Action\AccountDeleteAction'] = function ($c) {
@@ -143,6 +143,10 @@ $container['App\Action\UserAction'] = function ($c) {
 // -----------------------------------------------------------------------------
 $container['HomeFilter'] = function ($c) {
     return new App\Domain\HomeFilter($c->get('ThreadService'), $c->get('MessageService'), $c->get('csrf'));
+};
+
+$container['QuitFilter'] = function ($c) {
+    return new \App\Domain\QuitFilter($c->get('MessageService'), $c->get('csrf'));
 };
 
 // -----------------------------------------------------------------------------
