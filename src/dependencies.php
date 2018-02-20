@@ -136,7 +136,7 @@ $container['App\Action\AccountDeleteAction'] = function ($c) {
 };
 
 $container['App\Action\UserAction'] = function ($c) {
-    return new App\Action\UserAction($c->get('UserService'), $c->get('CommentService'), $c->get('UserResponder'));
+    return new App\Action\UserAction($c->get('UserFilter'), $c->get('UserResponder'));
 };
 // -----------------------------------------------------------------------------
 // Domain factories
@@ -147,6 +147,10 @@ $container['HomeFilter'] = function ($c) {
 
 $container['QuitFilter'] = function ($c) {
     return new \App\Domain\QuitFilter($c->get('MessageService'), $c->get('csrf'));
+};
+
+$container['UserFilter'] = function ($c) {
+    return new \App\Domain\UserFilter($c->get('UserService'), $c->get('CommentService'));
 };
 
 // -----------------------------------------------------------------------------
