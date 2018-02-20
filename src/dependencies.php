@@ -108,7 +108,7 @@ $container['App\Action\SearchAction'] = function ($c) {
 };
 
 $container['App\Action\ThreadAction'] = function ($c) {
-    return new App\Action\ThreadAction($c->get('logger'), $c->get('csrf'), $c->get('CommentService'), $c->get('MessageService'), $c->get('ThreadResponder'), $c->get('settings')['s3']);
+    return new App\Action\ThreadAction($c->get('logger'), $c->get('MessageService'), $c->get('ThreadFilter'), $c->get('ThreadResponder'));
 };
 
 $container['App\Action\CommentSaveAction'] = function ($c) {
@@ -143,6 +143,10 @@ $container['App\Action\UserAction'] = function ($c) {
 // -----------------------------------------------------------------------------
 $container['HomeFilter'] = function ($c) {
     return new App\Domain\HomeFilter($c->get('ThreadService'), $c->get('MessageService'), $c->get('csrf'));
+};
+
+$container['ThreadFilter'] = function ($c) {
+    return new \App\Domain\ThreadFilter($c->get('csrf'), $c->get('CommentService'), $c->get('MessageService'), $c->get('settings')['s3']);
 };
 
 $container['QuitFilter'] = function ($c) {
