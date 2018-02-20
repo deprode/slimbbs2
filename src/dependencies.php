@@ -96,7 +96,7 @@ $container['App\Action\SaveAction'] = function ($c) {
 };
 
 $container['App\Action\LoginAction'] = function ($c) {
-    return new App\Action\LoginAction($c->get('logger'), $c->get('UserService'), $c->get('OAuthService'), $c->get('LoginResponder'));
+    return new App\Action\LoginAction($c->get('logger'), $c->get('OAuthService'), $c->get('LoginFilter'), $c->get('LoginResponder'));
 };
 
 $container['App\Action\LogoutAction'] = function ($c) {
@@ -143,6 +143,10 @@ $container['App\Action\UserAction'] = function ($c) {
 // -----------------------------------------------------------------------------
 $container['HomeFilter'] = function ($c) {
     return new App\Domain\HomeFilter($c->get('ThreadService'), $c->get('MessageService'), $c->get('csrf'));
+};
+
+$container['LoginFilter'] = function ($c) {
+    return new \App\Domain\LoginFilter($c->get('UserService'), $c->get('OAuthService'));
 };
 
 $container['ThreadFilter'] = function ($c) {
