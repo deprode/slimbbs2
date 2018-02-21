@@ -92,7 +92,7 @@ $container['App\Action\HomeAction'] = function ($c) {
 };
 
 $container['App\Action\SaveAction'] = function ($c) {
-    return new App\Action\SaveAction($c->get('logger'), $c->get('CommentService'), $c->get('AuthService'), $c->get('MessageService'), $c->get('SaveResponder'));
+    return new App\Action\SaveAction($c->get('logger'), $c->get('SaveFilter'), $c->get('SaveResponder'));
 };
 
 $container['App\Action\LoginAction'] = function ($c) {
@@ -143,6 +143,10 @@ $container['App\Action\UserAction'] = function ($c) {
 // -----------------------------------------------------------------------------
 $container['HomeFilter'] = function ($c) {
     return new App\Domain\HomeFilter($c->get('ThreadService'), $c->get('MessageService'), $c->get('csrf'));
+};
+
+$container['SaveFilter'] = function ($c) {
+    return new \App\Domain\SaveFilter($c->get('AuthService'), $c->get('CommentService'));
 };
 
 $container['LoginFilter'] = function ($c) {

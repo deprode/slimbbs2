@@ -41,6 +41,7 @@ class SaveResponder
 
     public function saved(Response $response, string $redirect): Response
     {
+        $this->message->setMessage($this->message::INFO, 'SavedThread');
         return $response->withRedirect($redirect, 303);
     }
 }
