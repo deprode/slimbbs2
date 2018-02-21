@@ -132,7 +132,7 @@ $container['App\Action\QuitAction'] = function ($c) {
 };
 
 $container['App\Action\AccountDeleteAction'] = function ($c) {
-    return new App\Action\AccountDeleteAction($c->get('MessageService'), $c->get('UserService'), $c->get('AuthService'), $c->get('QuitedResponder'));
+    return new App\Action\AccountDeleteAction($c->get('AccountDeleteFilter'), $c->get('AuthService'), $c->get('QuitedResponder'));
 };
 
 $container['App\Action\UserAction'] = function ($c) {
@@ -167,6 +167,10 @@ $container['CommentDeleteFilter'] = function ($c) {
 
 $container['QuitFilter'] = function ($c) {
     return new \App\Domain\QuitFilter($c->get('MessageService'), $c->get('csrf'));
+};
+
+$container['AccountDeleteFilter'] = function ($c) {
+    return new \App\Domain\AccountDeleteFilter($c->get('UserService'));
 };
 
 $container['UserFilter'] = function ($c) {

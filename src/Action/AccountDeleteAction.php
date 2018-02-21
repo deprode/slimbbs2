@@ -3,51 +3,40 @@
 namespace App\Action;
 
 
+use App\Domain\AccountDeleteFilter;
+use App\Exception\CsrfException;
 use App\Exception\DeleteFailedException;
-use App\Repository\UserService;
 use App\Responder\QuitedResponder;
 use App\Service\AuthService;
-use App\Service\MessageService;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 class AccountDeleteAction
 {
-    private $message;
-    private $user;
+    private $filter;
     private $auth;
     private $responder;
 
-    public function __construct(MessageService $message, UserService $user, AuthService $auth, QuitedResponder $responder)
+    public function __construct(AccountDeleteFilter $filter, AuthService $auth, QuitedResponder $responder)
     {
-        $this->message = $message;
-        $this->user = $user;
+        $this->filter = $filter;
         $this->auth = $auth;
         $this->responder = $responder;
     }
 
     public function delete(Request $request, Response $response): ResponseInterface
     {
-        $loggedIn = $request->getAttribute('isLoggedIn');
-        if ($loggedIn == false) {
-            return $this->responder->redirect($response);
-        }
-
-        if ($request->getAttribute('csrf_status') === "bad_request") {
-            return $this->responder->redirect($response);
-        }
-
-        $user_id = $request->getAttribute('userId');
-
         try {
-            $result = $this->user->deleteAccount($user_id);
-            if ($result === false) {
-                throw new DeleteFailedException();
-            }
+            $this->filter->delete($request);
             $this->auth->logout();
-
             return $this->responder->quited($response);
+        } catch (CsrfException $e) {
+            return $this->responder->redirect($response);
+
+        } catch (\OutOfBoundsException $e) {
+            return $this->responder->redirect($response);
+
         } catch (DeleteFailedException $e) {
             return $this->responder->deleteFailed($response);
         }
