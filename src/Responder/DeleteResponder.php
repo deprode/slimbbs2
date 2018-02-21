@@ -36,6 +36,7 @@ class DeleteResponder
 
     public function deleted(Response $response, string $redirect): Response
     {
+        $this->message->setMessage($this->message::INFO, 'DeletedComment');
         return $response->withRedirect($redirect, 303);
     }
 }

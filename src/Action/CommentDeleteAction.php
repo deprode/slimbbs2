@@ -3,8 +3,8 @@
 namespace App\Action;
 
 
-use App\Repository\CommentService;
-use App\Service\MessageService;
+use App\Domain\CommentDeleteFilter;
+use App\Exception\CsrfException;
 use App\Exception\DeleteFailedException;
 use App\Responder\DeleteResponder;
 use Psr\Log\LoggerInterface;
@@ -14,15 +14,13 @@ use Slim\Http\Response;
 class CommentDeleteAction
 {
     private $log;
-    private $comment;
-    private $message;
+    private $filter;
     private $responder;
 
-    public function __construct(LoggerInterface $log, CommentService $comment, MessageService $message, DeleteResponder $responder)
+    public function __construct(LoggerInterface $log, CommentDeleteFilter $filter, DeleteResponder $responder)
     {
         $this->log = $log;
-        $this->comment = $comment;
-        $this->message = $message;
+        $this->filter = $filter;
         $this->responder = $responder;
     }
 
@@ -30,37 +28,20 @@ class CommentDeleteAction
     {
         $this->log->info("Slimbbs '/thread' route comment delete");
 
-        if ($request->getAttribute('csrf_status') === "bad_request") {
-            return $this->responder->csrfInvalid($response);
-        }
-
         $data = $request->getParsedBody();
-
-        // Validation
-        $user_id = $request->getAttribute('userId');
-        $is_anonymous = $user_id == 0;
-        if ($request->getAttribute('has_errors') || $is_anonymous) {
-            return $this->responder->invalid($response);
-        }
-
         $url = $this->getRedirectUrl($request->getUri()->getPath(), $data);
 
         try {
-            if ($request->getAttribute('isAdmin')) {
-                $delete = $this->comment->deleteCommentByAdmin($data['thread_id'], $data['comment_id']);
-            } else {
-                $delete = $this->comment->deleteComment($data['thread_id'], $data['comment_id'], $user_id);
-            }
-
-            if ($delete) {
-                $this->message->setMessage($this->message::INFO, 'DeletedComment');
-            }
+            $this->filter->delete($request);
+            return $this->responder->deleted($response, $url);
+        } catch (CsrfException $e) {
+            return $this->responder->csrfInvalid($response);
+        } catch (\OutOfBoundsException $e) {
+            return $this->responder->invalid($response);
         } catch (DeleteFailedException $e) {
             $this->log->error($e->getMessage(), ['exception' => $e]);
             return $this->responder->deleteFailed($response, $url);
         }
-
-        return $this->responder->deleted($response, $url);
     }
 
     private function getRedirectUrl(string $base_path, array $data): string

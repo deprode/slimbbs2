@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Responder;
 
-use App\Service\MessageService;
 use App\Responder\DeleteResponder;
+use App\Service\MessageService;
 use PHPUnit\Framework\TestCase;
 use Slim\Flash\Messages;
 use Slim\Http\Response;
@@ -26,6 +26,7 @@ class DeleteResponderTest extends TestCase
 
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals('/', $response->getHeader('Location')[0]);
+        $this->assertContains('削除に失敗しました。', $_SESSION['slimFlash']['Error'][0]);
     }
 
     public function testInvalid()
@@ -35,6 +36,7 @@ class DeleteResponderTest extends TestCase
 
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals('/', $response->getHeader('Location')[0]);
+        $this->assertContains('削除に失敗しました。', $_SESSION['slimFlash']['Error'][0]);
     }
 
     public function testDeleteFailed()
@@ -44,6 +46,7 @@ class DeleteResponderTest extends TestCase
 
         $this->assertEquals(303, $response->getStatusCode());
         $this->assertEquals('/redirect', $response->getHeader('Location')[0]);
+        $this->assertContains('削除に失敗しました。', $_SESSION['slimFlash']['Error'][0]);
     }
 
     public function testDeleted()
@@ -53,5 +56,6 @@ class DeleteResponderTest extends TestCase
 
         $this->assertEquals(303, $response->getStatusCode());
         $this->assertEquals('/redirect', $response->getHeader('Location')[0]);
+        $this->assertContains('コメントを削除しました。', $_SESSION['slimFlash']['Info'][0]);
     }
 }
