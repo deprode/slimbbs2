@@ -112,7 +112,7 @@ $container['App\Action\ThreadAction'] = function ($c) {
 };
 
 $container['App\Action\CommentSaveAction'] = function ($c) {
-    return new App\Action\CommentSaveAction($c->get('logger'), $c->get('CommentService'), $c->get('SaveResponder'), $c->get('AuthService'), $c->get('MessageService'), $c->get('StorageService'));
+    return new App\Action\CommentSaveAction($c->get('logger'), $c->get('CommentSaveFilter'), $c->get('SaveResponder'));
 };
 
 $container['App\Action\CommentUpdateAction'] = function ($c) {
@@ -155,6 +155,10 @@ $container['LoginFilter'] = function ($c) {
 
 $container['ThreadFilter'] = function ($c) {
     return new \App\Domain\ThreadFilter($c->get('csrf'), $c->get('CommentService'), $c->get('MessageService'), $c->get('settings')['s3']);
+};
+
+$container['CommentSaveFilter'] = function ($c) {
+    return new \App\Domain\CommentSaveFilter($c->get('StorageService'), $c->get('CommentService'));
 };
 
 $container['QuitFilter'] = function ($c) {

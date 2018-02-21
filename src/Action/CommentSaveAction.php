@@ -3,13 +3,10 @@
 namespace App\Action;
 
 
-use App\Service\AuthService;
-use App\Repository\CommentService;
-use App\Service\MessageService;
-use App\Service\StorageService;
+use App\Domain\CommentSaveFilter;
+use App\Exception\CsrfException;
 use App\Exception\SaveFailedException;
 use App\Exception\UploadFailedException;
-use App\Model\Comment;
 use App\Model\Sort;
 use App\Responder\SaveResponder;
 use Psr\Log\LoggerInterface;
@@ -19,31 +16,23 @@ use Slim\Http\Response;
 class CommentSaveAction
 {
     private $logger;
+    private $filter;
     private $responder;
-    private $comment;
-    private $auth;
-    private $message;
-    private $storage;
 
-    public function __construct(LoggerInterface $logger, CommentService $comment, SaveResponder $responder, AuthService $auth, MessageService $message, StorageService $storage)
+    public function __construct(LoggerInterface $logger, CommentSaveFilter $filter, SaveResponder $responder)
     {
         $this->logger = $logger;
+        $this->filter = $filter;
         $this->responder = $responder;
-        $this->comment = $comment;
-        $this->auth = $auth;
-        $this->message = $message;
-        $this->storage = $storage;
     }
 
     public function save(Request $request, Response $response)
     {
         $this->logger->info("Slimbbs '/' route comment save");
 
-        if ($request->getAttribute('csrf_status') === "bad_request") {
-            return $this->responder->csrfInvalid($response);
-        }
-
+        // make redirect url
         $data = $request->getParsedBody();
+
         try {
             $sort = new Sort($data['sort'] ?? 'desc');
         } catch (\InvalidArgumentException $e) {
@@ -58,34 +47,21 @@ class CommentSaveAction
             $url = $request->getUri()->getPath();
         }
 
-        // Validation
-        if ($request->getAttribute('has_errors')) {
-            return $this->responder->invalid($response, $url);
-        }
-
-        $files = $request->getUploadedFiles();
-        if (!empty($files['picture']->file)) {
-            try {
-                $filename = $this->storage->upload($files['picture']);
-            } catch (UploadFailedException $e) {
-                $this->logger->error($e->getMessage(), ['exception' => $e]);
-                return $this->responder->uploadFailed($response, $url);
-            }
-        }
-
+        // save comment
         try {
-            $comment = new Comment();
-            $comment->thread_id = $data['thread_id'];
-            $comment->user_id = $this->auth->getUserId();
-            $comment->comment = $data['comment'];
-            $comment->photo_url = $filename ?? '';
-            $this->comment->saveComment($comment);
+            $this->filter->save($request);
+
+            return $this->responder->saveComment($response, $url);
+        } catch (CsrfException $e) {
+            return $this->responder->csrfInvalid($response);
+        } catch (\OutOfBoundsException $e) {
+            return $this->responder->invalid($response, $url);
+        } catch (UploadFailedException $e) {
+            $this->logger->error($e->getMessage(), ['exception' => $e]);
+            return $this->responder->uploadFailed($response, $url);
         } catch (SaveFailedException $e) {
             $this->logger->error($e->getMessage(), ['exception' => $e]);
             return $this->responder->saveFailed($response, $url);
         }
-
-        $this->message->setMessage($this->message::INFO, 'SavedComment');
-        return $this->responder->saved($response, $url);
     }
 }

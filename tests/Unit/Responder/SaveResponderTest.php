@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Service\MessageService;
 use App\Responder\SaveResponder;
+use App\Service\MessageService;
 use PHPUnit\Framework\TestCase;
 use Slim\Flash\Messages;
 use Slim\Http\Response;
@@ -67,5 +67,16 @@ class SaveResponderTest extends TestCase
 
         $this->assertEquals(303, $response->getStatusCode());
         $this->assertContains('/success', $response->getHeader('location'));
+        $this->assertContains('スレッドを作成しました。', $_SESSION['slimFlash']['Info'][0]);
+    }
+
+    public function testSaveCommentSuccess()
+    {
+        $responder = new SaveResponder($this->message);
+        $response = $responder->saveComment(new Response(), '/success');
+
+        $this->assertEquals(303, $response->getStatusCode());
+        $this->assertContains('/success', $response->getHeader('location'));
+        $this->assertContains('コメントを保存しました。', $_SESSION['slimFlash']['Info'][0]);
     }
 }

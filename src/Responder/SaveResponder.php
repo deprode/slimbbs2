@@ -44,4 +44,10 @@ class SaveResponder
         $this->message->setMessage($this->message::INFO, 'SavedThread');
         return $response->withRedirect($redirect, 303);
     }
+
+    public function saveComment(Response $response, string $redirect): Response
+    {
+        $this->message->setMessage($this->message::INFO, 'SavedComment');
+        return $response->withRedirect($redirect, 303);
+    }
 }
