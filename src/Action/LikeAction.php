@@ -3,8 +3,8 @@
 namespace App\Action;
 
 
-use App\Repository\CommentService;
-use App\Service\MessageService;
+use App\Domain\LikeFilter;
+use App\Exception\NotAllowedException;
 use App\Exception\SaveFailedException;
 use Psr\Log\LoggerInterface;
 use Slim\Http\Request;
@@ -13,42 +13,31 @@ use Slim\Http\Response;
 class LikeAction
 {
     private $logger;
-    private $comment;
-    private $message;
+    private $filter;
 
-    public function __construct(LoggerInterface $log, CommentService $comment, MessageService $message)
+    public function __construct(LoggerInterface $log, LikeFilter $filter)
     {
         $this->logger = $log;
-        $this->comment = $comment;
-        $this->message = $message;
+        $this->filter = $filter;
     }
 
     public function add(Request $request, Response $response)
     {
         $this->logger->info("Slimbbs '/like' route save");
 
-        if (!$request->isXhr()) {
-            return $response->withJson([], 500);
-        }
-
-        if ($request->getAttribute('has_errors')) {
-            return $response->withStatus(400);
-        }
-
-        $comment_id = $request->getParsedBodyParam('comment_id');
-        $thread_id = $request->getParsedBodyParam('thread_id');
         try {
-            $result = $this->comment->addLike($thread_id, $comment_id);
-            if ($result === false) {
-                throw new SaveFailedException();
-            }
+            $this->filter->update($request);
+
+            // MEMO: withStatusを使うとwithJSONでデータが渡せなくなるので、PHP側ではwithStatusを使う
+            return $response->withStatus(204);
+        } catch (NotAllowedException $e) {
+            return $response->withJson([], 500);
+        } catch (\OutOfBoundsException $e) {
+            return $response->withStatus(400);
         } catch (SaveFailedException $e) {
             $this->logger->error($e->getMessage(), ['exception' => $e]);
             return $response->withStatus(500);
         }
-
-        // MEMO: withStatusを使うとwithJSONでデータが渡せなくなるので、PHP側ではwithStatusを使う
-        return $response->withStatus(204);
     }
 
 }

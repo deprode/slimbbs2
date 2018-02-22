@@ -124,7 +124,7 @@ $container['App\Action\CommentDeleteAction'] = function ($c) {
 };
 
 $container['App\Action\LikeAction'] = function ($c) {
-    return new App\Action\LikeAction($c->get('logger'), $c->get('CommentService'), $c->get('MessageService'));
+    return new App\Action\LikeAction($c->get('logger'), $c->get('LikeFilter'));
 };
 
 $container['App\Action\QuitAction'] = function ($c) {
@@ -167,6 +167,10 @@ $container['CommentUpdateFilter'] = function ($c) {
 
 $container['CommentDeleteFilter'] = function ($c) {
     return new \App\Domain\CommentDeleteFilter($c->get('CommentService'));
+};
+
+$container['LikeFilter'] = function ($c) {
+    return new \App\Domain\LikeFilter($c->get('CommentService'));
 };
 
 $container['QuitFilter'] = function ($c) {
