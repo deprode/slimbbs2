@@ -36,12 +36,23 @@ class CommentDeleteFilterTest extends TestCase
     /**
      * @expectedException \OutOfBoundsException
      */
-    public function testAuthError()
+    public function testValidationError()
     {
         $request = $this->createMock(Request::class);
         $request->method('getAttributes')->willReturn([
             'has_errors' => ["error"],
         ]);
+
+        $this->filter = new CommentDeleteFilter($this->comment);
+        $this->filter->delete($request);
+    }
+
+    /**
+     * @expectedException \App\Exception\NotAllowedException
+     */
+    public function testAuthError()
+    {
+        $request = $this->createMock(Request::class);
 
         $this->filter = new CommentDeleteFilter($this->comment);
         $this->filter->delete($request);

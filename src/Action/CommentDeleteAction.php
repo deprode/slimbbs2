@@ -6,6 +6,7 @@ namespace App\Action;
 use App\Domain\CommentDeleteFilter;
 use App\Exception\CsrfException;
 use App\Exception\DeleteFailedException;
+use App\Exception\NotAllowedException;
 use App\Responder\DeleteResponder;
 use Psr\Log\LoggerInterface;
 use Slim\Http\Request;
@@ -37,6 +38,8 @@ class CommentDeleteAction
         } catch (CsrfException $e) {
             return $this->responder->csrfInvalid($response);
         } catch (\OutOfBoundsException $e) {
+            return $this->responder->invalid($response);
+        } catch (NotAllowedException $e) {
             return $this->responder->invalid($response);
         } catch (DeleteFailedException $e) {
             $this->log->error($e->getMessage(), ['exception' => $e]);

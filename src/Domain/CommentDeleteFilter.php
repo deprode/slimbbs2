@@ -6,6 +6,7 @@ namespace App\Domain;
 
 use App\Exception\CsrfException;
 use App\Exception\DeleteFailedException;
+use App\Exception\NotAllowedException;
 use App\Repository\CommentService;
 use Slim\Http\Request;
 
@@ -22,6 +23,7 @@ class CommentDeleteFilter
      * @param Request $request
      * @throws CsrfException
      * @throws \OutOfBoundsException
+     * @throws NotAllowedException
      * @throws DeleteFailedException
      */
     public function delete(Request $request): void
@@ -44,7 +46,7 @@ class CommentDeleteFilter
         $user_id = $attributes['userId'] ?? 0;
         $is_anonymous = $user_id == 0;
         if ($is_anonymous) {
-            throw new \OutOfBoundsException();
+            throw new NotAllowedException();
         }
 
         $is_admin = $attributes['isAdmin'] ?? 0;
