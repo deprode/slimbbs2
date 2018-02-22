@@ -178,13 +178,15 @@ SAVE;
 UPDATE
   `threads` 
 SET
-  `threads`.`count` = `threads`.`count`+1
+  `threads`.`count` = `threads`.`count`+1,
+  `threads`.`updated_at` = :datetime
 WHERE
   `threads`.`thread_id` = :thread_id;
 THREAD_UPDATE;
 
         $thread_update_values = [
             ':thread_id' => ['value' => $comment->thread_id, 'type' => \PDO::PARAM_INT],
+            ':datetime'  => ['value' => date_create()->format('Y-m-d H:i:s'), 'type' => \PDO::PARAM_STR]
         ];
 
         try {
