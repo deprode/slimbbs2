@@ -34,7 +34,7 @@ class CommentDeleteFilterTest extends TestCase
     }
 
     /**
-     * @expectedException \OutOfBoundsException
+     * @expectedException \App\Exception\ValidationException
      */
     public function testValidationError()
     {

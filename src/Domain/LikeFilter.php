@@ -6,6 +6,7 @@ namespace App\Domain;
 
 use App\Exception\NotAllowedException;
 use App\Exception\SaveFailedException;
+use App\Exception\ValidationException;
 use App\Repository\CommentService;
 use Slim\Http\Request;
 
@@ -21,7 +22,7 @@ class LikeFilter
     /**
      * @param Request $request
      * @throws NotAllowedException
-     * @throws \OutOfBoundsException
+     * @throws ValidationException
      * @throws SaveFailedException
      */
     public function update(Request $request): void
@@ -31,7 +32,7 @@ class LikeFilter
         }
 
         if ($request->getAttribute('has_errors')) {
-            throw new \OutOfBoundsException();
+            throw new ValidationException();
         }
 
         $params = $request->getParsedBody();

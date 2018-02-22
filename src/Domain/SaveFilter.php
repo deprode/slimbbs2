@@ -6,6 +6,7 @@ namespace App\Domain;
 
 use App\Exception\CsrfException;
 use App\Exception\NotAllowedException;
+use App\Exception\ValidationException;
 use App\Model\Comment;
 use App\Repository\CommentService;
 use App\Service\AuthService;
@@ -26,6 +27,7 @@ class SaveFilter
      * @param Request $request
      * @throws CsrfException
      * @throws NotAllowedException
+     * @throws ValidationException
      * @throws \App\Exception\SaveFailedException
      */
     public function save(Request $request): void
@@ -47,7 +49,7 @@ class SaveFilter
         // Validation
         $validate = $attributes['has_errors'] ?? '';
         if (empty($validate) === false) {
-            throw new \OutOfBoundsException();
+            throw new ValidationException();
         }
 
         $comment = new Comment();

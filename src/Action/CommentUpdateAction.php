@@ -6,6 +6,7 @@ namespace App\Action;
 use App\Domain\CommentUpdateFilter;
 use App\Exception\NotAllowedException;
 use App\Exception\SaveFailedException;
+use App\Exception\ValidationException;
 use Psr\Log\LoggerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -30,7 +31,7 @@ class CommentUpdateAction
             return $response->withStatus(204);
         } catch (NotAllowedException $e) {
             return $response->withJson([], 500);
-        } catch (\OutOfBoundsException $e) {
+        } catch (ValidationException $e) {
             return $response->withStatus(400);
         } catch (SaveFailedException $e) {
             $this->logger->error($e->getMessage(), ['exception' => $e]);

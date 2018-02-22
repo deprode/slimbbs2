@@ -30,7 +30,7 @@ class LikeFilterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \OutOfBoundsException
+     * @expectedException \App\Exception\ValidationException
      */
     public function testValidatioinError()
     {

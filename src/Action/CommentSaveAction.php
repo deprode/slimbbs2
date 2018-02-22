@@ -7,6 +7,7 @@ use App\Domain\CommentSaveFilter;
 use App\Exception\CsrfException;
 use App\Exception\SaveFailedException;
 use App\Exception\UploadFailedException;
+use App\Exception\ValidationException;
 use App\Model\Sort;
 use App\Responder\SaveResponder;
 use Psr\Log\LoggerInterface;
@@ -54,7 +55,7 @@ class CommentSaveAction
             return $this->responder->saveComment($response, $url);
         } catch (CsrfException $e) {
             return $this->responder->csrfInvalid($response);
-        } catch (\OutOfBoundsException $e) {
+        } catch (ValidationException $e) {
             return $this->responder->invalid($response, $url);
         } catch (UploadFailedException $e) {
             $this->logger->error($e->getMessage(), ['exception' => $e]);

@@ -31,7 +31,7 @@ class CommentUpdateFilterTest extends TestCase
     }
 
     /**
-     * @expectedException \OutOfBoundsException
+     * @expectedException \App\Exception\ValidationException
      */
     public function testValidatioinError()
     {

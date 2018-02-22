@@ -7,6 +7,7 @@ namespace App\Domain;
 use App\Exception\CsrfException;
 use App\Exception\DeleteFailedException;
 use App\Exception\NotAllowedException;
+use App\Exception\ValidationException;
 use App\Repository\CommentService;
 use Slim\Http\Request;
 
@@ -22,7 +23,7 @@ class CommentDeleteFilter
     /**
      * @param Request $request
      * @throws CsrfException
-     * @throws \OutOfBoundsException
+     * @throws ValidationException
      * @throws NotAllowedException
      * @throws DeleteFailedException
      */
@@ -40,7 +41,7 @@ class CommentDeleteFilter
         // Validation
         $validate = $attributes['has_errors'] ?? '';
         if ($validate) {
-            throw new \OutOfBoundsException();
+            throw new ValidationException();
         }
 
         $user_id = $attributes['userId'] ?? 0;

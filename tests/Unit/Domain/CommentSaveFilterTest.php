@@ -42,7 +42,7 @@ class CommentSaveFilterTest extends TestCase
     }
 
     /**
-     * @expectedException \OutOfBoundsException
+     * @expectedException \App\Exception\ValidationException
      */
     public function testAuthError()
     {

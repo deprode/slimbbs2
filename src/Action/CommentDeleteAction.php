@@ -7,6 +7,7 @@ use App\Domain\CommentDeleteFilter;
 use App\Exception\CsrfException;
 use App\Exception\DeleteFailedException;
 use App\Exception\NotAllowedException;
+use App\Exception\ValidationException;
 use App\Responder\DeleteResponder;
 use Psr\Log\LoggerInterface;
 use Slim\Http\Request;
@@ -37,7 +38,7 @@ class CommentDeleteAction
             return $this->responder->deleted($response, $url);
         } catch (CsrfException $e) {
             return $this->responder->csrfInvalid($response);
-        } catch (\OutOfBoundsException $e) {
+        } catch (ValidationException $e) {
             return $this->responder->invalid($response);
         } catch (NotAllowedException $e) {
             return $this->responder->invalid($response);

@@ -5,6 +5,7 @@ namespace App\Domain;
 
 
 use App\Exception\CsrfException;
+use App\Exception\ValidationException;
 use App\Model\Comment;
 use App\Repository\CommentService;
 use App\Service\StorageService;
@@ -24,7 +25,7 @@ class CommentSaveFilter
     /**
      * @param Request $request
      * @throws CsrfException
-     * @throws \OutOfBoundsException
+     * @throws ValidationException
      * @throws \App\Exception\SaveFailedException
      * @throws \App\Exception\UploadFailedException
      */
@@ -40,7 +41,7 @@ class CommentSaveFilter
         // Validation
         $validation_status = $attributes['has_errors'];
         if ($validation_status) {
-            throw new \OutOfBoundsException();
+            throw new ValidationException();
         }
 
         // upload file

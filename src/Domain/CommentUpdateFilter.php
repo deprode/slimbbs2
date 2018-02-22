@@ -5,6 +5,7 @@ namespace App\Domain;
 
 
 use App\Exception\NotAllowedException;
+use App\Exception\ValidationException;
 use App\Repository\CommentService;
 use Slim\Http\Request;
 
@@ -20,7 +21,7 @@ class CommentUpdateFilter
     /**
      * @param Request $request
      * @throws NotAllowedException
-     * @throws \OutOfBoundsException
+     * @throws ValidationException
      * @throws \App\Exception\SaveFailedException
      */
     public function update(Request $request): void
@@ -31,7 +32,7 @@ class CommentUpdateFilter
 
         $validation_status = $request->getAttribute('has_errors');
         if ($validation_status) {
-            throw new \OutOfBoundsException();
+            throw new ValidationException();
         }
 
         $params = $request->getParsedBody();

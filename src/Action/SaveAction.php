@@ -6,6 +6,7 @@ use App\Domain\SaveFilter;
 use App\Exception\CsrfException;
 use App\Exception\NotAllowedException;
 use App\Exception\SaveFailedException;
+use App\Exception\ValidationException;
 use App\Responder\SaveResponder;
 use Psr\Log\LoggerInterface;
 use Slim\Http\Request;
@@ -33,9 +34,9 @@ class SaveAction
             return $this->responder->saved($response, '/');
         } catch (CsrfException $e) {
             return $this->responder->csrfInvalid($response);
-        } catch (\UnexpectedValueException $e) {
+        } catch (NotAllowedException $e) {
             return $this->responder->invalid($response, '/');
-        } catch (\OutOfBoundsException $e) {
+        } catch (ValidationException $e) {
             return $this->responder->invalid($response, '/');
         } catch (SaveFailedException $e) {
             $this->logger->error($e->getMessage(), ['exception' => $e]);
