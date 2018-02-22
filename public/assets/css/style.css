@@ -226,6 +226,22 @@ input.button--small {
     .thread .cell--scroll::-webkit-scrollbar {
         display: none;
     }
+
+    .cell__title {
+        display: inline-block;
+        max-width: 10rem;
+        overflow-x: scroll;
+    }
+
+    .cell__title::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 374px) {
+    .thread .cell {
+        max-width: 24rem;
+    }
 }
 
 .comment {

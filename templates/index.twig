@@ -60,7 +60,7 @@
                 {% for thread in threads %}
                     <tr>
                         <td class="cell cell--scroll">
-                            <a href="{{ path_for('thread', {}, {'thread_id': thread.thread_id}) }}">
+                            <a href="{{ path_for('thread', {}, {'thread_id': thread.thread_id}) }}" class="cell__title">
                                 {% if thread.comment %}
                                     {{ thread.comment }}
                                 {% else %}
