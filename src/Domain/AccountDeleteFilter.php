@@ -6,6 +6,7 @@ namespace App\Domain;
 
 use App\Exception\CsrfException;
 use App\Exception\DeleteFailedException;
+use App\Exception\NotAllowedException;
 use App\Repository\UserService;
 use Slim\Http\Request;
 
@@ -21,7 +22,7 @@ class AccountDeleteFilter
     /**
      * @param Request $request
      * @throws CsrfException
-     * @throws \OutOfBoundsException
+     * @throws NotAllowedException
      * @throws \App\Exception\DeleteFailedException
      */
     public function delete(Request $request): void
@@ -35,7 +36,7 @@ class AccountDeleteFilter
 
         $loggedIn = $attributes['isLoggedIn'] ?? false;
         if ($loggedIn == false) {
-            throw new \OutOfBoundsException();
+            throw new NotAllowedException();
         }
 
         $user_id = $attributes['userId'] ?? 0;

@@ -5,6 +5,7 @@ namespace App\Domain;
 
 
 use App\Exception\CsrfException;
+use App\Exception\NotAllowedException;
 use App\Model\Comment;
 use App\Repository\CommentService;
 use App\Service\AuthService;
@@ -24,6 +25,7 @@ class SaveFilter
     /**
      * @param Request $request
      * @throws CsrfException
+     * @throws NotAllowedException
      * @throws \App\Exception\SaveFailedException
      */
     public function save(Request $request): void
@@ -39,7 +41,7 @@ class SaveFilter
         $user_id = $data['user_id'] ?? 0;
         // 認証されたユーザと違うIDが送信された
         if (!$this->auth->equalUser((int)$user_id)) {
-            throw new \UnexpectedValueException();
+            throw new NotAllowedException();
         }
 
         // Validation

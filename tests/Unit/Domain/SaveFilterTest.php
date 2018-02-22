@@ -37,7 +37,7 @@ class SaveFilterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
+     * @expectedException \App\Exception\NotAllowedException
      */
     public function testAuthError()
     {

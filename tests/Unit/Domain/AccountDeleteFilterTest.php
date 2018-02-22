@@ -33,7 +33,7 @@ class AccountDeleteFilterTest extends TestCase
     }
 
     /**
-     * @expectedException \OutOfBoundsException
+     * @expectedException \App\Exception\NotAllowedException
      */
     public function testAuthError()
     {

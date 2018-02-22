@@ -6,6 +6,7 @@ namespace App\Action;
 use App\Domain\AccountDeleteFilter;
 use App\Exception\CsrfException;
 use App\Exception\DeleteFailedException;
+use App\Exception\NotAllowedException;
 use App\Responder\QuitedResponder;
 use App\Service\AuthService;
 use Psr\Http\Message\ResponseInterface;
@@ -34,7 +35,7 @@ class AccountDeleteAction
         } catch (CsrfException $e) {
             return $this->responder->redirect($response);
 
-        } catch (\OutOfBoundsException $e) {
+        } catch (NotAllowedException $e) {
             return $this->responder->redirect($response);
 
         } catch (DeleteFailedException $e) {
