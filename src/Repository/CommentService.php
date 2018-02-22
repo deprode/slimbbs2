@@ -174,9 +174,27 @@ SAVE;
             ':created_at' => ['value' => date_create()->format('Y-m-d H:i:s'), 'type' => \PDO::PARAM_STR],
         ];
 
+        $increment_count = <<<THREAD_UPDATE
+UPDATE
+  `threads` 
+SET
+  `threads`.`count` = `threads`.`count`+1
+WHERE
+  `threads`.`thread_id` = :thread_id;
+THREAD_UPDATE;
+
+        $thread_update_values = [
+            ':thread_id' => ['value' => $comment->thread_id, 'type' => \PDO::PARAM_INT],
+        ];
+
         try {
-            return $this->db->execute($sql, $values);
+            $this->db->beginTransaction();
+            $saved = $this->db->execute($sql, $values);
+            $this->db->execute($increment_count, $thread_update_values);
+            $this->db->commit();
+            return $saved;
         } catch (\PDOException $e) {
+            $this->db->rollback();
             throw new SaveFailedException();
         }
     }

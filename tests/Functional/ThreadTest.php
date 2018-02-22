@@ -78,6 +78,9 @@ class ThreadTest extends BaseTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('comment_test', (string)$response->getBody());
         $this->assertContains('コメントを保存しました。', (string)$response->getBody());
+
+        $response = $this->runApp('GET', '/');
+        $this->assertContains('data-title="コメント数">2', (string)$response->getBody());
     }
 
     public function testソート順の記憶()
