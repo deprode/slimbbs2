@@ -32,13 +32,13 @@ class CommentSaveFilterTest extends TestCase
      */
     public function testCsrfError()
     {
-        $this->request = $this->createMock(Request::class);
-        $this->request->method('getAttributes')->willReturn([
+        $request = $this->createMock(Request::class);
+        $request->method('getAttributes')->willReturn([
             'csrf_status' => "bad_request",
         ]);
 
         $this->filter = new CommentSaveFilter($this->storage, $this->comment, $this->auth);
-        $this->filter->save($this->request);
+        $this->filter->save($request);
     }
 
     /**
@@ -46,13 +46,13 @@ class CommentSaveFilterTest extends TestCase
      */
     public function testAuthError()
     {
-        $this->request = $this->createMock(Request::class);
-        $this->request->method('getAttributes')->willReturn([
+        $request = $this->createMock(Request::class);
+        $request->method('getAttributes')->willReturn([
             'has_errors' => ["error"],
         ]);
 
         $this->filter = new CommentSaveFilter($this->storage, $this->comment, $this->auth);
-        $this->filter->save($this->request);
+        $this->filter->save($request);
     }
 
     /**
@@ -61,13 +61,13 @@ class CommentSaveFilterTest extends TestCase
     public function testUploadError()
     {
         $this->storage->method('upload')->willThrowException(new UploadFailedException());
-        $this->request = $this->createMock(Request::class);
-        $this->request->method('getUploadedFiles')->willReturn([
+        $request = $this->createMock(Request::class);
+        $request->method('getUploadedFiles')->willReturn([
             'picture' => new UploadedFile('file'),
         ]);
 
         $this->filter = new CommentSaveFilter($this->storage, $this->comment, $this->auth);
-        $this->filter->save($this->request);
+        $this->filter->save($request);
     }
 
     /**
@@ -76,23 +76,23 @@ class CommentSaveFilterTest extends TestCase
     public function testSaveError()
     {
         $this->comment->method('saveComment')->willThrowException(new SaveFailedException());
-        $this->request = $this->createMock(Request::class);
+        $request = $this->createMock(Request::class);
 
         $this->filter = new CommentSaveFilter($this->storage, $this->comment, $this->auth);
-        $this->filter->save($this->request);
+        $this->filter->save($request);
     }
 
     public function testSave()
     {
         $this->auth->method('getUserId')->willReturn(1);
-        $this->request = $this->createMock(Request::class);
-        $this->request->method('getParsedBody')->willReturn([
+        $request = $this->createMock(Request::class);
+        $request->method('getParsedBody')->willReturn([
             'thread_id' => 1,
             'user_id'   => 1,
             'comment'   => 'Comment',
         ]);
 
         $this->filter = new CommentSaveFilter($this->storage, $this->comment, $this->auth);
-        $this->filter->save($this->request);
+        $this->filter->save($request);
     }
 }

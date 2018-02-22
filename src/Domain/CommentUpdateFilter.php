@@ -35,9 +35,9 @@ class CommentUpdateFilter
         }
 
         $params = $request->getParsedBody();
-        $thread_id = $params['thread_id'];
-        $comment_id = $params['comment_id'];
-        $comment = $params['comment'];
+        $thread_id = $params['thread_id'] ?? 0;
+        $comment_id = $params['comment_id'] ?? 0;
+        $comment = $params['comment'] ?? null;
 
         $this->comment->updateComment($thread_id, $comment_id, $comment);
     }
