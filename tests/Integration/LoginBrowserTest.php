@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Functional;
+namespace Tests\Integration;
 
 use Dotenv\Dotenv;
 use Facebook\WebDriver\Chrome\ChromeOptions;
