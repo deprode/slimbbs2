@@ -4,6 +4,7 @@ namespace Tests\Integration;
 
 use Dotenv\Dotenv;
 use Facebook\WebDriver\Chrome\ChromeOptions;
+use Facebook\WebDriver\Exception\TimeOutException;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
@@ -46,7 +47,7 @@ class MessageTest extends TestCase
             exit(1);
         }
 
-        $host = 'http://localhost:4444/wd/hub';
+        $host = 'http://127.0.0.1:4444/wd/hub';
         $capabilities = DesiredCapabilities::chrome();
         $options = new ChromeOptions();
         $options->addArguments(['--headless']);
@@ -58,7 +59,15 @@ class MessageTest extends TestCase
 
     public function testSuccessMessage()
     {
-        $this->driver->get('http://localhost:8080/');
+        $this->driver->get('http://127.0.0.1:8080/');
+        try {
+            $this->driver->wait(30)->until(
+                WebDriverExpectedCondition::titleContains('Toppage')
+            );
+        } catch (TimeOutException $e) {
+            return;
+        }
+
         $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div[1]/form/label/textarea'))
             ->sendKeys('スレッド作成');
         $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div[1]/form/input[4]'))->click();
@@ -74,7 +83,11 @@ class MessageTest extends TestCase
 
     public function testErrorMessage()
     {
-        $this->driver->get('http://localhost:8080/');
+        $this->driver->get('http://127.0.0.1:8080/');
+        $this->driver->wait(5)->until(
+            WebDriverExpectedCondition::titleContains('Toppage')
+        );
+
         $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div[1]/form/input[4]'))->click();
 
         $this->driver->wait()->until(

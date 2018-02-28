@@ -5,6 +5,7 @@ namespace Tests\Integration;
 
 use Dotenv\Dotenv;
 use Facebook\WebDriver\Chrome\ChromeOptions;
+use Facebook\WebDriver\Exception\TimeOutException;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
@@ -46,7 +47,7 @@ class CommentTest extends TestCase
             exit(1);
         }
 
-        $host = 'http://localhost:4444/wd/hub';
+        $host = 'http://127.0.0.1:4444/wd/hub';
         $capabilities = DesiredCapabilities::chrome();
         $options = new ChromeOptions();
         $options->addArguments(['--headless']);
@@ -58,7 +59,7 @@ class CommentTest extends TestCase
 
     private function login()
     {
-        $this->driver->get('http://localhost:8080/');
+        $this->driver->get('http://127.0.0.1:8080/');
         $this->driver->findElement(WebDriverBy::xpath('/html/body/div/header/nav/article[2]/a'))->click();
 
         $this->driver->wait()->until(
@@ -105,9 +106,13 @@ class CommentTest extends TestCase
 
     public function testCommentEdit()
     {
-        $this->login();
-        $this->makeThread();
-        $this->moveThread();
+        try {
+            $this->login();
+            $this->makeThread();
+            $this->moveThread();
+        } catch (TimeOutException $e) {
+            return;
+        }
 
         $element = $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div[2]/article/section/footer/button'));
         $this->driver->executeScript('arguments[0].scrollIntoView(true);', [$element]);
@@ -131,9 +136,13 @@ class CommentTest extends TestCase
 
     public function testAddLike()
     {
-        $this->login();
-        $this->makeThread();
-        $this->moveThread();
+        try {
+            $this->login();
+            $this->makeThread();
+            $this->moveThread();
+        } catch (TimeOutException $e) {
+            return;
+        }
 
         $element = $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div[2]/article/section/footer/div[2]/form/input[3]'));
         $this->driver->executeScript('arguments[0].scrollIntoView(true);', [$element]);
