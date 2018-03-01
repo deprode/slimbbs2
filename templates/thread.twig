@@ -69,7 +69,11 @@
                                 {{ comment.created_at }}
                             </div>
                         </header>
-                        <main class="comment__main">
+                        <main class="comment__main" v-cloak>
+                            <div v-show="has_error"
+                                 class="message message--error content content--thin">
+                                ${error_msg}
+                            </div>
                             <div id="{{ comment.comment_id }}" v-show="!editing"
                                  v-html="comment.replace(/\n/g,'<br/>')">
                             </div>

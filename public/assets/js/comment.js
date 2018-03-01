@@ -15,7 +15,8 @@ Array.from(comments).forEach((comment) => {
             pre_comment: comment_str,
             like_form_id: like_form ? like_form.id : '',
             count: like_form ? document.getElementById(like_form.id).dataset.like : 0,
-            unsent: false
+            unsent: false,
+            error_msg: ''
         },
         computed: {
             editing: function () {
@@ -23,6 +24,9 @@ Array.from(comments).forEach((comment) => {
             },
             soudane: function () {
                 return 'そうだね ×' + this.count;
+            },
+            has_error: function () {
+                return this.error_msg !== '';
             }
         },
         methods: {
@@ -34,10 +38,12 @@ Array.from(comments).forEach((comment) => {
                 event.preventDefault();
                 this.edit = false;
                 this.comment = this.pre_comment;
+                this.error_msg = '';
             },
             editEnd: function (event) {
                 event.preventDefault();
                 this.edit = false;
+                this.error_msg = '';
 
                 const form = document.getElementById(event.target.id).parentElement;
 
@@ -50,11 +56,12 @@ Array.from(comments).forEach((comment) => {
                         if (!response.ok) {
                             throw Error(response.statusText);
                         }
+                        this.error_msg = '';
                     })
                     .catch((e) => {
-                        console.error(e);
                         this.edit = true;
                         this.comment = this.pre_comment;
+                        this.error_msg = '保存できませんでした。';
                     });
 
                 this.pre_comment = this.comment;
@@ -67,6 +74,7 @@ Array.from(comments).forEach((comment) => {
                 }
                 const form = new FormData(document.getElementById(this.like_form_id));
                 this.plus1(form);
+                this.error_msg = '';
             },
             plus1: function (form) {
                 const _this = this;
@@ -84,7 +92,7 @@ Array.from(comments).forEach((comment) => {
                         }
                     )
                     .catch((e) => {
-                        console.error(e);
+                        this.error_msg = '「そうだね」できませんでした。';
                     });
             },
             updateCount: function () {

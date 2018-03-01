@@ -144,6 +144,10 @@ input.button--small {
     background: #fefefe;
 }
 
+.content--thin {
+    padding: 1rem;
+}
+
 .content form {
     margin-bottom: .5rem;
 }
@@ -365,4 +369,8 @@ input.button--small {
 
 .quit {
     margin-top: 2rem;
+}
+
+[v-cloak] {
+    display: none;
 }
