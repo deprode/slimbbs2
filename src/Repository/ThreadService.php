@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Collection\ThreadCollection;
 use App\Exception\FetchFailedException;
+use App\Model\Thread;
 use App\Service\DatabaseService;
 use App\Traits\TimeElapsed;
 
@@ -24,7 +26,12 @@ class ThreadService
         return isset($values[$key]) ? $values[$key] : $values['new'];
     }
 
-    public function getThreads($sort_key = 'new'): array
+    /**
+     * @param string $sort_key
+     * @return ThreadCollection
+     * @throws FetchFailedException
+     */
+    public function getThreads($sort_key = 'new'): ThreadCollection
     {
         $sort_value = $this->getSortValue($sort_key);
 
@@ -46,20 +53,9 @@ ORDER BY
 THREADS;
 
         try {
-            return $this->db->fetchAll($sql);
+            return new ThreadCollection($this->db->fetchAll($sql, [], Thread::class));
         } catch (\PDOException $e) {
             throw new FetchFailedException();
         }
-    }
-
-    public function convertTime(array $threads = []): array
-    {
-        for ($i = 0; $i < count($threads); $i++) {
-            if (isset($threads[$i]['updated_at'])) {
-                $threads[$i]['updated_at'] = $this->timeToString(new \DateTime($threads[$i]['updated_at']));
-            }
-        }
-
-        return $threads;
     }
 }

@@ -35,8 +35,7 @@ class HomeFilter
 
         // threads
         $data['sort'] = $param['sort'] ?? '';
-        $threads = $this->thread->getThreads($data['sort']);
-        $data['threads'] = $this->thread->convertTime($threads);
+        $data['threads'] = $this->thread->getThreads($data['sort']);
 
         // csrf
         $nameKey = $this->csrf->getTokenNameKey();

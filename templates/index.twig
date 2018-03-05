@@ -26,7 +26,7 @@
             <input type="submit" value="作成" class="button">
         </form>
     </div>
-    {% if threads %}
+    {% if threads is not empty %}
         <div class="search column">
             <h2 class="search__title">コメントを探す</h2>
             <form action="{{ path_for('search') }}" method="get" class="form--inline">
@@ -38,7 +38,7 @@
     {% endif %}
     <article class="threads">
         <h2>スレッド一覧</h2>
-        {% if threads %}
+        {% if threads is not empty %}
             <form action="{{ path_for('home') }}" method="get" class="form--inline">
                 <label for="sort" class="hidden">ソート順</label>
                 <select name="sort">
@@ -75,7 +75,7 @@
                                 匿名
                             {% endif %}
                         </td>
-                        <td class="cell cell--scroll" data-title="更新日">{{ thread.updated_at }}</td>
+                        <td class="cell cell--scroll" data-title="更新日">{{ thread.updatedAtStr }}</td>
                         <td class="cell" data-title="コメント数">{{ thread.count }}</td>
                     </tr>
                 {% endfor %}

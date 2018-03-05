@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Domain;
 
+use App\Collection\ThreadCollection;
 use App\Domain\HomeFilter;
 use App\Repository\ThreadService;
 use App\Service\MessageService;
@@ -19,20 +20,19 @@ class HomeFilterTest extends TestCase
     {
         parent::setUp();
 
-        $this->data = [
+        $this->data = new ThreadCollection([
             'thread_id'  => 1,
             'comment'    => 'aaaa',
             'created_at' => '2017-12-06 13:42:28',
             'updated_at' => '3日前',
-        ];
+        ]);
 
         $thread = $this->getMockBuilder(ThreadService::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getThreads', 'convertTime'])
+            ->setMethods(['getThreads'])
             ->getMock();
 
         $thread->method('getThreads')->willReturn($this->data);
-        $thread->method('convertTime')->willReturn($this->data);
 
 
         $message = $this->getMockBuilder(MessageService::class)
