@@ -16,9 +16,11 @@ class DatabaseService
     }
 
     /**
-     * @throws \PDOException
+     * @param string $sql
+     * @param array $params
+     * @return \PDOStatement
      */
-    private function prepare($sql = '', $params = []): \PDOStatement
+    private function prepare(string $sql = '', array $params = []): \PDOStatement
     {
         $prepare = $this->db->prepare($sql);
         foreach ($params as $key => $value) {
@@ -32,9 +34,12 @@ class DatabaseService
     }
 
     /**
-     * @throws \PDOException
+     * @param string $sql
+     * @param array $params
+     * @param string $class
+     * @return array
      */
-    public function fetchAll($sql = '', $params = [], $class = ''): array
+    public function fetchAll(string $sql = '', array $params = [], string $class = ''): array
     {
         $prepare = $this->prepare($sql, $params);
 
@@ -48,9 +53,11 @@ class DatabaseService
     }
 
     /**
-     * @throws \PDOException
+     * @param string $sql
+     * @param array $params
+     * @return int
      */
-    public function execute($sql = '', $params = []): int
+    public function execute(string $sql = '', array $params = []): int
     {
         $prepare = $this->prepare($sql, $params);
 
