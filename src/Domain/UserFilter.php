@@ -5,18 +5,21 @@ namespace App\Domain;
 
 use App\Repository\CommentService;
 use App\Repository\UserService;
+use App\Service\AuthService;
 use Slim\Http\Request;
 
 class UserFilter
 {
     private $user;
     private $comment;
+    private $auth;
     private $s3_settings;
 
-    public function __construct(UserService $user, CommentService $comment, array $s3_settings)
+    public function __construct(UserService $user, CommentService $comment, AuthService $auth, array $s3_settings)
     {
         $this->user = $user;
         $this->comment = $comment;
+        $this->auth = $auth;
         $this->s3_settings = $s3_settings;
     }
 
@@ -39,16 +42,14 @@ class UserFilter
 
         $data = [];
 
-        $user = $this->user->getUser($username);
-        $data['image_url'] = $user['user_image_url'] ?? '';
-        $data['id'] = $user['user_id'] ?? '';
-        $data['name'] = $user['user_name'] ?? '';   // ユーザーが指定したユーザーネーム
+        $data['user'] = $this->user->getUser($username);
 
-        $data['comments'] = $this->comment->getCommentsByUser($user['user_id']);
+        $user_id = $data['user']->user_id;
+        $data['comments'] = $this->comment->getCommentsByUser($user_id);
 
         $data['loggedIn'] = $attributes['isLoggedIn'] ?? '';
         $data['user_id'] = $attributes['userId'] ?? '';
-        $data['username'] = $attributes['username'] ?? '';  // sessionのユーザーネーム
+        $data['same_user'] = $this->auth->equalUser($user_id);
 
         // s3
         $data['region'] = $this->s3_settings['region'];

@@ -18,7 +18,7 @@ class UserService
         $this->db = $db;
     }
 
-    public function getUser(string $user_name): array
+    public function getUser(string $user_name): User
     {
         $sql = <<<SQL
 SELECT
@@ -34,7 +34,7 @@ SQL;
         ];
 
         try {
-            $data = $this->db->fetchAll($sql, $values);
+            $data = $this->db->fetchAll($sql, $values, User::class);
             if (count($data) !== 1) {
                 throw new \PDOException();
             }

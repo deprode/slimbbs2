@@ -2,9 +2,9 @@
 
 namespace Test\Unit;
 
-use App\Service\DatabaseService;
-use App\Repository\UserService;
 use App\Model\User;
+use App\Repository\UserService;
+use App\Service\DatabaseService;
 
 class UserServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,19 +25,18 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUser()
     {
-        $data = [
-            [
-                'user_id'        => '1',
-                'user_name'      => 'testuser',
-                'user_image_url' => 'http://via.placeholder.com/48x48',
-            ]
-        ];
+        $user_data = new User();
+        $user_data->user_id = '1';
+        $user_data->user_name = 'testuser';
+        $user_data->user_image_url = 'http://via.placeholder.com/48x48';
+        $data = [$user_data];
 
         $dbs = $this->createMock(DatabaseService::class);
         $dbs->expects($this->any())->method('fetchAll')->willReturn($data);
         $this->user = new UserService($dbs);
 
         $this->assertEquals($data[0], $this->user->getUser('user_name'));
+        $this->assertInstanceOf(User::class, $this->user->getUser('user_name'));
     }
 
     public function testConvertUser()

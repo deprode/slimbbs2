@@ -2,18 +2,18 @@
 
 {% block title %}User{% endblock %}
 {% block contents %}
-    {% if name %}
+    {% if user.user_name %}
         <div class="content profile">
-            <img src="{{ image_url }}" alt="{{ name }}" class="profile__icon">
-            <h2 class="profile__name">@{{ name }}</h2>
+            <img src="{{ user.user_image_url }}" alt="{{ user.user_name }}" class="profile__icon">
+            <h2 class="profile__name">@{{ user.user_name }}</h2>
             <p class="profile__links">
-                <a href="https://twitter.com/{{ name }}">Twitter</a>
+                <a href="https://twitter.com/{{ user.user_name }}">Twitter</a>
             </p>
         </div>
         <section>
             {% include "comments.twig" with { 'comments': comments, 'is_admin': is_admin } %}
         </section>
-        {% if name == username %}
+        {% if same_user %}
             <div class="content quit">
                 <a href="{{ path_for('quit') }}">退会する</a>
             </div>
