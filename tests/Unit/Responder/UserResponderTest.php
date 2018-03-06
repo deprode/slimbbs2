@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Responder;
 
-use App\Service\MessageService;
 use App\Responder\UserResponder;
+use App\Service\MessageService;
 use PHPUnit\Framework\TestCase;
 use Slim\Flash\Messages;
 use Slim\Http\Response;
@@ -60,7 +60,7 @@ class UserResponderTest extends TestCase
 
         $this->assertEquals(303, $response->getStatusCode());
         $this->assertEquals('/', $response->getHeader('Location')[0]);
-        $this->assertContains('コメントの取得に失敗しました。', $_SESSION['slimFlash']['Error'][0]);
-        $this->assertNotContains('コメントの取得に失敗しました。', (string)$response->getBody());
+        $this->assertContains('このユーザーは存在しません。', $_SESSION['slimFlash']['Error'][0]);
+        $this->assertNotContains('このユーザーは存在しません。', (string)$response->getBody());
     }
 }

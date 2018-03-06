@@ -30,7 +30,7 @@ class UserResponder
 
     public function fetchFailed(Response $response): ResponseInterface
     {
-        $this->message->setMessage($this->message::ERROR, 'CommentFetchFailed');
+        $this->message->setMessage($this->message::ERROR, 'UserFetchFailed');
 
         return $response->withRedirect('/', 303);
     }
