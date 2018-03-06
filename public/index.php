@@ -13,6 +13,9 @@ require __DIR__ . '/../vendor/autoload.php';
 
 session_name('SlimSession');
 session_start();
+if (!isset($_SESSION)) {
+    $_SESSION = [];
+}
 
 $env_file = __DIR__ . '/../.env';
 if (is_readable($env_file)) {
