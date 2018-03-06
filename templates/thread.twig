@@ -75,7 +75,7 @@
                                 ${error_msg}
                             </div>
                             <div id="{{ comment.comment_id }}" v-show="!editing"
-                                 v-html="comment.replace(/\n/g,'<br/>')">
+                                 v-html="comment_computed">
                             </div>
                             {% if comment.photo_url %}
                                 <div class="comment_main__photo">
@@ -154,6 +154,7 @@
     </div>
 {% endblock %}
 {% block javascript %}
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
     <script>
         const add_like_path = '' + '{{ path_for('add_like') }}';

@@ -4,6 +4,7 @@ let comments = document.querySelectorAll('section.js-comment');
 Array.from(comments).forEach((comment) => {
     const comment_str = document.getElementById(comment.id).dataset.comment;
     const like_form = document.getElementById(comment.id).querySelectorAll('form.js-like')[0];
+    const twitter_embed = `<blockquote class="twitter-tweet"><a href="$url"></a></blockquote>`;
 
     new Vue({
         delimiters: ['${', '}'],
@@ -27,9 +28,24 @@ Array.from(comments).forEach((comment) => {
             },
             has_error: function () {
                 return this.error_msg !== '';
+            },
+            comment_computed: function () {
+                const reg = /^https?:\/\/twitter.com\/(.*)\/(status|statuses)\/(\d+)$/;
+                let comments = this.comment.split('\n');
+                // twitter-linkを検出
+                const _this = this;
+                comments = comments.map(function (value) {
+                    if (reg.test(value)) {
+                        return twitter_embed.replace('$url', value);
+                    }
+                    return value;
+                });
+                // コメントを結合
+                return comments.join('<br/>');
             }
         },
         methods: {
+            // edit
             editStart: function () {
                 this.edit = true;
                 this.pre_comment = this.comment;
