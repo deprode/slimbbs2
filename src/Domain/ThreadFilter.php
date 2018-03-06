@@ -45,9 +45,7 @@ class ThreadFilter
         $data['sort'] = new Sort($params['sort'] ?? 'desc');
         $data['thread_id'] = $thread_id;
 
-        $data['comments'] = $this->comment->convertTime(
-            $this->comment->getComments((int)$thread_id, $data['sort'])
-        );
+        $data['comments'] = $this->comment->getComments((int)$thread_id, $data['sort']);
         if (empty($data['comments'])) {
             throw new \UnexpectedValueException();
         }

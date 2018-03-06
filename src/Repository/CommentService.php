@@ -6,6 +6,7 @@ use App\Exception\DeleteFailedException;
 use App\Exception\FetchFailedException;
 use App\Exception\SaveFailedException;
 use App\Model\Comment;
+use App\Model\CommentRead;
 use App\Model\Sort;
 use App\Service\DatabaseService;
 use App\Traits\TimeElapsed;
@@ -40,7 +41,7 @@ COMMENTS;
         try {
             return $this->db->fetchAll($sql, [
                 ':thread_id' => ['value' => $thread_id, 'type' => \PDO::PARAM_INT]
-            ]);
+            ], CommentRead::class);
         } catch (\PDOException $e) {
             throw new FetchFailedException();
         }
@@ -65,21 +66,10 @@ COMMENTS;
         try {
             return $this->db->fetchAll($sql, [
                 ':user_id' => ['value' => $user_id, 'type' => \PDO::PARAM_INT]
-            ]);
+            ], CommentRead::class);
         } catch (\PDOException $e) {
             throw new FetchFailedException();
         }
-    }
-
-    public function convertTime(array $comments = []): array
-    {
-        for ($i = 0; $i < count($comments); $i++) {
-            if (isset($comments[$i]['created_at'])) {
-                $comments[$i]['created_at'] = $this->timeToString(new \DateTime($comments[$i]['created_at']));
-            }
-        }
-
-        return $comments;
     }
 
     public function searchComments(string $query): array
@@ -96,7 +86,9 @@ WHERE
   `comment` LIKE :query;
 COMMENTS;
         try {
-            return $this->db->fetchAll($sql, [':query' => ['value' => '%' . $query . '%', 'type' => \PDO::PARAM_STR]]);
+            return $this->db->fetchAll($sql, [
+                ':query' => ['value' => '%' . $query . '%', 'type' => \PDO::PARAM_STR]
+            ], CommentRead::class);
         } catch (\PDOException $e) {
             throw new FetchFailedException();
         }

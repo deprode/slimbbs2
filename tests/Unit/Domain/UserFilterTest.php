@@ -35,7 +35,6 @@ class UserFilterTest extends TestCase
         ];
         $comment = $this->createMock(CommentService::class);
         $comment->method('getCommentsByUser')->willReturn($this->data);
-        $comment->method('convertTime')->willReturn($this->data);
         $setting = [
             'region' => 'aws_s3_region',
             'bucket' => 'aws_s3_bucket'

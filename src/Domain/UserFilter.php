@@ -44,7 +44,7 @@ class UserFilter
         $data['id'] = $user['user_id'] ?? '';
         $data['name'] = $user['user_name'] ?? '';   // ユーザーが指定したユーザーネーム
 
-        $data['comments'] = $this->comment->convertTime($this->comment->getCommentsByUser($user['user_id']));
+        $data['comments'] = $this->comment->getCommentsByUser($user['user_id']);
 
         $data['loggedIn'] = $attributes['isLoggedIn'] ?? '';
         $data['user_id'] = $attributes['userId'] ?? '';

@@ -36,7 +36,7 @@ class SearchFilter
 
         $data = [];
         $data['query'] = $query;
-        $data['comments'] = $this->comment->convertTime($this->comment->searchComments($query));
+        $data['comments'] = $this->comment->searchComments($query);
 
         $attributes = $request->getAttributes();
 

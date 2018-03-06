@@ -2,12 +2,14 @@
 
 namespace Test\Unit;
 
+use App\Model\Comment;
+use App\Model\CommentRead;
+use App\Model\Sort;
 use App\Repository\CommentService;
 use App\Service\DatabaseService;
-use App\Model\Comment;
-use App\Model\Sort;
+use PHPUnit\Framework\TestCase;
 
-class CommentServiceTest extends \PHPUnit_Framework_TestCase
+class CommentServiceTest extends TestCase
 {
     private $comment;
     private $error_comment;
@@ -17,17 +19,16 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->data = [
-            [
-                'comment_id'     => 1,
-                'user_id'        => 1,
-                'created_at'     => '2017-12-06 13:42:28',
-                'comment'        => 'sample comment test',
-                'photo_url'      => 'http://via.placeholder.com/32x32',
-                'user_name'      => 'testuser',
-                'user_image_url' => 'http://via.placeholder.com/48x48'
-            ]
-        ];
+        $comment_data = new CommentRead();
+        $comment_data->comment_id = 1;
+        $comment_data->user_id = 1;
+        $comment_data->created_at = '2017-12-06 13:42:28';
+        $comment_data->comment = 'sample comment test';
+        $comment_data->photo_url = 'http://via.placeholder.com/32x32';
+        $comment_data->user_name = 'testuser';
+        $comment_data->user_image_url = 'http://via.placeholder.com/48x48';
+
+        $this->data = [$comment_data];
 
         $dbs = $this->createMock(DatabaseService::class);
         $dbs->expects($this->any())->method('fetchAll')->willReturn($this->data);
@@ -60,28 +61,6 @@ class CommentServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->data, $comments);
 
         $this->error_comment->getCommentsByUser(1);
-    }
-
-    public function testConvertTime()
-    {
-        $this->comment = null;
-
-        $data = '3日前';
-
-        $this->comment = $this->getMockBuilder(CommentService::class)
-            ->setMethods(['timeToString'])
-            ->setConstructorArgs([$this->createMock(DatabaseService::class)])
-            ->getMock();
-
-        $this->comment->expects($this->any())->method('timeToString')->willReturn($data);
-
-        $comments = [
-            0 => ['created_at' => '2018-01-01 00:00:00']
-        ];
-
-        $result = $this->comment->convertTime($comments);
-
-        $this->assertEquals([0 => ['created_at' => '3日前']], $result);
     }
 
     /**

@@ -32,7 +32,7 @@ class SearchFilterTest extends TestCase
 
         $csrf = new Guard();
         $comment = $this->createMock(CommentService::class);
-        $comment->method('convertTime')->willReturn($this->comment_data);
+        $comment->method('searchComments')->willReturn($this->comment_data);
 
         $this->filter = new SearchFilter($csrf, $comment);
 
