@@ -104,7 +104,7 @@ $container['App\Action\LogoutAction'] = function ($c) {
 };
 
 $container['App\Action\SearchAction'] = function ($c) {
-    return new App\Action\SearchAction($c->get('logger'), $c->get('csrf'), $c->get('CommentService'), $c->get('SearchResponder'));
+    return new App\Action\SearchAction($c->get('logger'), $c->get('SearchFilter'), $c->get('SearchResponder'));
 };
 
 $container['App\Action\ThreadAction'] = function ($c) {
@@ -151,6 +151,10 @@ $container['SaveFilter'] = function ($c) {
 
 $container['LoginFilter'] = function ($c) {
     return new \App\Domain\LoginFilter($c->get('UserService'), $c->get('OAuthService'));
+};
+
+$container['SearchFilter'] = function ($c) {
+    return new \App\Domain\SearchFilter($c->get('csrf'), $c->get('CommentService'));
 };
 
 $container['ThreadFilter'] = function ($c) {
