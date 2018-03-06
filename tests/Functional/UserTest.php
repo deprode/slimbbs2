@@ -68,6 +68,30 @@ class UserTest extends BaseTestCase
         $this->assertContains('<section class="comment">', (string)$response->getBody());
     }
 
+    public function test画像の表示()
+    {
+        $_SESSION['user_id'] = getenv('USER_ID');
+        $_SESSION['user_name'] = 'testuser';
+        $_SESSION['admin_id'] = getenv('ADMIN_ID');
+
+        // 画像が表示されるか
+        $_FILES = [
+            'picture' => [
+                'name'     => 'dummy.png',
+                'type'     => 'image/png',
+                'tmp_name' => __DIR__ . '/../data/dummy.png',
+                'error'    => 0,
+                'size'     => 13188
+            ]
+        ];
+
+        $this->runApp('POST', '/thread', ['comment' => 'file_upload_test', 'thread_id' => "1", 'user_id' => (string)1]);
+        $response = $this->runApp('GET', '/user/testuser');
+
+        $this->assertContains('<img src="https://s3-ap-northeast-1.amazonaws.com/slimbbs2/', (string)$response->getBody());
+        $this->assertContains('alt="file_upload_test"', (string)$response->getBody());
+    }
+
     public function test匿名でユーザーページの表示()
     {
         $_SESSION = [];

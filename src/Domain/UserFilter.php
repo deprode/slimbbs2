@@ -11,11 +11,13 @@ class UserFilter
 {
     private $user;
     private $comment;
+    private $s3_settings;
 
-    public function __construct(UserService $user, CommentService $comment)
+    public function __construct(UserService $user, CommentService $comment, array $s3_settings)
     {
         $this->user = $user;
         $this->comment = $comment;
+        $this->s3_settings = $s3_settings;
     }
 
     /**
@@ -47,6 +49,10 @@ class UserFilter
         $data['loggedIn'] = $attributes['isLoggedIn'] ?? '';
         $data['user_id'] = $attributes['userId'] ?? '';
         $data['username'] = $attributes['username'] ?? '';  // sessionのユーザーネーム
+
+        // s3
+        $data['region'] = $this->s3_settings['region'];
+        $data['bucket'] = $this->s3_settings['bucket'];
 
         return $data;
     }

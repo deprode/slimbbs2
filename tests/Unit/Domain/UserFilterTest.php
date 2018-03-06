@@ -36,8 +36,12 @@ class UserFilterTest extends TestCase
         $comment = $this->createMock(CommentService::class);
         $comment->method('getCommentsByUser')->willReturn($this->data);
         $comment->method('convertTime')->willReturn($this->data);
+        $setting = [
+            'region' => 'aws_s3_region',
+            'bucket' => 'aws_s3_bucket'
+        ];
 
-        $this->filter = new UserFilter($user, $comment);
+        $this->filter = new UserFilter($user, $comment, $setting);
 
         $this->request = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
@@ -68,5 +72,8 @@ class UserFilterTest extends TestCase
         $this->assertEquals('1', $data['loggedIn']);
         $this->assertEquals('100', $data['user_id']);
         $this->assertEquals('test_user', $data['username']);
+
+        $this->assertEquals('aws_s3_region', $data['region']);
+        $this->assertEquals('aws_s3_bucket', $data['bucket']);
     }
 }

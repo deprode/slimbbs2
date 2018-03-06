@@ -186,7 +186,7 @@ $container['AccountDeleteFilter'] = function ($c) {
 };
 
 $container['UserFilter'] = function ($c) {
-    return new \App\Domain\UserFilter($c->get('UserService'), $c->get('CommentService'));
+    return new \App\Domain\UserFilter($c->get('UserService'), $c->get('CommentService'), $c->get('settings')['s3']);
 };
 
 // -----------------------------------------------------------------------------
