@@ -43,7 +43,7 @@
                     </form>
                 </div>
                 {% for comment in comments %}
-                    <section class="comment js-comment" id="js-form--{{ comment.comment_id }}"
+                    <section class="comment js-comment" id="c{{ comment.comment_id }}"
                              data-comment="{{- comment.comment | trim }}">
                         <header class="comment__header">
                             {% set isSigned = comment.user_name and comment.user_image_url %}
