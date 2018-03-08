@@ -16,19 +16,6 @@
             </ul>
         </div>
     {% endif %}
-    <div class="content">
-        <form action="{{ path_for('thread_save') }}" method="post" id="comment_form" enctype="multipart/form-data">
-            <label for="comment">コメント: <textarea name="comment"></textarea></label>
-            <label for="picture">画像: <input type="file" name="picture" id="picture"
-                                            accept="image/png, image/gif, image/jpeg"></label>
-            <input type="hidden" name="thread_id" value="{{ thread_id }}">
-            <input type="hidden" name="sort" value="{{ sort }}">
-            <input type="hidden" name="user_id" value="{{ user_id }}">
-            <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
-            <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
-            <input type="submit" value="コメントする" class="button">
-        </form>
-    </div>
     <div class="row">
         <article class="comments column">
             {% if comments %}
@@ -42,6 +29,17 @@
                         <input type="submit" value="並び順を変更" class="comments__sort__button">
                     </form>
                 </div>
+    {% if sort == 'desc' %}
+        {% include "comment_form.twig" with {
+            'thread_id': thread_id,
+            'sort': sort,
+            'user_id': user_id,
+            'nameKey': nameKey,
+            'name': name,
+            'valueKey': valueKey,
+            'value': value
+        } %}
+    {% endif %}
                 {% for comment in comments %}
                     <section class="comment js-comment" id="c{{ comment.comment_id }}"
                              data-comment="{{- comment.comment | trim }}">
@@ -152,6 +150,17 @@
             {% endif %}
         </article>
     </div>
+    {% if sort == 'asc' %}
+        {% include "comment_form.twig" with {
+            'thread_id': thread_id,
+            'sort': sort,
+            'user_id': user_id,
+            'nameKey': nameKey,
+            'name': name,
+            'valueKey': valueKey,
+            'value': value
+        } %}
+    {% endif %}
 {% endblock %}
 {% block javascript %}
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
