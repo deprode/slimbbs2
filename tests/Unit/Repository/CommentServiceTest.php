@@ -33,6 +33,7 @@ class CommentServiceTest extends TestCase
         $dbs = $this->createMock(DatabaseService::class);
         $dbs->expects($this->any())->method('fetchAll')->willReturn($this->data);
         $dbs->expects($this->any())->method('execute')->willReturn(1);
+        $dbs->expects($this->any())->method('lastInsertId')->willReturn(10);
         $this->comment = new CommentService($dbs);
 
         $dbs = $this->createMock(DatabaseService::class);
@@ -97,7 +98,7 @@ class CommentServiceTest extends TestCase
         $comment->user_id = 1;
         $comment->comment = 'aaaa';
         $comment->photo_url = 'https://examnple.com/picture';
-        $this->assertEquals(1, $this->comment->saveComment($comment));
+        $this->assertEquals(10, $this->comment->saveComment($comment));
 
         $this->error_comment->saveComment($comment);
     }

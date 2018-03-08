@@ -40,17 +40,11 @@ class CommentSaveAction
             $sort = new Sort('desc');
         }
 
-        if (isset($data['thread_id']) && intval($data['thread_id'])) {
-            $url = $request->getUri()->getPath();
-            $url .= (empty(intval($data['thread_id'])) ? '' : '?thread_id=' . intval($data['thread_id']));
-            $url .= ($sort->value() == 'desc') ? '' : '&sort=' . $sort->value();
-        } else {
-            $url = $request->getUri()->getPath();
-        }
-
         // save comment
+        $url = $request->getUri()->getPath();
         try {
-            $this->filter->save($request);
+            $comment_id = $this->filter->save($request);
+            $url = $this->filter->generateUrl($request->getUri()->getPath(), $sort, $data['thread_id'], $comment_id);
 
             return $this->responder->saveComment($response, $url);
         } catch (CsrfException $e) {

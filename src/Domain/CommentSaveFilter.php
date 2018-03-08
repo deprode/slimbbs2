@@ -7,6 +7,7 @@ namespace App\Domain;
 use App\Exception\CsrfException;
 use App\Exception\ValidationException;
 use App\Model\Comment;
+use App\Model\Sort;
 use App\Repository\CommentService;
 use App\Service\StorageService;
 use Slim\Http\Request;
@@ -24,12 +25,13 @@ class CommentSaveFilter
 
     /**
      * @param Request $request
+     * @return int
      * @throws CsrfException
      * @throws ValidationException
      * @throws \App\Exception\SaveFailedException
      * @throws \App\Exception\UploadFailedException
      */
-    public function save(Request $request): void
+    public function save(Request $request): int
     {
         $attributes = $request->getAttributes();
 
@@ -57,6 +59,20 @@ class CommentSaveFilter
         $comment->user_id = $attributes['userId'] ?? 0;
         $comment->comment = $data['comment'];
         $comment->photo_url = $filename ?? '';
-        $this->comment->saveComment($comment);
+        return $this->comment->saveComment($comment);
+    }
+
+    public function generateUrl(string $base_path, Sort $sort, int $thread_id = 0, int $comment_id = 0): string
+    {
+        if ($base_path && $thread_id && $comment_id) {
+            $url = $base_path;
+            $url .= '?thread_id=' . $thread_id;
+            $url .= ($sort->value() == 'desc') ? '' : '&sort=' . $sort->value();
+            $url .= '#c' . $comment_id;
+        } else {
+            $url = $base_path;
+        }
+
+        return $url;
     }
 }

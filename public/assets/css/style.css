@@ -248,6 +248,10 @@ input.button--small {
     }
 }
 
+.comment_form {
+    margin: 2rem 0;
+}
+
 .comment {
     padding: 1rem 1.5rem;
     border: 1px solid #e0e0e0;

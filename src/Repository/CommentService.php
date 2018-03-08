@@ -183,10 +183,11 @@ THREAD_UPDATE;
 
         try {
             $this->db->beginTransaction();
-            $saved = $this->db->execute($sql, $values);
+            $this->db->execute($sql, $values);
+            $comment_id = $this->db->lastInsertId('comment_id');
             $this->db->execute($increment_count, $thread_update_values);
             $this->db->commit();
-            return $saved;
+            return $comment_id;
         } catch (\PDOException $e) {
             $this->db->rollback();
             throw new SaveFailedException();
