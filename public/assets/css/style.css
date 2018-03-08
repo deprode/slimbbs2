@@ -258,6 +258,10 @@ input.button--small {
     background: #fefefe;
 }
 
+.comment_top {
+    margin-bottom: 3rem;
+}
+
 .comment__main {
     background: #ffffff;
     margin: 0.2rem 0 1.5rem 0;

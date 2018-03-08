@@ -29,6 +29,15 @@ class ThreadFilterTest extends TestCase
                 'photo_url'      => 'http://via.placeholder.com/32x32',
                 'user_name'      => 'testuser',
                 'user_image_url' => 'http://via.placeholder.com/48x48'
+            ],
+            [
+                'comment_id'     => 2,
+                'user_id'        => 10,
+                'created_at'     => '2017-12-10 15:40:59',
+                'comment'        => 'sample comment reply',
+                'photo_url'      => 'http://via.placeholder.com/32x32',
+                'user_name'      => 'sample_user',
+                'user_image_url' => 'http://via.placeholder.com/48x48'
             ]
         ]);
 
@@ -64,6 +73,33 @@ class ThreadFilterTest extends TestCase
                 'isAdmin'    => '1',
                 'userId'     => '100',
             ]);
+    }
+
+    public function testFilteringSort()
+    {
+        $request = $this->createMock(Request::class);
+        $request
+            ->expects($this->any())
+            ->method('getParams')
+            ->willReturn([
+                'thread_id' => '1',
+                'sort'      => 'asc'
+            ]);
+        $data = $this->filter->filtering($request);
+
+        $this->assertEquals(1, $data['comment_top']['comment_id']);
+
+        $request = $this->createMock(Request::class);
+        $request
+            ->expects($this->any())
+            ->method('getParams')
+            ->willReturn([
+                'thread_id' => '1',
+                'sort'      => 'desc'
+            ]);
+        $data = $this->filter->filtering($request);
+
+        $this->assertEquals(2, $data['comment_top']['comment_id']);
     }
 
     public function testFiltering()

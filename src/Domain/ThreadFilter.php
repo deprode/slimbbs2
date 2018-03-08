@@ -49,6 +49,11 @@ class ThreadFilter
         if (empty($data['comments'])) {
             throw new \UnexpectedValueException();
         }
+        if ($data['sort']->value() === Sort::OLDER) {
+            $data['comment_top'] = $data['comments'][count($data['comments']) - 1];
+        } else if ($data['sort']->value() === Sort::NEWER) {
+            $data['comment_top'] = $data['comments'][0];
+        }
 
         // csrf
         $nameKey = $this->csrf->getTokenNameKey();
