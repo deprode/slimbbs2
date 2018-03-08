@@ -108,6 +108,22 @@ class ThreadTest extends BaseTestCase
         $this->assertContains('<form action="/thread" method="post" id="comment_form" enctype="multipart/form-data">', (string)$response->getBody());
     }
 
+    public function testタイトルの切り詰め()
+    {
+        $comment = <<<COMMENT
+123456789
+12345678
+COMMENT;
+        $expect = <<<EXPECT
+123456789
+123456… - Slimbbs
+EXPECT;
+
+        $this->runApp('POST', '/', ['comment' => $comment, 'user_id' => '1']);
+
+        $response = $this->runApp('GET', '/thread?thread_id=2');
+        $this->assertContains($expect, (string)$response->getBody());
+    }
 
     public function test返信のValidationエラー()
     {

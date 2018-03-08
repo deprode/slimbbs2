@@ -1,6 +1,6 @@
 {% extends "base.twig" %}
 
-{% block title %}Thread{% endblock %}
+{% block title %}{{ comment_top.comment|length > 16 ? comment_top.comment|slice(0, 16) ~ '…' : comment_top.comment }}{% endblock %}
 {% block contents %}
     {% if info %}
         <div class="message content">
@@ -191,7 +191,8 @@
                                         <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
                                         <input type="hidden" name="thread_id" value="{{ thread_id }}">
                                         <input type="submit" :value="soudane"
-                                               class="button--small button--like" id="like-{{ comment.comment_id }}--submit"
+                                               class="button--small button--like"
+                                               id="like-{{ comment.comment_id }}--submit"
                                                @click="addLike"
                                                :disabled="unsent">
                                     </form>
