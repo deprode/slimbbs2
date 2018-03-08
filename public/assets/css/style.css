@@ -18,13 +18,18 @@ select:hover {
     background: none;
 }
 
-.button,
-button,
-input[type='button'],
-input[type='reset'],
 input[type='submit'] {
     background-color: darkgreen;
     border: 0.1rem solid darkgreen;
+}
+
+.button,
+button,
+input[type='button'],
+input[type='reset'] {
+    color: #606c76;
+    background-color: #fafafa;
+    border: 0.1rem solid #606c76;
 }
 
 .button:focus,
@@ -34,7 +39,13 @@ button:hover,
 input[type='button']:focus,
 input[type='button']:hover,
 input[type='reset']:focus,
-input[type='reset']:hover,
+input[type='reset']:hover {
+    background-color: #fafafa;
+    border-color: #2b9e2b;
+    color: #606c76;
+    outline: 0;
+}
+
 input[type='submit']:focus,
 input[type='submit']:hover {
     background-color: #606c76;
@@ -55,6 +66,7 @@ input[type='submit'][disabled]:focus,
 input[type='submit'][disabled]:hover {
     background-color: darkgreen;
     border: 0.1rem solid darkgreen;
+    color: #fff;
 }
 
 input[type='email']:focus,
@@ -114,11 +126,40 @@ select:focus {
 
 button.button--small,
 input.button--small {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: 400;
     height: 2.8rem;
     line-height: 2.6rem;
     padding: 0 1.5rem;
+}
+
+button.button--small:hover,
+input.button--small:hover {
+    font-weight: 800;
+}
+
+input.button--like {
+    color: #606c76;
+    background-color: #fafafa;
+    border: 0.1rem solid #606c76;
+}
+
+input.button--like:focus,
+input.button--like:hover {
+    background-color: #fafafa;
+    border-color: #2b9e2b;
+    color: #606c76;
+    outline: 0;
+}
+
+input.button--like[disabled],
+input.button--like[disabled]:hover,
+input.button--like[disabled]:focus {
+    background-color: #fafafa;
+    border-color: #2b9e2b;
+    color: #606c76;
+    font-weight: 400;
+    opacity: .8;
 }
 
 .container {
@@ -252,6 +293,10 @@ input.button--small {
     margin: 2rem 0;
 }
 
+.comment_form__comment {
+    font-weight: 400;
+}
+
 .comment {
     padding: 1rem 1.5rem;
     border: 1px solid #e0e0e0;
@@ -315,6 +360,15 @@ input.button--small {
 .comment_delete[type=submit] {
     background-color: #d9534f;
     border: 1px solid #d43f3a;
+    color: #fff;
+    font-weight: 400;
+}
+
+.comment_delete[type=submit]:hover {
+    background-color: #d9534f;
+    border: 1px solid #d43f3a;
+    color: #fff;
+    font-weight: 400;
 }
 
 .form--inline {
