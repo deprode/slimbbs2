@@ -68,9 +68,9 @@ class MessageTest extends TestCase
             return;
         }
 
-        $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div[1]/form/label/textarea'))
+        $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div/form/label/textarea'))
             ->sendKeys('スレッド作成');
-        $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div[1]/form/input[4]'))->click();
+        $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div/form/input[4]'))->click();
 
         $this->driver->wait()->until(
             WebDriverExpectedCondition::titleContains('Toppage')
@@ -88,7 +88,7 @@ class MessageTest extends TestCase
             WebDriverExpectedCondition::titleContains('Toppage')
         );
 
-        $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div[1]/form/input[4]'))->click();
+        $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div/form/input[4]'))->click();
 
         $this->driver->wait()->until(
             WebDriverExpectedCondition::titleContains('Toppage')
