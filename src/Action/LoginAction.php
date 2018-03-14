@@ -29,7 +29,11 @@ class LoginAction
     public function index(Request $request, Response $response)
     {
         $this->logger->info("Slimbbs '/login' route");
-        $url = $this->oauth->getLoginUrl($request->getUri()->getBaseUrl());
+
+        $scheme = $request->getUri()->getScheme() . '://';
+        $host = $request->getUri()->getHost();
+        $port = $request->getUri()->getPort() ? ':' . $request->getUri()->getPort() : '';
+        $url = $this->oauth->getLoginUrl($scheme . $host . $port . '/');
 
         return $response->withRedirect($url, 303);
     }
