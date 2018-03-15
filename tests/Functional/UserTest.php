@@ -29,6 +29,10 @@ class UserTest extends BaseTestCase
             $sql = 'INSERT INTO `users` (`user_id`, `user_name`, `user_image_url`, `access_token`, `access_secret`) VALUES (1, "testuser", "http://via.placeholder.com/48x48", "dummy_token", "dummy_secret")';
             $prepare = $db_connection->prepare($sql);
             $prepare->execute();
+            $admin_id = getenv('ADMIN_ID');
+            $sql = 'INSERT INTO `users` (`user_id`, `user_name`, `user_image_url`, `access_token`, `access_secret`) VALUES (' . $admin_id . ', "admin", "http://via.placeholder.com/48x48", "dummy_token", "dummy_secret")';
+            $prepare = $db_connection->prepare($sql);
+            $prepare->execute();
 
         } catch (\PDOException $e) {
             echo $e->getMessage();
@@ -67,6 +71,25 @@ class UserTest extends BaseTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('<section class="comment">', (string)$response->getBody());
         $this->assertContains('<a href="/thread?thread_id=1#c1">', (string)$response->getBody());
+    }
+
+    public function testコメントの表示件数制限()
+    {
+        $_SESSION['user_id'] = getenv('USER_ID');
+        $_SESSION['user_name'] = 'testuser';
+        $_SESSION['admin_id'] = getenv('ADMIN_ID');
+
+        $this->runApp('POST', '/', ['comment' => 'サンプル コメント テスト1', 'user_id' => '1']);
+        $this->runApp('POST', '/', ['comment' => 'サンプル コメント テスト2', 'user_id' => '1']);
+        $this->runApp('POST', '/', ['comment' => 'サンプル コメント テスト3', 'user_id' => '1']);
+
+        $_SESSION['user_id'] = getenv('ADMIN_ID');
+        $_SESSION['user_name'] = 'admin';
+        $response = $this->runApp('GET', '/user/testuser');
+
+        $this->assertContains('サンプル コメント テスト3', (string)$response->getBody());
+        $this->assertContains('サンプル コメント テスト2', (string)$response->getBody());
+        $this->assertNotContains('サンプル コメント テスト1', (string)$response->getBody());
     }
 
     public function test画像の表示()

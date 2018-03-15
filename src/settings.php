@@ -30,6 +30,8 @@ return [
 
         'admin_id' => getenv('ADMIN_ID'),
 
+        'comment_limit' => getenv('COMMENT_LIMIT'),
+
         's3' => [
             'key'    => getenv('AWS_S3_KEY'),
             'secret' => getenv('AWS_S3_SECRET'),

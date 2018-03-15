@@ -197,7 +197,7 @@ $container['DatabaseService'] = function ($c) {
 };
 
 $container['CommentService'] = function ($c) {
-    return new App\Repository\CommentService($c->get('DatabaseService'));
+    return new App\Repository\CommentService($c->get('DatabaseService'), $c->get('settings')['comment_limit']);
 };
 
 $container['ThreadService'] = function ($c) {

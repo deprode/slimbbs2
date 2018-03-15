@@ -16,10 +16,12 @@ class CommentService
     use TimeElapsed;
 
     private $db;
+    private $comment_limit;
 
-    public function __construct(DatabaseService $db)
+    public function __construct(DatabaseService $db, int $comment_limit)
     {
         $this->db = $db;
+        $this->comment_limit = $comment_limit;
     }
 
     public function getComments(int $thread_id = null, Sort $sort = null): array
@@ -47,7 +49,7 @@ COMMENTS;
         }
     }
 
-    public function getCommentsByUser(int $user_id): array
+    public function getCommentsByUser(int $user_id, bool $limit): array
     {
         $sql = <<<COMMENTS
 SELECT
@@ -63,10 +65,17 @@ ORDER BY
   `comments`.`comment_id` DESC
 COMMENTS;
 
+        $params = [
+            ':user_id' => ['value' => $user_id, 'type' => \PDO::PARAM_INT]
+        ];
+
+        if ($limit) {
+            $sql .= ' LIMIT :limit';
+            $params[':limit'] = ['value' => $this->comment_limit, 'type' => \PDO::PARAM_INT];
+        }
+
         try {
-            return $this->db->fetchAll($sql, [
-                ':user_id' => ['value' => $user_id, 'type' => \PDO::PARAM_INT]
-            ], CommentRead::class);
+            return $this->db->fetchAll($sql, $params, CommentRead::class);
         } catch (\PDOException $e) {
             throw new FetchFailedException();
         }

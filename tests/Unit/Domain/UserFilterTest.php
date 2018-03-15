@@ -80,4 +80,16 @@ class UserFilterTest extends TestCase
         $this->assertEquals('aws_s3_region', $data['region']);
         $this->assertEquals('aws_s3_bucket', $data['bucket']);
     }
+
+    public function testNeedsLimit()
+    {
+        $class = new \ReflectionClass(UserFilter::class);
+        $method = $class->getMethod('needsLimit');
+        $method->setAccessible(true);
+
+        $this->assertTrue($method->invokeArgs($this->filter, [false, false]));  // MEMO: この条件は事前にはじかれる
+        $this->assertTrue($method->invokeArgs($this->filter, [false, true]));
+        $this->assertTrue($method->invokeArgs($this->filter, [true, false]));
+        $this->assertFalse($method->invokeArgs($this->filter, [true, true]));
+    }
 }

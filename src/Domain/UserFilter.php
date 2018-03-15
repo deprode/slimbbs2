@@ -45,7 +45,9 @@ class UserFilter
         $data['user'] = $this->user->getUser($username);
 
         $user_id = $data['user']->user_id;
-        $data['comments'] = $this->comment->getCommentsByUser($user_id);
+
+        $limit = $this->needsLimit($this->auth->isLoggedIn(), $this->auth->equalUser($user_id));
+        $data['comments'] = $this->comment->getCommentsByUser($user_id, $limit);
 
         $data['loggedIn'] = $attributes['isLoggedIn'] ?? '';
         $data['user_id'] = $attributes['userId'] ?? '';
@@ -57,4 +59,16 @@ class UserFilter
 
         return $data;
     }
+
+    /**
+     * ログインしていてユーザー名が同じ場合以外は、表示数制限
+     * @param $is_logged_in
+     * @param $equal_user
+     * @return bool
+     */
+    protected function needsLimit($is_logged_in, $equal_user)
+    {
+        return !($is_logged_in && $equal_user);
+    }
+
 }
