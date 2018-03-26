@@ -5,6 +5,17 @@ volumes:
         driver: local
 
 services:
+    https-portal:
+      image: steveltn/https-portal:1
+      ports:
+        - '80:80'
+        - '443:443'
+      links:
+        - web
+      environment:
+        DOMAINS: 'localhost -> http://web'
+        STAGE: 'local'
+
     web:
         image: nginx:1.13.10-alpine
         ports:
