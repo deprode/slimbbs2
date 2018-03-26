@@ -11,16 +11,16 @@ if (PHP_SAPI == 'cli-server') {
 
 require __DIR__ . '/../vendor/autoload.php';
 
-session_name('SlimSession');
-session_start();
-if (!isset($_SESSION)) {
-    $_SESSION = [];
-}
-
 $env_file = __DIR__ . '/../.env';
 if (is_readable($env_file)) {
     $dot_env = new Dotenv\Dotenv(__DIR__ . '/../');
     $dot_env->load();
+}
+
+session_name('SlimSession');
+session_start();
+if (!isset($_SESSION)) {
+    $_SESSION = [];
 }
 
 // Instantiate the app
