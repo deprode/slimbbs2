@@ -5,19 +5,38 @@ volumes:
         driver: local
 
 services:
-    slim:
+    https-portal:
+      image: steveltn/https-portal:1
+      ports:
+        - '80:80'
+        - '443:443'
+      links:
+        - web
+      environment:
+        DOMAINS: 'localhost -> http://web'
+        STAGE: 'local'
+
+    web:
+        image: nginx:1.13.10-alpine
+        ports:
+          - "8080:80"
+        links:
+          - app
+        volumes:
+            - ./docker/web/default.conf:/etc/nginx/conf.d/default.conf
+            - logs:/var/www/logs
+            - .:/var/www/html
+
+    app:
         build: ./docker/php
-        working_dir: /var/www
-        command: php -S 0.0.0.0:8080 -t public public/index.php
+        env_file: .env
         environment:
             docker: "true"
-        ports:
-            - "8080:8080"
         volumes:
-            - .:/var/www
-            - logs:/var/www/logs
+            - .:/var/www/html
         links:
             - db
+
     db:
         image: mysql:5
         env_file: .env
