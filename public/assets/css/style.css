@@ -224,69 +224,30 @@ input.button--like[disabled]:focus {
     margin-bottom: 1rem;
 }
 
-.thread {
-    display: block;
-    margin: 2rem 0;
+.threads__ruler {
+    margin: 1.5rem 0;
 }
 
-.thread thead {
-    display: none;
+.threads__titles {
+    margin: 1rem 0;
 }
 
-.thread .cell:before {
-    content: attr(data-title) " ";
+.threads__titles__title {
+    font-size: 1.8rem;
 }
 
-.thread .cell {
-    display: block;
-    max-width: 30rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.threads__subtitles {
+    display: flex;
+    justify-content: space-between;
 }
 
-@media screen and (min-width: 425px) {
-    .thread {
-        display: table;
-        table-layout: fixed;
-    }
-
-    .thread thead {
-        display: table-header-group;
-    }
-
-    .thread .cell:before {
-        content: "";
-    }
-
-    .thread .cell {
-        display: table-cell;
-    }
-
-    .thread .cell--scroll {
-        overflow-x: scroll;
-        text-overflow: initial;
-    }
-
-    .thread .cell--scroll::-webkit-scrollbar {
-        display: none;
-    }
-
-    .cell__title {
-        display: inline-block;
-        max-width: 10rem;
-        overflow-x: scroll;
-    }
-
-    .cell__title::-webkit-scrollbar {
-        display: none;
-    }
+.threads__subtitles__username {
+    font-size: 1.5rem;
 }
 
-@media screen and (max-width: 374px) {
-    .thread .cell {
-        max-width: 24rem;
-    }
+.threads__subtitles__updated,
+.threads__subtitles__count {
+    font-size: 1.4rem;
 }
 
 .comment_form {

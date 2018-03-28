@@ -82,7 +82,7 @@ class ThreadTest extends BaseTestCase
         sleep(1);
 
         $response = $this->runApp('GET', '/');
-        $this->assertContains('data-title="コメント数">2', (string)$response->getBody());
+        $this->assertContains('2個のコメント', (string)$response->getBody());
         $this->assertContains('秒前', (string)$response->getBody());
     }
 

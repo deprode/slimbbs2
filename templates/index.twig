@@ -47,40 +47,40 @@
                 </select>
                 <input type="submit" value="並び順を変更" class="search__button">
             </form>
-            <table class="thread">
-                <thead>
-                <tr>
-                    <th>スレッド</th>
-                    <th>ユーザー</th>
-                    <th>更新日</th>
-                    <th>コメント数</th>
-                </tr>
-                </thead>
-                <tbody>
+            <div>
                 {% for thread in threads %}
-                    <tr>
-                        <td class="cell cell--scroll">
-                            <a href="{{ path_for('thread', {}, {'thread_id': thread.thread_id}) }}" class="cell__title">
-                                {% if thread.comment %}
-                                    {{ thread.comment }}
-                                {% else %}
-                                    [削除済み]
-                                {% endif %}
-                            </a>
-                        </td>
-                        <td class="cell" data-title="ユーザ">
+                    <hr class="threads__ruler">
+                    <div class="threads__subtitles">
+                        <div class="threads__subtitles__username">
                             {% if thread.user_name %}
-                                {{ thread.user_name }}
+                                by <a href="{{ path_for('user', {'name': thread.user_name}, {}) }}">
+                                @{{ thread.user_name }}
+                            </a>
                             {% else %}
                                 匿名
                             {% endif %}
-                        </td>
-                        <td class="cell cell--scroll" data-title="更新日">{{ thread.updatedAtStr }}</td>
-                        <td class="cell" data-title="コメント数">{{ thread.count }}</td>
-                    </tr>
+                        </div>
+                        <div class="threads__subtitles__updated">{{ thread.updatedAtStr }}に更新</div>
+                    </div>
+                    <div class="threads__titles">
+                        <a href="{{ path_for('thread', {}, {'thread_id': thread.thread_id}) }}"
+                           class="threads__titles__title">
+                            {% if thread.comment %}
+                                {{ thread.comment }}
+                            {% else %}
+                                [削除済み]
+                            {% endif %}
+                        </a>
+                    </div>
+                    <div class="threads__subtitles">
+                        <a class="threads__subtitles__count"
+                           href="{{ path_for('thread', {}, {'thread_id': thread.thread_id}) }}">
+                            {{ thread.count }}個のコメント
+                        </a>
+                    </div>
                 {% endfor %}
-                </tbody>
-            </table>
+                <hr>
+            </div>
         {% else %}
             <p>スレッドはまだありません。</p>
         {% endif %}

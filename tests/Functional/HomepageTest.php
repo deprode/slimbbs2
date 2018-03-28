@@ -87,8 +87,8 @@ class HomepageTest extends BaseTestCase
         $response = $this->runApp('GET', '/');
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('¥骶𠮷🍢', (string)$response->getBody());
-        $this->assertContains('<a href="/thread?thread_id=1"', (string)$response->getBody());
-        $this->assertContains('<td class="cell" data-title="コメント数">1</td>', (string)$response->getBody());
+        $this->assertContains('href="/thread?thread_id=1"', (string)$response->getBody());
+        $this->assertContains('1個のコメント', (string)$response->getBody());
         $this->assertContains('スレッドを作成しました。', (string)$response->getBody());
     }
 
