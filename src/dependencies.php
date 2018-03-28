@@ -96,7 +96,7 @@ $container['App\Action\SaveAction'] = function ($c) {
 };
 
 $container['App\Action\LoginAction'] = function ($c) {
-    return new App\Action\LoginAction($c->get('logger'), $c->get('OAuthService'), $c->get('LoginFilter'), $c->get('LoginResponder'));
+    return new App\Action\LoginAction($c->get('logger'), $c->get('OAuthService'), $c->get('session'), $c->get('LoginFilter'), $c->get('LoginResponder'));
 };
 
 $container['App\Action\LogoutAction'] = function ($c) {
