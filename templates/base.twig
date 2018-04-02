@@ -9,13 +9,13 @@
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
-    <div class="container">
-        {% include 'header.twig' %}
-        {% block contents %}
-        {% endblock %}
-        {% include 'footer.twig' %}
-    </div>
-{% block javascript %}
+<div class="container">
+    {% include 'header.twig' %}
+    {% block contents %}
+    {% endblock %}
+    {% include 'footer.twig' %}
+</div>
+{% block scripts %}
 {% endblock %}
 </body>
 </html>
