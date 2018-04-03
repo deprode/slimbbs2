@@ -223,12 +223,12 @@
         } %}
     {% endif %}
 {% endblock %}
-{% block javascript %}
+{% block scripts %}
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
     <script>
         const add_like_path = '' + '{{ path_for('add_like') }}';
         const update_path = '' + '{{ path_for('update_comment') }}';
     </script>
-    <script src="{{ base_url() }}/assets/js/comment.js"></script>
+    <script src="{{ base_url() }}/assets/js/bundle.js"></script>
 {% endblock %}
