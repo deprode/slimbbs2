@@ -1,10 +1,12 @@
 <?php
 // DIC configuration
 
+use Psr\Container\ContainerInterface;
+
 $container = $app->getContainer();
 
 // view renderer
-$container['view'] = function ($container) {
+$container['view'] = function (ContainerInterface $container) {
     $cache = (getenv('TWIG_CACHE') == "false") ? false : getenv('TWIG_CACHE');
 
     $settings = $container->get('settings')['renderer'];
@@ -20,7 +22,7 @@ $container['view'] = function ($container) {
 };
 
 // monolog
-$container['logger'] = function ($c) {
+$container['logger'] = function (ContainerInterface $c) {
     $settings = $c->get('settings')['logger'];
     $logger = new Monolog\Logger($settings['name']);
     $logger->pushProcessor(new Monolog\Processor\UidProcessor());
@@ -29,7 +31,7 @@ $container['logger'] = function ($c) {
 };
 
 // database
-$container['db'] = function ($c) {
+$container['db'] = function (ContainerInterface $c) {
     $db = $c['settings']['db'];
     $dns = $db['driver'] . ':host=' . $db['host'] . ';port=' . $db['port'] . ';dbname=' . $db['database'] . ';charset=utf8mb4;';
     try {
@@ -45,7 +47,7 @@ $container['db'] = function ($c) {
 };
 
 // csrf
-$container['csrf'] = function ($c) {
+$container['csrf'] = function () {
     $guard = new \Slim\Csrf\Guard();
     $guard->setFailureCallable(function (\Slim\Http\Request $request, \Slim\Http\Response $response, $next) {
         $request = $request->withAttribute("csrf_status", "bad_request");
@@ -55,15 +57,15 @@ $container['csrf'] = function ($c) {
 };
 
 // Validation
-$container['validate'] = function ($c) {
+$container['validate'] = function () {
     return new \Respect\Validation\Validator();
 };
 
-$container['twitter'] = function ($c) {
+$container['twitter'] = function () {
     return new Abraham\TwitterOAuth\TwitterOAuth(getenv('TWITTER_CONSUMER_KEY'), getenv('TWITTER_CONSUMER_SECRET'));
 };
 
-$container['session'] = function ($c) {
+$container['session'] = function () {
     return new \RKA\Session();
 };
 
@@ -72,7 +74,7 @@ $container['flash'] = function () {
     return new \Slim\Flash\Messages();
 };
 
-$container['s3'] = function ($c) {
+$container['s3'] = function (ContainerInterface $c) {
     $settings = $c->get('settings')['s3'];
     return new \Aws\S3\S3Client([
         'version'     => 'latest',
@@ -87,185 +89,185 @@ $container['s3'] = function ($c) {
 // -----------------------------------------------------------------------------
 // Action factories
 // -----------------------------------------------------------------------------
-$container['App\Action\HomeAction'] = function ($c) {
+$container['App\Action\HomeAction'] = function (ContainerInterface $c) {
     return new App\Action\HomeAction($c->get('logger'), $c->get('HomeFilter'), $c->get('HomeResponder'));
 };
 
-$container['App\Action\SaveAction'] = function ($c) {
+$container['App\Action\SaveAction'] = function (ContainerInterface $c) {
     return new App\Action\SaveAction($c->get('logger'), $c->get('SaveFilter'), $c->get('SaveResponder'));
 };
 
-$container['App\Action\LoginAction'] = function ($c) {
+$container['App\Action\LoginAction'] = function (ContainerInterface $c) {
     return new App\Action\LoginAction($c->get('logger'), $c->get('OAuthService'), $c->get('session'), $c->get('LoginFilter'), $c->get('LoginResponder'));
 };
 
-$container['App\Action\LogoutAction'] = function ($c) {
+$container['App\Action\LogoutAction'] = function (ContainerInterface $c) {
     return new App\Action\LogoutAction($c->get('logger'), $c->get('AuthService'));
 };
 
-$container['App\Action\SearchAction'] = function ($c) {
+$container['App\Action\SearchAction'] = function (ContainerInterface $c) {
     return new App\Action\SearchAction($c->get('logger'), $c->get('SearchFilter'), $c->get('SearchResponder'));
 };
 
-$container['App\Action\ThreadAction'] = function ($c) {
+$container['App\Action\ThreadAction'] = function (ContainerInterface $c) {
     return new App\Action\ThreadAction($c->get('logger'), $c->get('MessageService'), $c->get('ThreadFilter'), $c->get('ThreadResponder'));
 };
 
-$container['App\Action\CommentSaveAction'] = function ($c) {
+$container['App\Action\CommentSaveAction'] = function (ContainerInterface $c) {
     return new App\Action\CommentSaveAction($c->get('logger'), $c->get('CommentSaveFilter'), $c->get('SaveResponder'));
 };
 
-$container['App\Action\CommentUpdateAction'] = function ($c) {
+$container['App\Action\CommentUpdateAction'] = function (ContainerInterface $c) {
     return new App\Action\CommentUpdateAction($c->get('logger'), $c->get('CommentUpdateFilter'));
 };
 
-$container['App\Action\CommentDeleteAction'] = function ($c) {
+$container['App\Action\CommentDeleteAction'] = function (ContainerInterface $c) {
     return new App\Action\CommentDeleteAction($c->get('logger'), $c->get('CommentDeleteFilter'), $c->get('DeleteResponder'));
 };
 
-$container['App\Action\LikeAction'] = function ($c) {
+$container['App\Action\LikeAction'] = function (ContainerInterface $c) {
     return new App\Action\LikeAction($c->get('logger'), $c->get('LikeFilter'));
 };
 
-$container['App\Action\QuitAction'] = function ($c) {
+$container['App\Action\QuitAction'] = function (ContainerInterface $c) {
     return new App\Action\QuitAction($c->get('QuitFilter'), $c->get('QuitResponder'));
 };
 
-$container['App\Action\AccountDeleteAction'] = function ($c) {
+$container['App\Action\AccountDeleteAction'] = function (ContainerInterface $c) {
     return new App\Action\AccountDeleteAction($c->get('AccountDeleteFilter'), $c->get('AuthService'), $c->get('QuitedResponder'));
 };
 
-$container['App\Action\UserAction'] = function ($c) {
+$container['App\Action\UserAction'] = function (ContainerInterface $c) {
     return new App\Action\UserAction($c->get('UserFilter'), $c->get('UserResponder'));
 };
 // -----------------------------------------------------------------------------
 // Domain factories
 // -----------------------------------------------------------------------------
-$container['HomeFilter'] = function ($c) {
+$container['HomeFilter'] = function (ContainerInterface $c) {
     return new App\Domain\HomeFilter($c->get('ThreadService'), $c->get('MessageService'), $c->get('csrf'));
 };
 
-$container['SaveFilter'] = function ($c) {
+$container['SaveFilter'] = function (ContainerInterface $c) {
     return new \App\Domain\SaveFilter($c->get('AuthService'), $c->get('CommentService'));
 };
 
-$container['LoginFilter'] = function ($c) {
+$container['LoginFilter'] = function (ContainerInterface $c) {
     return new \App\Domain\LoginFilter($c->get('UserService'), $c->get('OAuthService'));
 };
 
-$container['SearchFilter'] = function ($c) {
+$container['SearchFilter'] = function (ContainerInterface $c) {
     return new \App\Domain\SearchFilter($c->get('csrf'), $c->get('CommentService'));
 };
 
-$container['ThreadFilter'] = function ($c) {
+$container['ThreadFilter'] = function (ContainerInterface $c) {
     return new \App\Domain\ThreadFilter($c->get('csrf'), $c->get('CommentService'), $c->get('MessageService'), $c->get('settings')['s3']);
 };
 
-$container['CommentSaveFilter'] = function ($c) {
+$container['CommentSaveFilter'] = function (ContainerInterface $c) {
     return new \App\Domain\CommentSaveFilter($c->get('StorageService'), $c->get('CommentService'));
 };
 
-$container['CommentUpdateFilter'] = function ($c) {
+$container['CommentUpdateFilter'] = function (ContainerInterface $c) {
     return new \App\Domain\CommentUpdateFilter($c->get('CommentService'));
 };
 
-$container['CommentDeleteFilter'] = function ($c) {
+$container['CommentDeleteFilter'] = function (ContainerInterface $c) {
     return new \App\Domain\CommentDeleteFilter($c->get('CommentService'));
 };
 
-$container['LikeFilter'] = function ($c) {
+$container['LikeFilter'] = function (ContainerInterface $c) {
     return new \App\Domain\LikeFilter($c->get('CommentService'));
 };
 
-$container['QuitFilter'] = function ($c) {
+$container['QuitFilter'] = function (ContainerInterface $c) {
     return new \App\Domain\QuitFilter($c->get('MessageService'), $c->get('csrf'));
 };
 
-$container['AccountDeleteFilter'] = function ($c) {
+$container['AccountDeleteFilter'] = function (ContainerInterface $c) {
     return new \App\Domain\AccountDeleteFilter($c->get('UserService'));
 };
 
-$container['UserFilter'] = function ($c) {
+$container['UserFilter'] = function (ContainerInterface $c) {
     return new \App\Domain\UserFilter($c->get('UserService'), $c->get('CommentService'), $c->get('AuthService'), $c->get('settings')['s3']);
 };
 
 // -----------------------------------------------------------------------------
 // Service(&Repositories) factories
 // -----------------------------------------------------------------------------
-$container['DatabaseService'] = function ($c) {
+$container['DatabaseService'] = function (ContainerInterface $c) {
     return new App\Service\DatabaseService($c->get('db'));
 };
 
-$container['CommentService'] = function ($c) {
+$container['CommentService'] = function (ContainerInterface $c) {
     return new App\Repository\CommentService($c->get('DatabaseService'), $c->get('settings')['comment_limit']);
 };
 
-$container['ThreadService'] = function ($c) {
+$container['ThreadService'] = function (ContainerInterface $c) {
     return new App\Repository\ThreadService($c->get('DatabaseService'));
 };
 
-$container['UserService'] = function ($c) {
+$container['UserService'] = function (ContainerInterface $c) {
     return new App\Repository\UserService($c->get('DatabaseService'));
 };
 
-$container['AuthService'] = function ($c) {
+$container['AuthService'] = function (ContainerInterface $c) {
     return new App\Service\AuthService($c->get('session'), $c->get('settings')['admin_id']);
 };
 
-$container['OAuthService'] = function ($c) {
+$container['OAuthService'] = function (ContainerInterface $c) {
     return new App\Service\OAuthService($c->get('twitter'), $c->get('AuthService'), $c->get('router')->pathFor('callback'));
 };
 
-$container['MessageService'] = function ($c) {
+$container['MessageService'] = function (ContainerInterface $c) {
     return new App\Service\MessageService($c->get('flash'));
 };
 
-$container['StorageService'] = function ($c) {
+$container['StorageService'] = function (ContainerInterface $c) {
     return new App\Service\StorageService($c->get('s3'), $c->get('settings')['s3']['bucket']);
 };
 // -----------------------------------------------------------------------------
 // Responder factories
 // -----------------------------------------------------------------------------
-$container['HomeResponder'] = function ($c) {
+$container['HomeResponder'] = function (ContainerInterface $c) {
     return new App\Responder\HomeResponder($c->get('view'));
 };
 
-$container['SaveResponder'] = function ($c) {
+$container['SaveResponder'] = function (ContainerInterface $c) {
     return new App\Responder\SaveResponder($c->get('MessageService'));
 };
 
-$container['LoginResponder'] = function ($c) {
+$container['LoginResponder'] = function (ContainerInterface $c) {
     return new App\Responder\LoginResponder($c->get('MessageService'));
 };
 
-$container['ThreadResponder'] = function ($c) {
+$container['ThreadResponder'] = function (ContainerInterface $c) {
     return new App\Responder\ThreadResponder($c->get('view'), $c->get('MessageService'));
 };
 
-$container['DeleteResponder'] = function ($c) {
+$container['DeleteResponder'] = function (ContainerInterface $c) {
     return new App\Responder\DeleteResponder($c->get('MessageService'));
 };
 
-$container['SearchResponder'] = function ($c) {
+$container['SearchResponder'] = function (ContainerInterface $c) {
     return new App\Responder\SearchResponder($c->get('view'), $c->get('MessageService'));
 };
 
-$container['QuitResponder'] = function ($c) {
+$container['QuitResponder'] = function (ContainerInterface $c) {
     return new App\Responder\QuitResponder($c->get('view'));
 };
 
-$container['QuitedResponder'] = function ($c) {
+$container['QuitedResponder'] = function (ContainerInterface $c) {
     return new App\Responder\QuitedResponder($c->get('view'), $c->get('MessageService'));
 };
 
-$container['UserResponder'] = function ($c) {
+$container['UserResponder'] = function (ContainerInterface $c) {
     return new App\Responder\UserResponder($c->get('view'), $c->get('MessageService'));
 };
 // -----------------------------------------------------------------------------
 // Validation factories
 // -----------------------------------------------------------------------------
 
-$container['App\Validation\Translator'] = function ($c) {
+$container['App\Validation\Translator'] = function () {
     return $translator = function ($message) {
         $messages = [
             'These rules must pass for {{name}}'                                => '{{name}}で守られていないルールがあります',
@@ -290,7 +292,7 @@ $container['App\Validation\Translator'] = function ($c) {
     };
 };
 
-$container['App\Validation\SearchValidation'] = function ($c) {
+$container['App\Validation\SearchValidation'] = function (ContainerInterface $c) {
     $translator = $c->get('App\Validation\Translator');
     $searchValidators = [
         'query' => \Respect\Validation\Validator::stringType()->setName('検索ワード'),
@@ -298,7 +300,7 @@ $container['App\Validation\SearchValidation'] = function ($c) {
     return new \DavidePastore\Slim\Validation\Validation($searchValidators, $translator);
 };
 
-$container['App\Validation\SaveValidation'] = function ($c) {
+$container['App\Validation\SaveValidation'] = function (ContainerInterface $c) {
     $translator = $c->get('App\Validation\Translator');
     $saveValidators = [
         'user_id' => \Respect\Validation\Validator::intVal()->digit()->setName('ユーザーID'),
@@ -307,7 +309,7 @@ $container['App\Validation\SaveValidation'] = function ($c) {
     return new \DavidePastore\Slim\Validation\Validation($saveValidators, $translator);
 };
 
-$container['App\Validation\CommentSaveValidation'] = function ($c) {
+$container['App\Validation\CommentSaveValidation'] = function (ContainerInterface $c) {
     $translator = $c->get('App\Validation\Translator');
     $saveValidators = [
         'user_id'   => \Respect\Validation\Validator::intVal()->digit()->setName('ユーザーID'),
@@ -317,7 +319,7 @@ $container['App\Validation\CommentSaveValidation'] = function ($c) {
     return new \DavidePastore\Slim\Validation\Validation($saveValidators, $translator);
 };
 
-$container['App\Validation\CommentDeleteValidation'] = function ($c) {
+$container['App\Validation\CommentDeleteValidation'] = function (ContainerInterface $c) {
     $translator = $c->get('App\Validation\Translator');
     $deleteValidators = [
         'thread_id'  => \Respect\Validation\Validator::intVal()->digit()->notEmpty()->setName('スレッドID'),
@@ -326,7 +328,7 @@ $container['App\Validation\CommentDeleteValidation'] = function ($c) {
     return new \DavidePastore\Slim\Validation\Validation($deleteValidators, $translator);
 };
 
-$container['App\Validation\CommentLikeValidation'] = function ($c) {
+$container['App\Validation\CommentLikeValidation'] = function (ContainerInterface $c) {
     $translator = $c->get('App\Validation\Translator');
     $likeValidators = [
         'thread_id'  => \Respect\Validation\Validator::intVal()->digit()->notEmpty()->setName('スレッドID'),
@@ -335,7 +337,7 @@ $container['App\Validation\CommentLikeValidation'] = function ($c) {
     return new \DavidePastore\Slim\Validation\Validation($likeValidators, $translator);
 };
 
-$container['App\Validation\CommentUpdateValidation'] = function ($c) {
+$container['App\Validation\CommentUpdateValidation'] = function (ContainerInterface $c) {
     $translator = $c->get('App\Validation\Translator');
     $updateValidators = [
         'thread_id'  => \Respect\Validation\Validator::intVal()->digit()->notEmpty()->setName('スレッドID'),
