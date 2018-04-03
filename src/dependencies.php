@@ -208,7 +208,7 @@ $container['CommentService'] = function (ContainerInterface $c) {
 };
 
 $container['ThreadService'] = function (ContainerInterface $c) {
-    return new App\Repository\ThreadService($c->get('DatabaseService'));
+    return new App\Repository\ThreadService($c->get('DatabaseService'), $c->get('query'));
 };
 
 $container['UserService'] = function (ContainerInterface $c) {

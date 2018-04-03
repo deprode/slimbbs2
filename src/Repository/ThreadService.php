@@ -7,16 +7,19 @@ use App\Exception\FetchFailedException;
 use App\Model\Thread;
 use App\Service\DatabaseService;
 use App\Traits\TimeElapsed;
+use Aura\SqlQuery\QueryFactory;
 
 class ThreadService
 {
     use TimeElapsed;
 
     private $db;
+    private $query;
 
-    public function __construct(DatabaseService $db)
+    public function __construct(DatabaseService $db, QueryFactory $query)
     {
         $this->db = $db;
+        $this->query = $query;
     }
 
     public function getSortValue($key = 'new'): string
@@ -35,25 +38,16 @@ class ThreadService
     {
         $sort_value = $this->getSortValue($sort_key);
 
-        $sql = <<<THREADS
-SELECT
-  `threads`.`thread_id`, `comments`.`comment`, `users`.`user_name`, `threads`.`count`, `threads`.`updated_at`
-FROM
-  `threads`
-LEFT JOIN
-  `comments`
-  ON
-    `threads`.`comment_id` = `comments`.`comment_id`
-LEFT JOIN
-  `users`
-  ON
-    `users`.`user_id` = `comments`.`user_id`
-ORDER BY 
-  `threads`.`updated_at` $sort_value;
-THREADS;
+        $select = $this->query->newSelect();
+        $select
+            ->from('threads')
+            ->cols(['threads.thread_id', 'comments.comment', 'users.user_name', 'threads.count', 'threads.updated_at'])
+            ->join('left', 'comments', 'threads.comment_id = comments.comment_id')
+            ->join('left', 'users', 'users.user_id = comments.user_id')
+            ->orderBy(['updated_at ' . $sort_value]);
 
         try {
-            return new ThreadCollection($this->db->fetchAll($sql, [], Thread::class));
+            return new ThreadCollection($this->db->fetchAll($select->getStatement(), [], Thread::class));
         } catch (\PDOException $e) {
             throw new FetchFailedException();
         }
