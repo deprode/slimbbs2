@@ -5,7 +5,6 @@ namespace Test\Unit;
 use App\Collection\ThreadCollection;
 use App\Repository\ThreadService;
 use App\Service\DatabaseService;
-use Aura\SqlQuery\Common\Select;
 use Aura\SqlQuery\QueryFactory;
 
 class ThreadServiceTest extends \PHPUnit_Framework_TestCase
@@ -30,15 +29,7 @@ class ThreadServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetThreads()
     {
-        $select = $this->createMock(Select::class);
-        $select->expects($this->any())->method('from')->willReturnSelf();
-        $select->expects($this->any())->method('cols')->willReturnSelf();
-        $select->expects($this->any())->method('join')->willReturnSelf();
-        $select->expects($this->any())->method('orderBy')->willReturnSelf();
-        $select->expects($this->any())->method('getStatement')->willReturn('');
-
-        $query = $this->createMock(QueryFactory::class);
-        $query->expects($this->any())->method('newSelect')->willReturn($select);
+        $query = new QueryFactory('common');
 
         $dbs = $this->createMock(DatabaseService::class);
         $dbs->expects($this->any())->method('fetchAll')->willReturn($this->data);
@@ -57,7 +48,7 @@ class ThreadServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSortValue()
     {
-        $query = $this->createMock(QueryFactory::class);
+        $query = new QueryFactory('common');
         $dbs = $this->createMock(DatabaseService::class);
         $this->thread = new ThreadService($dbs, $query);
 
