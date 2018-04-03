@@ -5,6 +5,11 @@ namespace Test\Unit;
 use App\Model\User;
 use App\Repository\UserService;
 use App\Service\DatabaseService;
+use Aura\SqlQuery\Common\Delete;
+use Aura\SqlQuery\Common\Insert;
+use Aura\SqlQuery\Common\Select;
+use Aura\SqlQuery\Common\Update;
+use Aura\SqlQuery\QueryFactory;
 
 class UserServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,7 +38,17 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
 
         $dbs = $this->createMock(DatabaseService::class);
         $dbs->expects($this->any())->method('fetchAll')->willReturn($data);
-        $this->user = new UserService($dbs);
+
+        $select = $this->createMock(Select::class);
+        $select->expects($this->any())->method('from')->willReturnSelf();
+        $select->expects($this->any())->method('cols')->willReturnSelf();
+        $select->expects($this->any())->method('where')->willReturnSelf();
+        $select->expects($this->any())->method('getStatement')->willReturn('');
+
+        $query = $this->createMock(QueryFactory::class);
+        $query->expects($this->any())->method('newSelect')->willReturn($select);
+
+        $this->user = new UserService($dbs, $query);
 
         $this->assertEquals($data[0], $this->user->getUser('user_name'));
         $this->assertInstanceOf(User::class, $this->user->getUser('user_name'));
@@ -43,7 +58,9 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     {
         $dbs = $this->createMock(DatabaseService::class);
         $dbs->expects($this->any())->method('execute')->willReturn(1);
-        $this->user = new UserService($dbs);
+
+        $query = $this->createMock(QueryFactory::class);
+        $this->user = new UserService($dbs, $query);
 
         $user_info = [
             'id_str'                  => '1',
@@ -63,15 +80,37 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveUser()
     {
+        $select = $this->createMock(Select::class);
+        $select->expects($this->any())->method('from')->willReturnSelf();
+        $select->expects($this->any())->method('cols')->willReturnSelf();
+        $select->expects($this->any())->method('where')->willReturnSelf();
+        $select->expects($this->any())->method('getStatement')->willReturn('');
+
+        $insert = $this->createMock(Insert::class);
+        $insert->expects($this->any())->method('into')->willReturnSelf();
+        $insert->expects($this->any())->method('cols')->willReturnSelf();
+        $insert->expects($this->any())->method('getStatement')->willReturn('');
+
+        $update = $this->createMock(Update::class);
+        $update->expects($this->any())->method('table')->willReturnSelf();
+        $update->expects($this->any())->method('cols')->willReturnSelf();
+        $update->expects($this->any())->method('where')->willReturnSelf();
+        $update->expects($this->any())->method('getStatement')->willReturn('');
+
+        $query = $this->createMock(QueryFactory::class);
+        $query->expects($this->any())->method('newSelect')->willReturn($select);
+        $query->expects($this->any())->method('newInsert')->willReturn($insert);
+        $query->expects($this->any())->method('newUpdate')->willReturn($update);
+
         $dbs = $this->createMock(DatabaseService::class);
         $dbs->expects($this->any())->method('execute')->willReturn(1);
-        $this->user = new UserService($dbs);
+        $this->user = new UserService($dbs, $query);
 
-        $this->assertEquals(1, $this->user->saveUser($this->data));
+        $this->assertNull($this->user->saveUser($this->data));
 
         $error_dbs = $this->createMock(DatabaseService::class);
         $error_dbs->expects($this->any())->method('execute')->will($this->throwException(new \PDOException()));
-        $this->user = new UserService($error_dbs);
+        $this->user = new UserService($error_dbs, $query);
 
         $this->user->saveUser($this->data);
     }
@@ -81,19 +120,27 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteAccount()
     {
+        $delete = $this->createMock(Delete::class);
+        $delete->expects($this->any())->method('from')->willReturnSelf();
+        $delete->expects($this->any())->method('where')->willReturnSelf();
+        $delete->expects($this->any())->method('getStatement')->willReturn('');
+
+        $query = $this->createMock(QueryFactory::class);
+        $query->expects($this->any())->method('newDelete')->willReturn($delete);
+
         // 先に匿名をはじいているかテスト
-        $this->user = new UserService(new DatabaseService($this->createMock(\PDO::class)));
+        $this->user = new UserService(new DatabaseService($this->createMock(\PDO::class)), $query);
         $this->assertFalse($this->user->deleteAccount(0));
 
         $dbs = $this->createMock(DatabaseService::class);
         $dbs->expects($this->at(0))->method('execute')->willReturn(1);
-        $this->user = new UserService($dbs);
+        $this->user = new UserService($dbs, $query);
 
         $this->assertTrue($this->user->deleteAccount(1));
 
         $error_dbs = $this->createMock(DatabaseService::class);
         $error_dbs->expects($this->any())->method('execute')->will($this->throwException(new \PDOException()));
-        $this->user = new UserService($error_dbs);
+        $this->user = new UserService($error_dbs, $query);
 
         $this->user->deleteAccount(1);
     }

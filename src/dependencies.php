@@ -212,7 +212,7 @@ $container['ThreadService'] = function (ContainerInterface $c) {
 };
 
 $container['UserService'] = function (ContainerInterface $c) {
-    return new App\Repository\UserService($c->get('DatabaseService'));
+    return new App\Repository\UserService($c->get('DatabaseService'), $c->get('query'));
 };
 
 $container['AuthService'] = function (ContainerInterface $c) {

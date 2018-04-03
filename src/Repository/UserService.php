@@ -8,33 +8,33 @@ use App\Exception\FetchFailedException;
 use App\Exception\SaveFailedException;
 use App\Model\User;
 use App\Service\DatabaseService;
+use Aura\SqlQuery\QueryFactory;
 
 class UserService
 {
     private $db;
+    private $query;
 
-    public function __construct(DatabaseService $db)
+    public function __construct(DatabaseService $db, QueryFactory $query)
     {
         $this->db = $db;
+        $this->query = $query;
     }
 
     public function getUser(string $user_name): User
     {
-        $sql = <<<SQL
-SELECT
-  `user_id`, `user_name`, `user_image_url`
-FROM
-  `users`
-WHERE
-  `user_name` = :user_name;
-SQL;
+        $select = $this->query->newSelect();
+        $select
+            ->cols(['user_id', 'user_name', 'user_image_url'])
+            ->from('users')
+            ->where('user_name = :user_name');
 
         $values = [
             ':user_name' => ['value' => $user_name, 'type' => \PDO::PARAM_STR],
         ];
 
         try {
-            $data = $this->db->fetchAll($sql, $values, User::class);
+            $data = $this->db->fetchAll($select->getStatement(), $values, User::class);
             if (count($data) !== 1) {
                 throw new \PDOException();
             }
@@ -57,20 +57,29 @@ SQL;
         return $user;
     }
 
-    public function saveUser(User $user): int
+    public function saveUser(User $user): void
     {
-        $sql = <<<SAVE
-INSERT INTO
-  `users` (`user_id`, `user_name`, `user_image_url`, `access_token`, `access_secret`)
-VALUES
-  (:user_id, :user_name, :user_image_url, :access_token, :access_secret)
-ON DUPLICATE KEY UPDATE 
-  `user_id` = VALUES(`user_id`),
-  `user_name` = VALUES(`user_name`),
-  `user_image_url` = VALUES(`user_image_url`),
-  `access_token` = VALUES(`access_token`),
-  `access_secret` = VALUES(`access_secret`);
-SAVE;
+        $select = $this->query->newSelect();
+        $select
+            ->from('users')
+            ->cols(['user_id'])
+            ->where('user_id = :user_id');
+
+        $insert = $this->query->newInsert();
+        $insert
+            ->into('users')
+            ->cols(['user_id', 'user_name', 'user_image_url', 'access_token', 'access_secret']);
+
+        $update = $this->query->newUpdate();
+        $update
+            ->table('users')
+            ->cols([
+                'user_id'        => ':user_id',
+                'user_name'      => ':user_name',
+                'user_image_url' => ':user_image_url',
+                'access_token'   => ':user_image_url',
+                'access_secret'  => ':access_secret'])
+            ->where('user_id = :user_id_value');
 
         $values = [
             ':user_id'        => ['value' => $user->user_id],
@@ -81,8 +90,19 @@ SAVE;
         ];
 
         try {
-            return $this->db->execute($sql, $values);
+            $this->db->beginTransaction();
+            $data = $this->db->execute($select->getStatement(), [
+                ':user_id' => ['value' => $user->user_id]
+            ]);
+            if (empty($data)) {
+                $this->db->execute($insert->getStatement(), $values);
+            } else {
+                $values[':user_id_value'] = ['value' => $user->user_id];
+                $this->db->execute($update->getStatement(), $values);
+            }
+            $this->db->commit();
         } catch (\PDOException $e) {
+            $this->db->rollback();
             throw new SaveFailedException();
         }
     }
@@ -93,24 +113,20 @@ SAVE;
             return false;
         }
 
-        $delete_user = <<<DELETE
-DELETE FROM
-  `users`
-WHERE
-  `users`.`user_id` = :user_id;
-DELETE;
+        $delete_user = $this->query->newDelete();
+        $delete_user
+            ->from('users')
+            ->where('user_id = :user_id');
 
-        $delete_comment = <<<DELETE
-DELETE FROM
-  `comments`
-WHERE
-  `comments`.`user_id` = :user_id;
-DELETE;
+        $delete_comment = $this->query->newDelete();
+        $delete_comment
+            ->from('comments')
+            ->where('user_id = :user_id');
 
         try {
             $this->db->beginTransaction();
-            $this->db->execute($delete_comment, [':user_id' => ['value' => $user_id, 'type' => \PDO::PARAM_INT]]);
-            $this->db->execute($delete_user, [':user_id' => ['value' => $user_id, 'type' => \PDO::PARAM_INT]]);
+            $this->db->execute($delete_comment->getStatement(), [':user_id' => ['value' => $user_id, 'type' => \PDO::PARAM_INT]]);
+            $this->db->execute($delete_user->getStatement(), [':user_id' => ['value' => $user_id, 'type' => \PDO::PARAM_INT]]);
             $this->db->commit();
         } catch (\PDOException $e) {
             $this->db->rollback();
