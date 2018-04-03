@@ -86,6 +86,11 @@ $container['s3'] = function (ContainerInterface $c) {
     ]);
 };
 
+$container['query'] = function (ContainerInterface $c) {
+    $db = $c['settings']['db'];
+    return new Aura\SqlQuery\QueryFactory($db['driver']);
+};
+
 // -----------------------------------------------------------------------------
 // Action factories
 // -----------------------------------------------------------------------------
