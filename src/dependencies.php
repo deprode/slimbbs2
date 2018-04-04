@@ -204,7 +204,7 @@ $container['DatabaseService'] = function (ContainerInterface $c) {
 };
 
 $container['CommentService'] = function (ContainerInterface $c) {
-    return new App\Repository\CommentService($c->get('DatabaseService'), $c->get('settings')['comment_limit']);
+    return new App\Repository\CommentService($c->get('DatabaseService'), $c->get('query'), $c->get('settings')['comment_limit']);
 };
 
 $container['ThreadService'] = function (ContainerInterface $c) {
