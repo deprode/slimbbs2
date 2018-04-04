@@ -10,14 +10,16 @@
         "autoprefixer": "^8.2.0",
         "cssnano": "^3.10.0",
         "postcss-cli": "^5.0.0",
+        "postcss-import": "^11.1.0",
+        "postcss-nested": "^3.0.0",
         "uglify-es": "^3.3.9",
         "watchify": "^3.11.0"
     },
     "scripts": {
         "js": "uglifyjs resources/assets/js/*.js -cm --source-map -o public/assets/js/bundle.js",
         "js:watch": "watchify resources/assets/js/*.js -o 'uglifyjs resources/assets/js/*.js -cm --source-map -o public/assets/js/bundle.js'",
-        "css": "postcss resources/assets/css/*.css -c postcss.config.js -o public/assets/css/style.css",
-        "css:watch": "postcss resources/assets/css/*.css -c postcss.config.js -o public/assets/css/style.css -w",
+        "css": "postcss resources/assets/css/style.css -c postcss.config.js -o public/assets/css/style.css",
+        "css:watch": "postcss resources/assets/css/style.css -c postcss.config.js -o public/assets/css/style.css -w",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
