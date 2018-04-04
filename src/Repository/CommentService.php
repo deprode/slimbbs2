@@ -20,6 +20,12 @@ class CommentService
     private $query;
     private $comment_limit;
 
+    /**
+     * CommentService constructor.
+     * @param DatabaseService $db
+     * @param QueryFactory $query
+     * @param int $comment_limit
+     */
     public function __construct(DatabaseService $db, QueryFactory $query, int $comment_limit)
     {
         $this->db = $db;
@@ -27,6 +33,12 @@ class CommentService
         $this->comment_limit = $comment_limit;
     }
 
+    /**
+     * @param int|null $thread_id
+     * @param Sort|null $sort
+     * @return array
+     * @throws FetchFailedException
+     */
     public function getComments(int $thread_id = null, Sort $sort = null): array
     {
         $select = $this->query->newSelect();
@@ -46,6 +58,12 @@ class CommentService
         }
     }
 
+    /**
+     * @param int $user_id
+     * @param bool $limit
+     * @return array
+     * @throws FetchFailedException
+     */
     public function getCommentsByUser(int $user_id, bool $limit): array
     {
         $select = $this->query->newSelect();
@@ -71,6 +89,11 @@ class CommentService
         }
     }
 
+    /**
+     * @param string $query
+     * @return array
+     * @throws FetchFailedException
+     */
     public function searchComments(string $query): array
     {
         $select = $this->query->newSelect();
@@ -89,6 +112,11 @@ class CommentService
         }
     }
 
+    /**
+     * @param Comment $comment
+     * @return int
+     * @throws SaveFailedException
+     */
     public function saveThread(Comment $comment): int
     {
         $add_thread = $this->query->newInsert();
@@ -138,6 +166,11 @@ class CommentService
         }
     }
 
+    /**
+     * @param Comment $comment
+     * @return int
+     * @throws SaveFailedException
+     */
     public function saveComment(Comment $comment): int
     {
         $insert = $this->query->newInsert();
@@ -179,6 +212,10 @@ class CommentService
     }
 
     /**
+     * @param int $thread_id
+     * @param int $comment_id
+     * @param string $comment
+     * @return int
      * @throws SaveFailedException
      */
     public function updateComment(int $thread_id, int $comment_id, string $comment): int
@@ -205,6 +242,13 @@ class CommentService
         }
     }
 
+    /**
+     * @param int $thread_id
+     * @param int $comment_id
+     * @param int $user_id
+     * @return bool
+     * @throws DeleteFailedException
+     */
     public function deleteComment(int $thread_id, int $comment_id, int $user_id = 0): bool
     {
         $delete_comment = $this->query->newDelete();
@@ -259,11 +303,23 @@ class CommentService
         return $deleted === 1;
     }
 
+    /**
+     * @param int $thread_id
+     * @param int $comment_id
+     * @return bool
+     * @throws DeleteFailedException
+     */
     public function deleteCommentByAdmin(int $thread_id, int $comment_id): bool
     {
         return $this->deleteComment($thread_id, $comment_id);
     }
 
+    /**
+     * @param int $thread_id
+     * @param int $comment_id
+     * @return bool
+     * @throws SaveFailedException
+     */
     public function addLike(int $thread_id, int $comment_id): bool
     {
         $update = $this->query->newUpdate();

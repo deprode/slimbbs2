@@ -15,12 +15,22 @@ class UserService
     private $db;
     private $query;
 
+    /**
+     * UserService constructor.
+     * @param DatabaseService $db
+     * @param QueryFactory $query
+     */
     public function __construct(DatabaseService $db, QueryFactory $query)
     {
         $this->db = $db;
         $this->query = $query;
     }
 
+    /**
+     * @param string $user_name
+     * @return User
+     * @throws FetchFailedException
+     */
     public function getUser(string $user_name): User
     {
         $select = $this->query->newSelect();
@@ -44,6 +54,11 @@ class UserService
         }
     }
 
+    /**
+     * @param array $user_info
+     * @param array $access_token
+     * @return User
+     */
     public function convertUser($user_info = [], $access_token = []): User
     {
         $user = new User();
@@ -57,6 +72,11 @@ class UserService
         return $user;
     }
 
+    /**
+     * @param User $user
+     * @return void
+     * @throws SaveFailedException
+     */
     public function saveUser(User $user): void
     {
         $select = $this->query->newSelect();
@@ -107,6 +127,11 @@ class UserService
         }
     }
 
+    /**
+     * @param int $user_id
+     * @return bool
+     * @throws DeleteFailedException
+     */
     public function deleteAccount(int $user_id): bool
     {
         if ($user_id <= 0) {

@@ -16,12 +16,21 @@ class ThreadService
     private $db;
     private $query;
 
+    /**
+     * ThreadService constructor.
+     * @param DatabaseService $db
+     * @param QueryFactory $query
+     */
     public function __construct(DatabaseService $db, QueryFactory $query)
     {
         $this->db = $db;
         $this->query = $query;
     }
 
+    /**
+     * @param string $key
+     * @return string
+     */
     public function getSortValue($key = 'new'): string
     {
         $values = ['new' => 'DESC', 'old' => 'ASC'];
