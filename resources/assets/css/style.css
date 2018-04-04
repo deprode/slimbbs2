@@ -1,35 +1,35 @@
 body {
-    background: #f0f3f3;
+  background: #f0f3f3;
 }
 
 a {
-    color: darkgreen;
+  color: darkgreen;
 }
 
 img {
-    max-width: 100%;
+  max-width: 100%;
 }
 
 select,
 select:focus,
 select:hover {
-    -webkit-appearance: menulist;
-    -moz-appearance: menulist;
-    background: none;
+  -webkit-appearance: menulist;
+  -moz-appearance: menulist;
+  background: none;
 }
 
 input[type='submit'] {
-    background-color: darkgreen;
-    border: 0.1rem solid darkgreen;
+  background-color: darkgreen;
+  border: 0.1rem solid darkgreen;
 }
 
 .button,
 button,
 input[type='button'],
 input[type='reset'] {
-    color: #606c76;
-    background-color: #fafafa;
-    border: 0.1rem solid #606c76;
+  color: #606c76;
+  background-color: #fafafa;
+  border: 0.1rem solid #606c76;
 }
 
 .button:focus,
@@ -40,18 +40,18 @@ input[type='button']:focus,
 input[type='button']:hover,
 input[type='reset']:focus,
 input[type='reset']:hover {
-    background-color: #fafafa;
-    border-color: #2b9e2b;
-    color: #606c76;
-    outline: 0;
+  background-color: #fafafa;
+  border-color: #2b9e2b;
+  color: #606c76;
+  outline: 0;
 }
 
 input[type='submit']:focus,
 input[type='submit']:hover {
-    background-color: #606c76;
-    border-color: #606c76;
-    color: #fff;
-    outline: 0;
+  background-color: #606c76;
+  border-color: #606c76;
+  color: #fff;
+  outline: 0;
 }
 
 .button[disabled]:focus,
@@ -64,9 +64,9 @@ input[type='reset'][disabled]:focus,
 input[type='reset'][disabled]:hover,
 input[type='submit'][disabled]:focus,
 input[type='submit'][disabled]:hover {
-    background-color: darkgreen;
-    border: 0.1rem solid darkgreen;
-    color: #fff;
+  background-color: darkgreen;
+  border: 0.1rem solid darkgreen;
+  color: #fff;
 }
 
 input[type='email']:focus,
@@ -78,7 +78,7 @@ input[type='text']:focus,
 input[type='url']:focus,
 textarea:focus,
 select:focus {
-    border-color: darkgreen;
+  border-color: darkgreen;
 }
 
 .global-header__top__home,
@@ -86,314 +86,314 @@ select:focus {
 .auth__logout,
 .search__button[type='submit'],
 .comments__sort__button[type='submit'] {
-    background: #fefefe;
-    border: 1px solid #d1d1d1;
-    border-radius: .4rem;
-    color: darkgreen;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 1.4rem;
-    font-weight: 400;
-    height: 3.8rem;
-    letter-spacing: .1rem;
-    line-height: 3.8rem;
-    padding: 0 3.0rem;
-    text-align: center;
-    text-decoration: none;
-    text-transform: uppercase;
-    white-space: nowrap;
+  background: #fefefe;
+  border: 1px solid #d1d1d1;
+  border-radius: .4rem;
+  color: darkgreen;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 1.4rem;
+  font-weight: 400;
+  height: 3.8rem;
+  letter-spacing: .1rem;
+  line-height: 3.8rem;
+  padding: 0 3.0rem;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .hidden {
-    display: none !important;
+  display: none !important;
 }
 
 .search .search__query:focus {
-    border-color: darkgreen;
+  border-color: darkgreen;
 }
 
 @media screen and (min-width: 600px) {
-    .search .search__query {
-        min-width: 40%;
-    }
+  .search .search__query {
+    min-width: 40%;
+  }
 }
 
 .search .search__query,
 .search .search__button {
-    vertical-align: bottom;
-    margin-bottom: 0;
+  vertical-align: bottom;
+  margin-bottom: 0;
 }
 
 button.button--small,
 input.button--small {
-    font-size: 1.4rem;
-    font-weight: 400;
-    height: 2.8rem;
-    line-height: 2.6rem;
-    padding: 0 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 400;
+  height: 2.8rem;
+  line-height: 2.6rem;
+  padding: 0 1.5rem;
 }
 
 button.button--small:hover,
 input.button--small:hover {
-    font-weight: 800;
+  font-weight: 800;
 }
 
 input.button--like {
-    color: #606c76;
-    background-color: #fafafa;
-    border: 0.1rem solid #606c76;
+  color: #606c76;
+  background-color: #fafafa;
+  border: 0.1rem solid #606c76;
 }
 
 input.button--like:focus,
 input.button--like:hover {
-    background-color: #fafafa;
-    border-color: #2b9e2b;
-    color: #606c76;
-    outline: 0;
+  background-color: #fafafa;
+  border-color: #2b9e2b;
+  color: #606c76;
+  outline: 0;
 }
 
 input.button--like[disabled],
 input.button--like[disabled]:hover,
 input.button--like[disabled]:focus {
-    background-color: #fafafa;
-    border-color: #2b9e2b;
-    color: #606c76;
-    font-weight: 400;
-    opacity: .8;
+  background-color: #fafafa;
+  border-color: #2b9e2b;
+  color: #606c76;
+  font-weight: 400;
+  opacity: .8;
 }
 
 .container {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 @media screen and (min-width: 600px) {
-    .container {
-        max-width: 60%;
-    }
+  .container {
+    max-width: 60%;
+  }
 }
 
 @media screen and (min-width: 1080px) {
-    .container {
-        max-width: 60rem;
-    }
+  .container {
+    max-width: 60rem;
+  }
 }
 
 .content {
-    padding: 2rem;
-    border: 1px solid #e0e0e0;
-    background: #fefefe;
+  padding: 2rem;
+  border: 1px solid #e0e0e0;
+  background: #fefefe;
 }
 
 .content--thin {
-    padding: 1rem;
+  padding: 1rem;
 }
 
 .content form {
-    margin-bottom: .5rem;
+  margin-bottom: .5rem;
 }
 
 .message {
-    margin: 2rem 0;
-    padding-bottom: 1rem;
-    font-weight: bold;
-    color: #000000;
-    border-color: rgba(96, 183, 96, 1.0);
+  margin: 2rem 0;
+  padding-bottom: 1rem;
+  font-weight: bold;
+  color: #000000;
+  border-color: rgba(96, 183, 96, 1.0);
 }
 
 .message--error {
-    border-color: #d43f3a;
+  border-color: #d43f3a;
 }
 
 .message__lists {
-    margin-bottom: 0;
-    list-style: none;
+  margin-bottom: 0;
+  list-style: none;
 }
 
 .create-thread,
 .search,
 .threads,
 .comments__sort {
-    margin: 3rem 0;
-    padding: 2rem 2rem 1.5rem;
-    border: 1px solid #e0e0e0;
-    background: #fefefe;
+  margin: 3rem 0;
+  padding: 2rem 2rem 1.5rem;
+  border: 1px solid #e0e0e0;
+  background: #fefefe;
 }
 
 .create-thread__form {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .threads__ruler {
-    margin: 1.5rem 0;
+  margin: 1.5rem 0;
 }
 
 .threads__titles {
-    margin: 1rem 0;
+  margin: 1rem 0;
 }
 
 .threads__titles__title {
-    font-size: 1.8rem;
+  font-size: 1.8rem;
 }
 
 .threads__subtitles {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .threads__subtitles__username {
-    font-size: 1.5rem;
+  font-size: 1.5rem;
 }
 
 .threads__subtitles__updated,
 .threads__subtitles__count {
-    font-size: 1.4rem;
+  font-size: 1.4rem;
 }
 
 .comment_form {
-    margin: 2rem 0;
+  margin: 2rem 0;
 }
 
 .comment_form__comment {
-    font-weight: 400;
+  font-weight: 400;
 }
 
 .comment {
-    padding: 1rem 1.5rem;
-    border: 1px solid #e0e0e0;
-    background: #fefefe;
+  padding: 1rem 1.5rem;
+  border: 1px solid #e0e0e0;
+  background: #fefefe;
 }
 
 .comment_top {
-    margin-bottom: 3rem;
+  margin-bottom: 3rem;
 }
 
 .comment__main {
-    background: #ffffff;
-    margin: 0.2rem 0 1.5rem 0;
-    padding: 0.5rem 0;
+  background: #ffffff;
+  margin: 0.2rem 0 1.5rem 0;
+  padding: 0.5rem 0;
 }
 
 .comment_main__photo {
-    margin: 1rem;
+  margin: 1rem;
 }
 
 .comment__header,
 .comment__footer {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .comment__header {
-    padding: .8rem 0;
+  padding: .8rem 0;
 }
 
 .comment__header__wrap {
-    display: inline-block;
+  display: inline-block;
 }
 
 .comment__header__wrap__icon {
-    border-radius: 50%;
+  border-radius: 50%;
 }
 
 .comment__header__username {
-    display: inline-block;
-    vertical-align: middle;
-    padding-left: 2rem;
-    margin-top: -4.1rem;
-    font-size: 1.6rem;
-    font-weight: bold;
+  display: inline-block;
+  vertical-align: middle;
+  padding-left: 2rem;
+  margin-top: -4.1rem;
+  font-size: 1.6rem;
+  font-weight: bold;
 }
 
 .comment__header__createdat {
-    display: inline-block;
-    font-size: 1.4rem;
+  display: inline-block;
+  font-size: 1.4rem;
 }
 
 .comment__footer form {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .comment__cancel {
-    margin-left: 3rem;
+  margin-left: 3rem;
 }
 
 .comment_delete[type=submit] {
-    background-color: #d9534f;
-    border: 1px solid #d43f3a;
-    color: #fff;
-    font-weight: 400;
+  background-color: #d9534f;
+  border: 1px solid #d43f3a;
+  color: #fff;
+  font-weight: 400;
 }
 
 .comment_delete[type=submit]:hover {
-    background-color: #d9534f;
-    border: 1px solid #d43f3a;
-    color: #fff;
-    font-weight: 400;
+  background-color: #d9534f;
+  border: 1px solid #d43f3a;
+  color: #fff;
+  font-weight: 400;
 }
 
 .form--inline {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .form--inline fieldset,
 .form--inline input,
 .form--inline select,
 .form--inline textarea {
-    margin-bottom: .5rem;
+  margin-bottom: .5rem;
 }
 
 .form--inline label,
 .form--inline input,
 .form--inline button,
 .form--inline select {
-    display: inline-block;
-    width: auto;
-    vertical-align: top;
+  display: inline-block;
+  width: auto;
+  vertical-align: top;
 }
 
 .global-header {
-    display: flex;
-    justify-content: space-between;
-    padding-bottom: 6rem;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 6rem;
 }
 
 .global-footer {
-    padding-top: 6rem;
+  padding-top: 6rem;
 }
 
 .auth__login,
 .auth__logout {
-    width: 100%;
+  width: 100%;
 }
 
 .profile {
-    padding: 2rem 1.5rem 0;
-    margin-bottom: 2rem;
+  padding: 2rem 1.5rem 0;
+  margin-bottom: 2rem;
 }
 
 .profile__icon {
-    border-radius: 50%;
+  border-radius: 50%;
 }
 
 .profile__name {
-    display: inline-block;
-    vertical-align: middle;
-    margin: 0 0 4rem 1rem;
-    font-size: 2.4rem;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 0 4rem 1rem;
+  font-size: 2.4rem;
 }
 
 .profile__links {
-    display: inline-block;
-    vertical-align: middle;
-    margin: 0 0 3.2rem 1rem;
-    font-size: 1.4rem;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 0 3.2rem 1rem;
+  font-size: 1.4rem;
 }
 
 .quit {
-    margin-top: 2rem;
+  margin-top: 2rem;
 }
 
 [v-cloak] {
-    display: none;
+  display: none;
 }
