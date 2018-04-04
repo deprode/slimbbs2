@@ -10,38 +10,47 @@ use App\Model\CommentRead;
 use App\Model\Sort;
 use App\Service\DatabaseService;
 use App\Traits\TimeElapsed;
+use Aura\SqlQuery\QueryFactory;
 
 class CommentService
 {
     use TimeElapsed;
 
     private $db;
+    private $query;
     private $comment_limit;
 
-    public function __construct(DatabaseService $db, int $comment_limit)
+    /**
+     * CommentService constructor.
+     * @param DatabaseService $db
+     * @param QueryFactory $query
+     * @param int $comment_limit
+     */
+    public function __construct(DatabaseService $db, QueryFactory $query, int $comment_limit)
     {
         $this->db = $db;
+        $this->query = $query;
         $this->comment_limit = $comment_limit;
     }
 
+    /**
+     * @param int|null $thread_id
+     * @param Sort|null $sort
+     * @return array
+     * @throws FetchFailedException
+     */
     public function getComments(int $thread_id = null, Sort $sort = null): array
     {
-        $sql = <<<COMMENTS
-SELECT
-  `comments`.`comment_id`, `comments`.`user_id`, `comments`.`like_count`, `comments`.`comment`, `comments`.`photo_url`, `comments`.`created_at`, `users`.`user_name`, `users`.`user_image_url`
-FROM
-  `comments`
-LEFT JOIN
-  `users`
-  ON `comments`.`user_id` = `users`.`user_id`
-WHERE
-  `thread_id` = :thread_id
-ORDER BY 
-  `comments`.`comment_id` {$sort->value()};
-COMMENTS;
+        $select = $this->query->newSelect();
+        $select
+            ->from('comments')
+            ->cols(['comments.comment_id', 'comments.user_id', 'comments.like_count', 'comments.comment', 'comments.photo_url', 'comments.created_at', 'users.user_name', 'users.user_image_url'])
+            ->join('left', 'users', 'comments.user_id = users.user_id')
+            ->where('thread_id = :thread_id')
+            ->orderBy(['comments.comment_id ' . $sort->value()]);
 
         try {
-            return $this->db->fetchAll($sql, [
+            return $this->db->fetchAll($select->getStatement(), [
                 ':thread_id' => ['value' => $thread_id, 'type' => \PDO::PARAM_INT]
             ], CommentRead::class);
         } catch (\PDOException $e) {
@@ -49,53 +58,53 @@ COMMENTS;
         }
     }
 
+    /**
+     * @param int $user_id
+     * @param bool $limit
+     * @return array
+     * @throws FetchFailedException
+     */
     public function getCommentsByUser(int $user_id, bool $limit): array
     {
-        $sql = <<<COMMENTS
-SELECT
-  `comments`.`comment_id`, `comments`.`thread_id`, `comments`.`user_id`, `comments`.`like_count`, `comments`.`comment`, `comments`.`photo_url`, `comments`.`created_at`, `users`.`user_name`, `users`.`user_image_url`
-FROM
-  `comments`
-LEFT JOIN
-  `users`
-  ON `comments`.`user_id` = `users`.`user_id`
-WHERE
-  `comments`.`user_id` = :user_id
-ORDER BY
-  `comments`.`comment_id` DESC
-COMMENTS;
+        $select = $this->query->newSelect();
+        $select
+            ->from('comments')
+            ->cols(['comments.comment_id, comments.thread_id, comments.user_id, comments.like_count, comments.comment, comments.photo_url, comments.created_at, users.user_name, users.user_image_url'])
+            ->join('left', 'users', 'comments.user_id = users.user_id')
+            ->where('comments.user_id = :user_id')
+            ->orderBy(['comments.comment_id DESC']);
 
         $params = [
             ':user_id' => ['value' => $user_id, 'type' => \PDO::PARAM_INT]
         ];
 
         if ($limit) {
-            $sql .= ' LIMIT :limit';
-            $params[':limit'] = ['value' => $this->comment_limit, 'type' => \PDO::PARAM_INT];
+            $select->limit($this->comment_limit);
         }
 
         try {
-            return $this->db->fetchAll($sql, $params, CommentRead::class);
+            return $this->db->fetchAll($select->getStatement(), $params, CommentRead::class);
         } catch (\PDOException $e) {
             throw new FetchFailedException();
         }
     }
 
+    /**
+     * @param string $query
+     * @return array
+     * @throws FetchFailedException
+     */
     public function searchComments(string $query): array
     {
-        $sql = <<<COMMENTS
-SELECT
-  `comments`.`comment_id`, `comments`.`thread_id`, `comments`.`user_id`, `comments`.`like_count`, `comments`.`comment`, `comments`.`created_at`, `users`.`user_name`, `users`.`user_image_url`
-FROM
-  `comments`
-LEFT JOIN
-  `users`
-  ON `comments`.`user_id` = `users`.`user_id`
-WHERE
-  `comment` LIKE :query;
-COMMENTS;
+        $select = $this->query->newSelect();
+        $select
+            ->from('comments')
+            ->cols(['comments.comment_id', 'comments.thread_id', 'comments.user_id', 'comments.like_count', 'comments.comment', 'comments.created_at', 'users.user_name', 'users.user_image_url'])
+            ->join('left', 'users', 'comments.user_id = users.user_id')
+            ->where('comment LIKE :query');
+
         try {
-            return $this->db->fetchAll($sql, [
+            return $this->db->fetchAll($select->getStatement(), [
                 ':query' => ['value' => '%' . $query . '%', 'type' => \PDO::PARAM_STR]
             ], CommentRead::class);
         } catch (\PDOException $e) {
@@ -103,49 +112,48 @@ COMMENTS;
         }
     }
 
+    /**
+     * @param Comment $comment
+     * @return int
+     * @throws SaveFailedException
+     */
     public function saveThread(Comment $comment): int
     {
+        $add_thread = $this->query->newInsert();
+        $add_thread
+            ->into('threads')
+            ->cols(['comment_id', 'user_id']);
 
-        $add_thread = <<<ADD_THREAD
-INSERT INTO
-  `threads` (`comment_id`, `user_id`, `updated_at`)
-VALUES
-  (:comment_id, :user_id, CURRENT_TIMESTAMP);
-ADD_THREAD;
+        $add_comment = $this->query->newInsert();
+        $add_comment
+            ->into('comments')
+            ->cols(['thread_id', 'user_id', 'like_count', 'comment', 'photo_url', 'created_at']);
 
-        $add_comment = <<<SAVE
-INSERT INTO
-  `comments` (`thread_id`, `user_id`, `like_count`, `comment`, `photo_url`, `created_at`, `updated_at`)
-VALUES 
-  (:thread_id, :user_id, 0, :comment, '', :created_at, NULL);
-SAVE;
-        $update = <<<UPDATE_THREAD
-UPDATE
-    `threads`
-SET
-    `comment_id` = :comment_id
-WHERE
-    `thread_id` = :thread_id;
-UPDATE_THREAD;
-
+        $update = $this->query->newUpdate();
+        $update
+            ->table('threads')
+            ->set('comment_id', ':comment_id')
+            ->where('thread_id = :thread_id');
 
         try {
             $this->db->beginTransaction();
-            $this->db->execute($add_thread, [
+            $this->db->execute($add_thread->getStatement(), [
                 ':comment_id' => ['value' => 1, 'type' => \PDO::PARAM_INT],
                 ':user_id'    => ['value' => $comment->user_id, 'type' => \PDO::PARAM_INT],
             ]);
 
             $thread_id = $this->db->lastInsertId('thread_id');
-            $count = $this->db->execute($add_comment, [
+            $count = $this->db->execute($add_comment->getStatement(), [
                 ':thread_id'  => ['value' => $thread_id, 'type' => \PDO::PARAM_INT],
                 ':user_id'    => ['value' => $comment->user_id, 'type' => \PDO::PARAM_INT],
+                ':like_count' => ['value' => 0, 'type' => \PDO::PARAM_INT],
                 ':comment'    => ['value' => $comment->comment, 'type' => \PDO::PARAM_STR],
-                ':created_at' => ['value' => date_create()->format('Y-m-d H:i:s'), 'type' => \PDO::PARAM_STR],
+                ':photo_url'  => ['value' => '', 'type' => \PDO::PARAM_STR],
+                ':created_at' => ['value' => date_create()->format('Y-m-d H:i:s'), 'type' => \PDO::PARAM_STR]
             ]);
 
             $comment_id = $this->db->lastInsertId('comment_id');
-            $this->db->execute($update, [
+            $this->db->execute($update->getStatement(), [
                 ':comment_id' => ['value' => $comment_id, 'type' => \PDO::PARAM_INT],
                 ':thread_id'  => ['value' => $thread_id, 'type' => \PDO::PARAM_INT],
             ]);
@@ -158,15 +166,18 @@ UPDATE_THREAD;
         }
     }
 
+    /**
+     * @param Comment $comment
+     * @return int
+     * @throws SaveFailedException
+     */
     public function saveComment(Comment $comment): int
     {
-        $sql = <<<SAVE
-INSERT INTO
-    `comments`
-    (`thread_id`, `user_id`, `like_count`, `comment`, `photo_url`, `created_at`, `updated_at`)
-VALUES
-    (:thread_id, :user_id, 0, :comment, :photo_url, :created_at, NULL);
-SAVE;
+        $insert = $this->query->newInsert();
+        $insert
+            ->into('comments')
+            ->cols(['thread_id', 'user_id', 'comment', 'photo_url', 'created_at']);
+
         $values = [
             ':thread_id'  => ['value' => $comment->thread_id, 'type' => \PDO::PARAM_INT],
             ':user_id'    => ['value' => $comment->user_id, 'type' => \PDO::PARAM_INT],
@@ -175,15 +186,12 @@ SAVE;
             ':created_at' => ['value' => date_create()->format('Y-m-d H:i:s'), 'type' => \PDO::PARAM_STR],
         ];
 
-        $increment_count = <<<THREAD_UPDATE
-UPDATE
-  `threads` 
-SET
-  `threads`.`count` = `threads`.`count`+1,
-  `threads`.`updated_at` = :datetime
-WHERE
-  `threads`.`thread_id` = :thread_id;
-THREAD_UPDATE;
+        $update = $this->query->newUpdate();
+        $update
+            ->table('threads')
+            ->set('count', 'count + 1')
+            ->set('updated_at', ':datetime')
+            ->where('thread_id = :thread_id');
 
         $thread_update_values = [
             ':thread_id' => ['value' => $comment->thread_id, 'type' => \PDO::PARAM_INT],
@@ -192,9 +200,9 @@ THREAD_UPDATE;
 
         try {
             $this->db->beginTransaction();
-            $this->db->execute($sql, $values);
+            $this->db->execute($insert->getStatement(), $values);
             $comment_id = $this->db->lastInsertId('comment_id');
-            $this->db->execute($increment_count, $thread_update_values);
+            $this->db->execute($update->getStatement(), $thread_update_values);
             $this->db->commit();
             return $comment_id;
         } catch (\PDOException $e) {
@@ -204,18 +212,21 @@ THREAD_UPDATE;
     }
 
     /**
+     * @param int $thread_id
+     * @param int $comment_id
+     * @param string $comment
+     * @return int
      * @throws SaveFailedException
      */
     public function updateComment(int $thread_id, int $comment_id, string $comment): int
     {
-        $sql = <<<UPDATE_COMMENT
-UPDATE
-    `comments`
-SET
-    `comment` = :comment, `updated_at` = :updated_at    
-WHERE
-    `thread_id` = :thread_id AND `comment_id` = :comment_id;
-UPDATE_COMMENT;
+        $update = $this->query->newUpdate();
+        $update
+            ->table('comments')
+            ->set('comment', ':comment')
+            ->set('updated_at', ':updated_at')
+            ->where('thread_id = :thread_id')
+            ->where('comment_id = :comment_id');
 
         $values = [
             ':thread_id'  => ['value' => $thread_id, 'type' => \PDO::PARAM_INT],
@@ -225,73 +236,64 @@ UPDATE_COMMENT;
         ];
 
         try {
-            return $this->db->execute($sql, $values);
+            return $this->db->execute($update->getStatement(), $values);
         } catch (\PDOException $e) {
             throw new SaveFailedException();
         }
     }
 
+    /**
+     * @param int $thread_id
+     * @param int $comment_id
+     * @param int $user_id
+     * @return bool
+     * @throws DeleteFailedException
+     */
     public function deleteComment(int $thread_id, int $comment_id, int $user_id = 0): bool
     {
-        if ($user_id === 0) {
-            $delete_comment = <<<DELETE
-DELETE FROM
-  `comments`
-WHERE
-  `comments`.`comment_id` = :comment_id;
-DELETE;
+        $delete_comment = $this->query->newDelete();
 
-            $delete_comment_values = [
-                ':comment_id' => ['value' => $comment_id, 'type' => \PDO::PARAM_INT],
-            ];
-        } else {
-            $delete_comment = <<<DELETE
-DELETE FROM
-  `comments`
-WHERE
-  `comments`.`comment_id` = :comment_id AND `comments`.`user_id` = :user_id;
-DELETE;
+        $delete_comment
+            ->from('comments')
+            ->where('comment_id = :comment_id');
 
-            $delete_comment_values = [
-                ':comment_id' => ['value' => $comment_id, 'type' => \PDO::PARAM_INT],
-                ':user_id'    => ['value' => $user_id, 'type' => \PDO::PARAM_INT],
-            ];
+        $delete_comment_values = [
+            ':comment_id' => ['value' => $comment_id, 'type' => \PDO::PARAM_INT],
+        ];
+        // user is not admin
+        if ($user_id > 0) {
+            $delete_comment->where('comments.user_id = :user_id');
+            $delete_comment_values[':user_id'] = ['value' => $user_id, 'type' => \PDO::PARAM_INT];
         }
 
-
-        $decrement_count = <<<THREAD_UPDATE
-UPDATE
-  `threads` 
-SET
-  `threads`.`count` = `threads`.`count`-1
-WHERE
-  `threads`.`thread_id` = :thread_id;
-THREAD_UPDATE;
+        $decrement_count = $this->query->newUpdate();
+        $decrement_count
+            ->table('threads')
+            ->set('count', 'count - 1')
+            ->where('thread_id = :thread_id');
 
         $thread_update_values = [
             ':thread_id' => ['value' => $thread_id, 'type' => \PDO::PARAM_INT],
         ];
 
-        $delete_thread = <<<DELETE_THREAD
-DELETE FROM
-  `threads`
-WHERE
-  `thread_id` = :thread_id AND `count` = 0;
-DELETE_THREAD;
+        $delete_thread = $this->query->newDelete();
+        $delete_thread
+            ->from('threads')
+            ->where('thread_id = :thread_id')
+            ->where('count = 0');
 
         $delete_thread_values = [
             ':thread_id' => ['value' => $thread_id, 'type' => \PDO::PARAM_INT],
         ];
 
-        $deleted = 0;
         try {
             $this->db->beginTransaction();
-            $deleted = $this->db->execute($delete_comment, $delete_comment_values);
+            $deleted = $this->db->execute($delete_comment->getStatement(), $delete_comment_values);
             if ($deleted !== 1) {
                 throw new \PDOException();
             }
-            $this->db->execute($decrement_count, $thread_update_values);
-            $this->db->execute($delete_thread, $delete_thread_values);
+            $this->db->execute($decrement_count->getStatement(), $thread_update_values);
+            $this->db->execute($delete_thread->getStatement(), $delete_thread_values);
             $this->db->commit();
         } catch (\PDOException $e) {
             $this->db->rollback();
@@ -301,24 +303,33 @@ DELETE_THREAD;
         return $deleted === 1;
     }
 
+    /**
+     * @param int $thread_id
+     * @param int $comment_id
+     * @return bool
+     * @throws DeleteFailedException
+     */
     public function deleteCommentByAdmin(int $thread_id, int $comment_id): bool
     {
         return $this->deleteComment($thread_id, $comment_id);
     }
 
+    /**
+     * @param int $thread_id
+     * @param int $comment_id
+     * @return bool
+     * @throws SaveFailedException
+     */
     public function addLike(int $thread_id, int $comment_id): bool
     {
-        $sql = <<<SQL
-UPDATE
-  `comments`
-SET
-  `like_count` = `like_count` + 1
-WHERE
-  `thread_id` = :thread_id AND `comment_id` = :comment_id;
-SQL;
+        $update = $this->query->newUpdate();
+        $update
+            ->table('comments')
+            ->set('like_count', 'like_count + 1')
+            ->where('thread_id = :thread_id AND comment_id = :comment_id');
 
         try {
-            $updated = $this->db->execute($sql, [
+            $updated = $this->db->execute($update->getStatement(), [
                 ':thread_id'  => ['value' => $thread_id, 'type' => \PDO::PARAM_INT],
                 ':comment_id' => ['value' => $comment_id, 'type' => \PDO::PARAM_INT]
             ]);

@@ -7,6 +7,7 @@ use App\Model\CommentRead;
 use App\Model\Sort;
 use App\Repository\CommentService;
 use App\Service\DatabaseService;
+use Aura\SqlQuery\QueryFactory;
 use PHPUnit\Framework\TestCase;
 
 class CommentServiceTest extends TestCase
@@ -32,16 +33,17 @@ class CommentServiceTest extends TestCase
 
         $comment_limit = 2;
 
+        $query = new QueryFactory('common');
         $dbs = $this->createMock(DatabaseService::class);
         $dbs->expects($this->any())->method('fetchAll')->willReturn($this->data);
         $dbs->expects($this->any())->method('execute')->willReturn(1);
         $dbs->expects($this->any())->method('lastInsertId')->willReturn(10);
-        $this->comment = new CommentService($dbs, $comment_limit);
+        $this->comment = new CommentService($dbs, $query, $comment_limit);
 
         $dbs = $this->createMock(DatabaseService::class);
         $dbs->expects($this->any())->method('fetchAll')->will($this->throwException(new \PDOException()));
         $dbs->expects($this->any())->method('execute')->will($this->throwException(new \PDOException()));
-        $this->error_comment = new CommentService($dbs, $comment_limit);
+        $this->error_comment = new CommentService($dbs, $query, $comment_limit);
     }
 
     /**
