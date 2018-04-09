@@ -90,9 +90,9 @@ class CommentTest extends TestCase
      */
     private function makeThread()
     {
-        $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div[1]/form/label/textarea'))
+        $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div/form/label/textarea'))
             ->sendKeys('スレッド作成');
-        $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div[1]/form/input[4]'))->click();
+        $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div/form/input[4]'))->click();
 
         $this->driver->wait()->until(
             WebDriverExpectedCondition::titleContains('Toppage')
@@ -115,7 +115,7 @@ class CommentTest extends TestCase
         $element->click();
 
         $this->driver->wait()->until(
-            WebDriverExpectedCondition::titleContains('Thread')
+            WebDriverExpectedCondition::titleContains('Slimbbs')
         );
     }
 
@@ -134,22 +134,22 @@ class CommentTest extends TestCase
             return;
         }
 
-        $element = $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div[2]/article/section/footer/button'));
+        $element = $this->driver->findElement(WebDriverBy::xpath('//*[@id="c1"]/footer/button'));
         $this->driver->executeScript('arguments[0].scrollIntoView(true);', [$element]);
         $element->click();
         $this->driver->wait(1);
 
-        $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div[2]/article/section/main/div[2]/form/label/textarea'))
+        $this->driver->findElement(WebDriverBy::xpath('//*[@id="c1"]/main/div[3]/form/label/textarea'))
             ->clear()->sendKeys('コメントの更新');
-        $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div[2]/article/section/main/div[2]/form/input[4]'))
+        $this->driver->findElement(WebDriverBy::xpath('//*[@id="update-1"]'))
             ->click();
 
         $this->driver->navigate()->refresh();
         $this->driver->wait()->until(
-            WebDriverExpectedCondition::titleContains('Thread')
+            WebDriverExpectedCondition::titleContains('Slimbbs')
         );
 
-        $element = $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div[2]/article/section/main/div'));
+        $element = $this->driver->findElement(WebDriverBy::xpath('//*[@id="1"]'));
 
         $this->assertEquals("コメントの更新", $element->getText());
     }
@@ -169,14 +169,14 @@ class CommentTest extends TestCase
             return;
         }
 
-        $element = $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div[2]/article/section/footer/div[2]/form/input[3]'));
+        $element = $this->driver->findElement(WebDriverBy::xpath('//*[@id="like-1--submit"]'));
         $this->driver->executeScript('arguments[0].scrollIntoView(true);', [$element]);
         $element->click();
         $this->driver->wait(5)->until(
-            WebDriverExpectedCondition::elementValueContains(WebDriverBy::xpath('/html/body/div/div[2]/article/section/footer/div[2]/form/input[3]'), '1')
+            WebDriverExpectedCondition::elementValueContains(WebDriverBy::xpath('//*[@id="like-1--submit"]'), '1')
         );
 
-        $element = $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div[2]/article/section/footer/div[2]/form/input[3]'));
+        $element = $this->driver->findElement(WebDriverBy::xpath('//*[@id="like-1--submit"]'));
 
         $this->assertEquals("そうだね ×1", $element->getAttribute('value'));
     }
