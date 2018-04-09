@@ -180,4 +180,33 @@ class CommentTest extends TestCase
 
         $this->assertEquals("そうだね ×1", $element->getAttribute('value'));
     }
+
+    /**
+     * 投稿にURLが含まれるかのテスト
+     * @throws TimeOutException
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     */
+    public function testLinkUrl()
+    {
+        try {
+            $this->driver->get('http://127.0.0.1:8080/');
+            $this->makeThread();
+            $this->moveThread();
+        } catch (TimeOutException $e) {
+            return;
+        }
+
+        $this->driver->findElement(WebDriverBy::xpath('//*[@id="comment_form"]/label[1]/textarea'))
+            ->sendKeys('https://www.example.com/foo/?bar=baz&inga=42&quux');
+        $this->driver->findElement(WebDriverBy::xpath('//*[@id="comment_form"]/input[6]'))->click();
+
+        $this->driver->wait()->until(
+            WebDriverExpectedCondition::titleContains('Slimbbs')
+        );
+
+        $element = $this->driver->findElement(WebDriverBy::xpath('//*[@id="2"]/a'));
+
+        $this->assertEquals("https://www.example.com/foo/?bar=baz&inga=42&quux", $element->getAttribute('href'));
+        $this->assertEquals("https://www.example.com/foo/?bar=baz&inga=42&quux", $element->getText());
+    }
 }

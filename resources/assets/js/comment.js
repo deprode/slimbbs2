@@ -5,6 +5,7 @@ Array.from(comments).forEach((comment) => {
     const comment_str = document.getElementById(comment.id).dataset.comment;
     const like_form = document.getElementById(comment.id).querySelectorAll('form.js-like')[0];
     const twitter_embed = `<blockquote class="twitter-tweet"><a href="$url"></a></blockquote>`;
+    const link_html = `<a href="{url}" target="_new">{url}</a>`;
 
     new Vue({
         delimiters: ['${', '}'],
@@ -31,12 +32,15 @@ Array.from(comments).forEach((comment) => {
             },
             comment_computed: function () {
                 const reg = /^https?:\/\/twitter.com\/(.*)\/(status|statuses)\/(\d+)$/;
+                const reg_link = /@^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$@iS/g;
                 let comments = this.comment.split('\n');
                 // twitter-linkを検出
                 const _this = this;
                 comments = comments.map(function (value) {
                     if (reg.test(value)) {
                         return twitter_embed.replace('$url', value);
+                    } else if (reg_link.test) {
+                        return link_html.replace(/{url}/g, value);
                     }
                     return value;
                 });
