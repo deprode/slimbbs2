@@ -38,6 +38,10 @@ class LoginBrowserTest extends \PHPUnit_Framework_TestCase
         $this->driver->manage()->deleteAllCookies();
     }
 
+    /**
+     * Twitterにログインできるかテスト
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     */
     public function testLogin()
     {
         $this->driver->get('http://127.0.0.1:8080/');

@@ -57,6 +57,11 @@ class MessageTest extends TestCase
         $this->driver->manage()->deleteAllCookies();
     }
 
+    /**
+     * 成功時のメッセージが出ているかテスト
+     * @throws TimeOutException
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     */
     public function testSuccessMessage()
     {
         $this->driver->get('http://127.0.0.1:8080/');
@@ -81,6 +86,11 @@ class MessageTest extends TestCase
         $this->assertEquals("スレッドを作成しました。", $element->getText());
     }
 
+    /**
+     * エラーメッセージが出ているかテスト
+     * @throws TimeOutException
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     */
     public function testErrorMessage()
     {
         $this->driver->get('http://127.0.0.1:8080/');

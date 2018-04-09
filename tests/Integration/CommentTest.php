@@ -57,6 +57,11 @@ class CommentTest extends TestCase
         $this->driver->manage()->deleteAllCookies();
     }
 
+    /**
+     * Twitterにログイン
+     * @throws TimeOutException
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     */
     private function login()
     {
         $this->driver->get('http://127.0.0.1:8080/');
@@ -78,6 +83,11 @@ class CommentTest extends TestCase
         );
     }
 
+    /**
+     * スレッドの作成
+     * @throws TimeOutException
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     */
     private function makeThread()
     {
         $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div[1]/form/label/textarea'))
@@ -89,6 +99,11 @@ class CommentTest extends TestCase
         );
     }
 
+    /**
+     * 作成したスレッドに移動
+     * @throws TimeOutException
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     */
     private function moveThread()
     {
         $element = $this->driver->findElement(WebDriverBy::linkText('スレッド作成'));
@@ -104,6 +119,11 @@ class CommentTest extends TestCase
         );
     }
 
+    /**
+     * コメントの編集のテスト
+     * @throws TimeOutException
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     */
     public function testCommentEdit()
     {
         try {
@@ -134,6 +154,11 @@ class CommentTest extends TestCase
         $this->assertEquals("コメントの更新", $element->getText());
     }
 
+    /**
+     * 「そうだね」のテスト
+     * @throws TimeOutException
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     */
     public function testAddLike()
     {
         try {
