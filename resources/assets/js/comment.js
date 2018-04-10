@@ -32,14 +32,14 @@ Array.from(comments).forEach((comment) => {
             },
             comment_computed: function () {
                 const reg = /^https?:\/\/twitter.com\/(.*)\/(status|statuses)\/(\d+)$/;
-                const reg_link = /@^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$@iS/g;
+                const reg_link = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,})/;
                 let comments = this.comment.split('\n');
                 // twitter-linkを検出
                 const _this = this;
                 comments = comments.map(function (value) {
                     if (reg.test(value)) {
                         return twitter_embed.replace('$url', value);
-                    } else if (reg_link.test) {
+                    } else if (reg_link.test(value)) {
                         return link_html.replace(/{url}/g, value);
                     }
                     return value;

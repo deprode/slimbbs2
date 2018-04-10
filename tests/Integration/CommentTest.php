@@ -197,7 +197,7 @@ class CommentTest extends TestCase
         }
 
         $this->driver->findElement(WebDriverBy::xpath('//*[@id="comment_form"]/label[1]/textarea'))
-            ->sendKeys('https://www.example.com/foo/?bar=baz&inga=42&quux');
+            ->sendKeys('テストテスト' . PHP_EOL . 'https://www.example.com/foo/?bar=baz&inga=42&quux');
         $this->driver->findElement(WebDriverBy::xpath('//*[@id="comment_form"]/input[6]'))->click();
 
         $this->driver->wait()->until(
@@ -208,5 +208,8 @@ class CommentTest extends TestCase
 
         $this->assertEquals("https://www.example.com/foo/?bar=baz&inga=42&quux", $element->getAttribute('href'));
         $this->assertEquals("https://www.example.com/foo/?bar=baz&inga=42&quux", $element->getText());
+
+        $element = $this->driver->findElement(WebDriverBy::xpath('//*[@id="2"]'));
+        $this->assertEquals("テストテスト" . PHP_EOL . "https://www.example.com/foo/?bar=baz&inga=42&quux", $element->getText());
     }
 }
