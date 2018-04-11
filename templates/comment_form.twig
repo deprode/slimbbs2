@@ -1,4 +1,19 @@
 <div class="content comment_form">
+    {% if not user %}
+        <div class="comment_form__header__wrap">
+            <img class="comment_form__header__wrap__icon" src="http://via.placeholder.com/48x48" alt="匿名ユーザー">
+        </div>
+        <div class="comment_form__header__username">
+            匿名ユーザー
+        </div>
+    {% else %}
+        <div class="comment_form__header__wrap">
+            <img class="comment_form__header__wrap__icon" src="{{ user.user_image_url }}" alt="{{ user.user_name }}">
+        </div>
+        <div class="comment_form__header__username">
+            @{{ user.user_name }}
+        </div>
+    {% endif %}
     <form action="{{ path_for('thread_save') }}" method="post" id="comment_form" enctype="multipart/form-data">
         <label for="comment">コメント: <textarea class="comment_form__comment" name="comment"></textarea></label>
         <label for="picture">画像: <input type="file" name="picture" id="picture"

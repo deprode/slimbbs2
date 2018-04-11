@@ -5,6 +5,7 @@ namespace App\Domain;
 
 use App\Model\Sort;
 use App\Repository\CommentService;
+use App\Repository\UserService;
 use App\Service\MessageService;
 use Slim\Csrf\Guard;
 use Slim\Http\Request;
@@ -14,13 +15,15 @@ class ThreadFilter
     private $csrf;
     private $comment;
     private $message;
+    private $user;
     private $s3_settings;
 
-    public function __construct(Guard $csrf, CommentService $comment, MessageService $message, array $s3_settings)
+    public function __construct(Guard $csrf, CommentService $comment, MessageService $message, UserService $user, array $s3_settings)
     {
         $this->csrf = $csrf;
         $this->comment = $comment;
         $this->message = $message;
+        $this->user = $user;
         $this->s3_settings = $s3_settings;
     }
 
@@ -53,6 +56,10 @@ class ThreadFilter
             $data['comment_top'] = $data['comments'][count($data['comments']) - 1];
         } else if ($data['sort']->value() === Sort::NEWER) {
             $data['comment_top'] = $data['comments'][0];
+        }
+
+        if (!empty($attributes['isLoggedIn'])) {
+            $data['user'] = $this->user->getUser($attributes['username']);
         }
 
         // csrf

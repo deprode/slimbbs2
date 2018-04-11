@@ -34,6 +34,7 @@ class ThreadTest extends BaseTestCase
         $_SESSION = [];
         $_SESSION['user_id'] = getenv('USER_ID');
         $_SESSION['admin_id'] = getenv('ADMIN_ID');
+        $_SESSION['user_name'] = 'testuser';
 
         $this->runApp('POST', '/', ['comment' => 'thread_test', 'user_id' => '1']);
     }
@@ -334,5 +335,32 @@ EXPECT;
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('スレッドを作成しました', (string)$response->getBody());
         $this->assertContains('スレッドは削除されました', (string)$response->getBody());
+    }
+
+    public function test投稿フォームのユーザー名表示()
+    {
+        $anony_user = <<<ANONY_USER
+<div class="comment_form__header__username">
+            匿名ユーザー
+        </div>
+ANONY_USER;
+
+        $test_user = <<<TEST_USER
+<div class="comment_form__header__username">
+            @testuser
+        </div>
+TEST_USER;
+
+        $response = $this->runApp('GET', '/thread?thread_id=1');
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertContains('<img class="comment_form__header__wrap__icon" src="http://via.placeholder.com/48x48" alt="testuser">', (string)$response->getBody());
+        $this->assertContains($test_user, (string)$response);
+
+        $_SESSION['user_id'] = null;
+
+        $response = $this->runApp('GET', '/thread?thread_id=1');
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertContains('<img class="comment_form__header__wrap__icon" src="http://via.placeholder.com/48x48" alt="匿名ユーザー">', (string)$response->getBody());
+        $this->assertContains($anony_user, (string)$response->getBody());
     }
 }

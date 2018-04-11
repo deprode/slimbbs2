@@ -3,7 +3,9 @@
 namespace Tests\Unit\Domain;
 
 use App\Domain\ThreadFilter;
+use App\Model\User;
 use App\Repository\CommentService;
+use App\Repository\UserService;
 use App\Service\MessageService;
 use PHPUnit\Framework\TestCase;
 use Slim\Csrf\Guard;
@@ -13,6 +15,7 @@ class ThreadFilterTest extends TestCase
 {
     private $filter;
     private $request;
+    private $user_data;
 
     protected function setUp()
     {
@@ -49,12 +52,20 @@ class ThreadFilterTest extends TestCase
             ->method('getErrorMessage')
             ->willReturn('ErrorMessage');
 
+        $user = $this->createMock(UserService::class);
+        $this->user_data = new User();
+        $this->user_data->user_image_url = 'http://example.com/icon';
+        $this->user_data->user_name = 'testuser';
+        $user->expects($this->any())
+            ->method('getUser')
+            ->willReturn($this->user_data);
+
         $setting = [
             'region' => 'aws_s3_region',
             'bucket' => 'aws_s3_bucket'
         ];
 
-        $this->filter = new ThreadFilter($csrf, $comment, $message, $setting);
+        $this->filter = new ThreadFilter($csrf, $comment, $message, $user, $setting);
 
         $this->request = $this->createMock(Request::class);
         $this->request
@@ -72,6 +83,7 @@ class ThreadFilterTest extends TestCase
                 'isLoggedIn' => '1',
                 'isAdmin'    => '1',
                 'userId'     => '100',
+                'username'   => 'testuser'
             ]);
     }
 
@@ -112,6 +124,8 @@ class ThreadFilterTest extends TestCase
         $this->assertEquals('100', $data['user_id']);
         $this->assertEquals('1', $data['is_admin']);
         $this->assertEquals('1', $data['loggedIn']);
+
+        $this->assertEquals($this->user_data, $data['user']);
 
         $this->assertEquals('TestMessage', $data['info']);
         $this->assertEquals('ErrorMessage', $data['error']);

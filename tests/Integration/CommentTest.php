@@ -29,6 +29,8 @@ class CommentTest extends TestCase
             $dot_env->load();
         }
 
+        $_SESSION = [];
+
         putenv('MYSQL_HOST=' . getenv('MYSQL_LOCAL_HOST'));
         $dns = 'mysql:host=' . getenv('MYSQL_HOST') . ';port=' . getenv('MYSQL_PORT') . ';dbname=' . getenv('MYSQL_DATABASE');
         try {

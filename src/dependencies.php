@@ -165,7 +165,7 @@ $container['SearchFilter'] = function (ContainerInterface $c) {
 };
 
 $container['ThreadFilter'] = function (ContainerInterface $c) {
-    return new \App\Domain\ThreadFilter($c->get('csrf'), $c->get('CommentService'), $c->get('MessageService'), $c->get('settings')['s3']);
+    return new \App\Domain\ThreadFilter($c->get('csrf'), $c->get('CommentService'), $c->get('MessageService'), $c->get('UserService'), $c->get('settings')['s3']);
 };
 
 $container['CommentSaveFilter'] = function (ContainerInterface $c) {
