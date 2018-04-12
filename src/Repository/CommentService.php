@@ -34,6 +34,33 @@ class CommentService
     }
 
     /**
+     * @param int $comment_id
+     * @return CommentRead
+     * @throws FetchFailedException
+     */
+    public function getComment(int $comment_id): CommentRead
+    {
+        $select = $this->query->newSelect();
+        $select
+            ->from('comments')
+            ->cols(['comments.comment_id', 'comments.thread_id', 'comments.user_id', 'comments.like_count', 'comments.comment', 'comments.photo_url', 'comments.created_at', 'users.user_name', 'users.user_image_url'])
+            ->join('left', 'users', 'comments.user_id = users.user_id')
+            ->where('comment_id = :comment_id');
+
+        try {
+            $comment = $this->db->fetchAll($select->getStatement(), [
+                ':comment_id' => ['value' => $comment_id, 'type' => \PDO::PARAM_INT]
+            ], CommentRead::class);
+            if (count($comment) !== 1) {
+                throw new FetchFailedException();
+            }
+            return $comment[0];
+        } catch (\PDOException $e) {
+            throw new FetchFailedException();
+        }
+    }
+
+    /**
      * @param int|null $thread_id
      * @param Sort|null $sort
      * @return array

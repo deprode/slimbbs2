@@ -40,6 +40,9 @@ $app->post('/like', 'App\Action\LikeAction:add')
     ->setName('add_like')
     ->add($container->get('App\Validation\CommentLikeValidation'));
 
+$app->get('/comment[/{comment_id}]', 'App\Action\CommentAction:index')
+    ->setName('comment');
+
 $app->get('/quit', 'App\Action\QuitAction:index')
     ->setName('quit');
 

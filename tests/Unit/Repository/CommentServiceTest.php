@@ -49,6 +49,17 @@ class CommentServiceTest extends TestCase
     /**
      * @expectedException \App\Exception\FetchFailedException
      */
+    public function testGetComment()
+    {
+        $comment = $this->comment->getComment(1);
+        $this->assertEquals($this->data[0], $comment);
+
+        $this->error_comment->getComment(1);
+    }
+
+    /**
+     * @expectedException \App\Exception\FetchFailedException
+     */
     public function testGetComments()
     {
         $comments = $this->comment->getComments(1, new Sort('desc'));

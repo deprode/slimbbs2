@@ -134,6 +134,10 @@ $container['App\Action\LikeAction'] = function (ContainerInterface $c) {
     return new App\Action\LikeAction($c->get('logger'), $c->get('LikeFilter'));
 };
 
+$container['App\Action\CommentAction'] = function (ContainerInterface $c) {
+    return new \App\Action\CommentAction($c->get('CommentFilter'), $c->get('CommentResponder'));
+};
+
 $container['App\Action\QuitAction'] = function (ContainerInterface $c) {
     return new App\Action\QuitAction($c->get('QuitFilter'), $c->get('QuitResponder'));
 };
@@ -182,6 +186,10 @@ $container['CommentDeleteFilter'] = function (ContainerInterface $c) {
 
 $container['LikeFilter'] = function (ContainerInterface $c) {
     return new \App\Domain\LikeFilter($c->get('CommentService'));
+};
+
+$container['CommentFilter'] = function (ContainerInterface $c) {
+    return new \App\Domain\CommentFilter($c->get('CommentService'));
 };
 
 $container['QuitFilter'] = function (ContainerInterface $c) {
@@ -255,6 +263,10 @@ $container['DeleteResponder'] = function (ContainerInterface $c) {
 
 $container['SearchResponder'] = function (ContainerInterface $c) {
     return new App\Responder\SearchResponder($c->get('view'), $c->get('MessageService'));
+};
+
+$container['CommentResponder'] = function (ContainerInterface $c) {
+    return new \App\Responder\CommentResponder($c->get('view'), $c->get('MessageService'));
 };
 
 $container['QuitResponder'] = function (ContainerInterface $c) {
