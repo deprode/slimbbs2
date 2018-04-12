@@ -98,6 +98,8 @@ class MessageTest extends TestCase
             WebDriverExpectedCondition::titleContains('Toppage')
         );
 
+        $this->driver->executeScript('document.getElementsByTagName("textarea")[0].removeAttribute("required");');
+
         $this->driver->findElement(WebDriverBy::xpath('/html/body/div/div/form/input[4]'))->click();
 
         $this->driver->wait()->until(

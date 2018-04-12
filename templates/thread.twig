@@ -148,7 +148,7 @@
                                           class="js-edit-form">
                                         <label for="comment">
                                             <textarea name="comment" class="comment_form__comment"
-                                                      v-model="comment"></textarea>
+                                                      v-model="comment" maxlength="400" required></textarea>
                                         </label>
                                         <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
                                         <input type="hidden" name="thread_id" value="{{ thread_id }}">

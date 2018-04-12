@@ -15,7 +15,8 @@
         </div>
     {% endif %}
     <form action="{{ path_for('thread_save') }}" method="post" id="comment_form" enctype="multipart/form-data">
-        <label for="comment">コメント: <textarea class="comment_form__comment" name="comment"></textarea></label>
+        <label for="comment">コメント:
+            <textarea class="comment_form__comment" name="comment" maxlength="400" required></textarea></label>
         <label for="picture">画像: <input type="file" name="picture" id="picture"
                                         accept="image/png, image/gif, image/jpeg"></label>
         <input type="hidden" name="thread_id" value="{{ thread_id }}">
