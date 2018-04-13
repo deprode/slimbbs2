@@ -27,7 +27,7 @@
                             </div>
                         </div>
                         <div class="comment__header__createdat">
-                            {{ comment.createdAtStr }}
+                            <a href="{{ path_for('comment', {'comment_id': comment.comment_id}) }}">{{ comment.createdAtStr }}</a>
                         </div>
                     </header>
                     <main class="comment__main" v-cloak>
