@@ -45,8 +45,7 @@ class ThreadTest extends BaseTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('thread_test', (string)$response->getBody());
         $this->assertContains('testuser', (string)$response->getBody());
-        $this->assertContains('<img class="comment__header__wrap__icon" src="http://via.placeholder.com/48x48"
-                                             alt="testuser">', (string)$response->getBody());
+        $this->assertContains('<img class="comment__header__wrap__icon" src="http://via.placeholder.com/48x48" width="48" height="48" alt="testuser">', (string)$response->getBody());
     }
 
     public function testスレッドの表示失敗()
@@ -353,7 +352,7 @@ TEST_USER;
 
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains('<img class="comment_form__header__wrap__icon" src="http://via.placeholder.com/48x48" alt="testuser">', (string)$response->getBody());
+        $this->assertContains('<img class="comment_form__header__wrap__icon" src="http://via.placeholder.com/48x48" width="48" height="48" alt="testuser">', (string)$response->getBody());
         $this->assertContains($test_user, (string)$response);
 
         $_SESSION['user_id'] = null;

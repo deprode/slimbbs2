@@ -235,6 +235,7 @@ input.button--like {
 
   &__header__wrap__icon {
     border-radius: 50%;
+    border: 1px solid #d1d1d1;
   }
 
   &__header__username {
@@ -298,6 +299,7 @@ input.button--like {
   margin-bottom: 2rem;
   &__icon {
     border-radius: 50%;
+    border-color: #d1d1d1;
   }
   &__name {
     display: inline-block;
