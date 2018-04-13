@@ -359,7 +359,7 @@ TEST_USER;
 
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains('<img class="comment_form__header__wrap__icon" src="http://via.placeholder.com/48x48" alt="匿名ユーザー">', (string)$response->getBody());
+        $this->assertContains('<img class="comment_form__header__wrap__icon" src="/assets/img/anonymous-user.svg" width="48" height="48" alt="匿名ユーザー">', (string)$response->getBody());
         $this->assertContains($anony_user, (string)$response->getBody());
     }
 }
