@@ -94,24 +94,11 @@ class ThreadFilterTest extends TestCase
             ->expects($this->any())
             ->method('getParams')
             ->willReturn([
-                'thread_id' => '1',
-                'sort'      => 'asc'
+                'thread_id' => '1'
             ]);
         $data = $this->filter->filtering($request);
 
         $this->assertEquals(1, $data['comment_top']['comment_id']);
-
-        $request = $this->createMock(Request::class);
-        $request
-            ->expects($this->any())
-            ->method('getParams')
-            ->willReturn([
-                'thread_id' => '1',
-                'sort'      => 'desc'
-            ]);
-        $data = $this->filter->filtering($request);
-
-        $this->assertEquals(2, $data['comment_top']['comment_id']);
     }
 
     public function testFiltering()

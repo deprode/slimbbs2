@@ -68,34 +68,15 @@
             </article>
         </div>
     {% endif %}
-    <div class="row">
-        <article class="comments column">
-            {% if comments %}
-                <div class="comments__sort">
-                    <form action="{{ path_for('thread') }}" method="get" class="form--inline">
-                        <input type="hidden" name="thread_id" value="{{ thread_id }}">
-                        <select name="sort">
-                            <option value="asc" {% if sort == "asc" %}selected{% endif %}>古い順</option>
-                            <option value="desc" {% if sort == "desc" %}selected{% endif %}>新しい順</option>
-                        </select>
-                        <input type="submit" value="並び順を変更" class="comments__sort__button">
-                    </form>
-                </div>
-            {% endif %}
-        </article>
-    </div>
-    {% if sort == 'desc' %}
-        {% include "comment_form.twig" with {
-            'thread_id': thread_id,
-            'sort': sort,
-            'user_id': user_id,
-            'nameKey': nameKey,
-            'name': name,
-            'valueKey': valueKey,
-            'value': value,
-            'user': user
-        } %}
-    {% endif %}
+    {% include "comment_form.twig" with {
+        'thread_id': thread_id,
+        'user_id': user_id,
+        'nameKey': nameKey,
+        'name': name,
+        'valueKey': valueKey,
+        'value': value,
+        'user': user
+    } %}
     <div class="row">
         <article class="comments column">
             {% if comments %}
@@ -208,17 +189,6 @@
             {% endif %}
         </article>
     </div>
-    {% if sort == 'asc' %}
-        {% include "comment_form.twig" with {
-            'thread_id': thread_id,
-            'sort': sort,
-            'user_id': user_id,
-            'nameKey': nameKey,
-            'name': name,
-            'valueKey': valueKey,
-            'value': value
-        } %}
-    {% endif %}
 {% endblock %}
 {% block scripts %}
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>

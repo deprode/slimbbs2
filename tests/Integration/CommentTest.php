@@ -200,7 +200,7 @@ class CommentTest extends TestCase
 
         $this->driver->findElement(WebDriverBy::xpath('//*[@id="comment_form"]/label[1]/textarea'))
             ->sendKeys('テストテスト' . PHP_EOL . 'https://www.example.com/foo/?bar=baz&inga=42&quux');
-        $this->driver->findElement(WebDriverBy::xpath('//*[@id="comment_form"]/input[6]'))->click();
+        $this->driver->findElement(WebDriverBy::xpath('//*[@id="comment_form"]/input[5]'))->click();
 
         $this->driver->wait()->until(
             WebDriverExpectedCondition::titleContains('Slimbbs')

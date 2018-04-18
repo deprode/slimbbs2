@@ -7,7 +7,6 @@ use App\Exception\FetchFailedException;
 use App\Exception\SaveFailedException;
 use App\Model\Comment;
 use App\Model\CommentRead;
-use App\Model\Sort;
 use App\Service\DatabaseService;
 use App\Traits\TimeElapsed;
 use Aura\SqlQuery\QueryFactory;
@@ -62,11 +61,10 @@ class CommentService
 
     /**
      * @param int|null $thread_id
-     * @param Sort|null $sort
      * @return array
      * @throws FetchFailedException
      */
-    public function getComments(int $thread_id = null, Sort $sort = null): array
+    public function getComments(int $thread_id = null): array
     {
         $select = $this->query->newSelect();
         $select
@@ -74,7 +72,7 @@ class CommentService
             ->cols(['comments.comment_id', 'comments.user_id', 'comments.like_count', 'comments.comment', 'comments.photo_url', 'comments.created_at', 'users.user_name', 'users.user_image_url'])
             ->join('left', 'users', 'comments.user_id = users.user_id')
             ->where('thread_id = :thread_id')
-            ->orderBy(['comments.comment_id ' . $sort->value()]);
+            ->orderBy(['comments.comment_id DESC']);
 
         try {
             return $this->db->fetchAll($select->getStatement(), [

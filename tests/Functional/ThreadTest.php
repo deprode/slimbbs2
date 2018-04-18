@@ -86,28 +86,6 @@ class ThreadTest extends BaseTestCase
         $this->assertContains('秒前', (string)$response->getBody());
     }
 
-    public function testソート順の記憶()
-    {
-        $this->postReply();
-
-        $response = $this->runApp('GET', '/thread?thread_id=1');
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains('<option value="desc" selected>', (string)$response->getBody());
-
-        $response = $this->runApp('GET', '/thread?thread_id=1&sort=asc');
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains('<option value="asc" selected>', (string)$response->getBody());
-    }
-
-    public function testソート後もコメント欄の表示()
-    {
-        $response = $this->runApp('GET', '/thread?thread_id=1&sort=desc');
-        $this->assertContains('<form action="/thread" method="post" id="comment_form" enctype="multipart/form-data">', (string)$response->getBody());
-
-        $response = $this->runApp('GET', '/thread?thread_id=1&sort=asc');
-        $this->assertContains('<form action="/thread" method="post" id="comment_form" enctype="multipart/form-data">', (string)$response->getBody());
-    }
-
     public function testタイトルの切り詰め()
     {
         $comment = <<<COMMENT
