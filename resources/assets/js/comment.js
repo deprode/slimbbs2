@@ -178,7 +178,7 @@ const vm = new Vue({
                     }
                 )
                 .catch((e) => {
-                    this.error_msg = '「そうだね」できませんでした。';
+                    comment.error_msg = '「そうだね」できませんでした。';
                 });
         },
         updateCount: function (comment) {

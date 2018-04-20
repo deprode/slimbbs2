@@ -80,6 +80,10 @@
     <div class="row" id="js-comments">
         <article class="comments column">
             {% if comments %}
+                <div v-show="error_msg !== ''"
+                     class="message message--error content content--thin">
+                    ${error_msg}
+                </div>
                 <section v-for="comment in comments" class="comment js-comment" :id="comment.id">
                     <header class="comment__header">
                         <div>
@@ -103,7 +107,7 @@
                     <main class="comment__main" v-cloak>
                         <div v-show="has_error(comment)"
                              class="message message--error content content--thin">
-                            ${error_msg}
+                            ${comment.error_msg}
                         </div>
                         <div :id="comment._comment.comment_id" v-show="!editing(comment)"
                              v-html="comment_computed(comment.comment)">
