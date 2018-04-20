@@ -20,3 +20,34 @@
         {% endif %}
     {% endif %}
 {% endblock %}
+{% block scripts %}
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <script>
+        const twitter_embed = `<blockquote class="twitter-tweet"><a href="$url"></a></blockquote>`;
+        const link_html = `<a href="{url}" target="_new">{url}</a>`;
+        const reg = /^https?:\/\/twitter.com\/(.*)\/(status|statuses)\/(\d+)$/;
+        const reg_link = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,})/;
+
+        function build_comment(comment) {
+            let comment_str = comment.split('\n');
+            // twitter-linkを検出
+            const _this = this;
+            comment_str = comment_str.map(function (value) {
+                if (reg.test(value)) {
+                    return twitter_embed.replace('$url', value);
+                } else if (reg_link.test(value)) {
+                    return link_html.replace(/{url}/g, value);
+                }
+                return value;
+            });
+            // コメントを結合
+            return comment_str.join('<br/>');
+        }
+
+        const comments = document.querySelectorAll('.js-comment');
+        Object.keys(comments).map(function (key, index) {
+            comments[index].innerHTML = build_comment(comments[index].dataset.comment);
+        });
+
+    </script>
+{% endblock %}

@@ -26,7 +26,7 @@
                         </div>
                     </header>
                     <main class="comment__main">
-                        <div id="{{ comment.comment_id }}">
+                        <div id="{{ comment.comment_id }}" data-comment="{{ comment.comment }}" class="js-comment">
                             {{ comment.comment | trim }}
                         </div>
                         {% if comment.photo_url %}
@@ -38,15 +38,17 @@
                     </main>
                     <footer class="comment__footer">
                         {% if is_admin %}
-                            <form action="{{ path_for('delete_comment') }}" method="post">
-                                <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
-                                <input type="hidden" name="thread_id" value="{{ comment.thread_id }}">
-                                <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
-                                <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
-                                <input type="hidden" name="query" value="{{ query }}">
-                                <input type="hidden" name="_METHOD" value="DELETE">
-                                <input type="submit" value="削除" class="button--small">
-                            </form>
+                            <div class="comment__footer_delete">
+                                <form action="{{ path_for('delete_comment') }}" method="post">
+                                    <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
+                                    <input type="hidden" name="thread_id" value="{{ comment.thread_id }}">
+                                    <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
+                                    <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
+                                    <input type="hidden" name="query" value="{{ query }}">
+                                    <input type="hidden" name="_METHOD" value="DELETE">
+                                    <input type="submit" value="削除" class="comment_delete button--small">
+                                </form>
+                            </div>
                         {% endif %}
                         <div>
                             <a href="{{ path_for('thread', {}, {'thread_id': comment.thread_id}) }}">スレッドを見る</a>
