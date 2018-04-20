@@ -28,9 +28,9 @@
                             <a href="{{ path_for('comment', {'comment_id': comment.comment_id}) }}">{{ comment.createdAtStr }}</a>
                         </div>
                     </header>
-                    <main class="comment__main" v-cloak>
-                        <div id="{{ comment.comment_id }}" v-show="!editing"
-                             v-html="comment_computed">
+                    <main class="comment__main">
+                        <div id="comment" data-comment="{{ comment.comment }}">
+                            {{ comment.comment }}
                         </div>
                         {% if comment.photo_url %}
                             <div class="comment_main__photo">
@@ -55,10 +55,28 @@
 {% endblock %}
 {% block scripts %}
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
     <script>
-        const add_like_path = '' + '{{ path_for('add_like') }}';
-        const update_path = '' + '{{ path_for('update_comment') }}';
+        const twitter_embed = `<blockquote class="twitter-tweet"><a href="$url"></a></blockquote>`;
+        const link_html = `<a href="{url}" target="_new">{url}</a>`;
+        const reg = /^https?:\/\/twitter.com\/(.*)\/(status|statuses)\/(\d+)$/;
+        const reg_link = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,})/;
+
+        function build_comment(comment) {
+            let comment_str = comment.split('\n');
+            // twitter-linkを検出
+            const _this = this;
+            comment_str = comment_str.map(function (value) {
+                if (reg.test(value)) {
+                    return twitter_embed.replace('$url', value);
+                } else if (reg_link.test(value)) {
+                    return link_html.replace(/{url}/g, value);
+                }
+                return value;
+            });
+            // コメントを結合
+            return comment_str.join('<br/>');
+        }
+
+        document.getElementById('comment').innerHTML = build_comment(document.getElementById('comment').dataset.comment);
     </script>
-    <script src="{{ base_url() }}/assets/js/bundle.js"></script>
 {% endblock %}

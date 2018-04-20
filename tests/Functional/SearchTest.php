@@ -40,7 +40,7 @@ class SearchTest extends BaseTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('<section class="comment">', (string)$response->getBody());
         $this->assertContains('コメント', (string)$response->getBody());
-        $this->assertContains('<a href="/thread?thread_id=1#c1">', (string)$response->getBody());
+        $this->assertContains('<a href="/thread?thread_id=1">', (string)$response->getBody());
     }
 
     public function test空クエリで検索()

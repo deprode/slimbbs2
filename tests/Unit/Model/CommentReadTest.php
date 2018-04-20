@@ -16,6 +16,33 @@ class CommentReadTest extends TestCase
         $this->assertEquals('1月1日', $result);
     }
 
+    public function testToArray()
+    {
+        $comment = new CommentRead();
+        $comment->comment_id = 1;
+        $comment->thread_id = 1;
+        $comment->user_id = 10;
+        $comment->like_count = 100;
+        $comment->photo_url = '';
+        $comment->created_at = '2018-10-10 10:10:10';
+        $comment->user_name = 'testuser';
+        $comment->user_image_url = 'http://example.com/icon';
+        $array = $comment->toArray();
+
+        $this->assertInternalType('array', $array);
+        $this->assertEquals([
+            'comment_id'     => 1,
+            'thread_id'      => 1,
+            'user_id'        => 10,
+            'like_count'     => 100,
+            'comment'        => null,
+            'photo_url'      => '',
+            'created_at'     => '2018-10-10 10:10:10',
+            'user_name'      => 'testuser',
+            'user_image_url' => 'http://example.com/icon',
+        ], $array);
+    }
+
     public function test__toString()
     {
         $comment = new CommentRead();

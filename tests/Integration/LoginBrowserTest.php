@@ -64,8 +64,26 @@ class LoginBrowserTest extends \PHPUnit_Framework_TestCase
 
         try {
             $this->driver->wait()->until(
-                WebDriverExpectedCondition::titleContains('Slimbbs')
+                function () {
+                    return WebDriverExpectedCondition::titleContains('Slimbbs')
+                        || WebDriverExpectedCondition::visibilityOfElementLocated(WebDriverBy::xpath('//*[@id="challenge_response"]'));
+                }
             );
+
+            if (mb_strstr($this->driver->getCurrentURL(), 'twitter.com')) {
+                $this->driver->findElement(WebDriverBy::xpath('//*[@id="challenge_response"]'))
+                    ->sendKeys(getenv('TWITTER_CELLPHONE'));
+                $this->driver->findElement(WebDriverBy::xpath('//*[@id="email_challenge_submit"]'))->click();
+
+                $this->driver->wait()->until(
+                    WebDriverExpectedCondition::titleContains('Twitter')
+                );
+                $this->driver->findElement(WebDriverBy::xpath('//*[@id="allow"]'))->click();
+
+                $this->driver->wait()->until(
+                    WebDriverExpectedCondition::titleContains('Slimbbs')
+                );
+            }
         } catch (TimeOutException $e) {
             return;
         }

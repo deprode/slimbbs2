@@ -3,7 +3,6 @@
 namespace App\Domain;
 
 
-use App\Model\Sort;
 use App\Repository\CommentService;
 use App\Repository\UserService;
 use App\Service\MessageService;
@@ -45,18 +44,13 @@ class ThreadFilter
             throw new \InvalidArgumentException();
         }
 
-        $data['sort'] = new Sort($params['sort'] ?? 'desc');
         $data['thread_id'] = $thread_id;
 
-        $data['comments'] = $this->comment->getComments((int)$thread_id, $data['sort']);
+        $data['comments'] = $this->comment->getComments((int)$thread_id);
         if (empty($data['comments'])) {
             throw new \UnexpectedValueException();
         }
-        if ($data['sort']->value() === Sort::OLDER) {
-            $data['comment_top'] = $data['comments'][count($data['comments']) - 1];
-        } else if ($data['sort']->value() === Sort::NEWER) {
-            $data['comment_top'] = $data['comments'][0];
-        }
+        $data['comment_top'] = $this->comment->getTopComment((int)$thread_id);
 
         if (!empty($attributes['isLoggedIn'])) {
             $data['user'] = $this->user->getUser($attributes['username']);

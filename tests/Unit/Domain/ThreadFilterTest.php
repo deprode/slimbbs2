@@ -3,6 +3,7 @@
 namespace Tests\Unit\Domain;
 
 use App\Domain\ThreadFilter;
+use App\Model\CommentRead;
 use App\Model\User;
 use App\Repository\CommentService;
 use App\Repository\UserService;
@@ -43,6 +44,11 @@ class ThreadFilterTest extends TestCase
                 'user_image_url' => 'http://via.placeholder.com/48x48'
             ]
         ]);
+        $top_comment = new CommentRead();
+        $top_comment->comment_id = 1;
+        $comment->expects($this->any())
+            ->method('getTopComment')
+            ->willReturn($top_comment);
 
         $message = $this->createMock(MessageService::class);
         $message->expects($this->any())
@@ -94,24 +100,11 @@ class ThreadFilterTest extends TestCase
             ->expects($this->any())
             ->method('getParams')
             ->willReturn([
-                'thread_id' => '1',
-                'sort'      => 'asc'
+                'thread_id' => '1'
             ]);
         $data = $this->filter->filtering($request);
 
-        $this->assertEquals(1, $data['comment_top']['comment_id']);
-
-        $request = $this->createMock(Request::class);
-        $request
-            ->expects($this->any())
-            ->method('getParams')
-            ->willReturn([
-                'thread_id' => '1',
-                'sort'      => 'desc'
-            ]);
-        $data = $this->filter->filtering($request);
-
-        $this->assertEquals(2, $data['comment_top']['comment_id']);
+        $this->assertEquals(1, $data['comment_top']->comment_id);
     }
 
     public function testFiltering()

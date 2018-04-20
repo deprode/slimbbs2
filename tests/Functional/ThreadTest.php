@@ -76,7 +76,6 @@ class ThreadTest extends BaseTestCase
 
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains('comment_test', (string)$response->getBody());
         $this->assertContains('コメントを保存しました。', (string)$response->getBody());
 
         sleep(1);
@@ -84,28 +83,6 @@ class ThreadTest extends BaseTestCase
         $response = $this->runApp('GET', '/');
         $this->assertContains('2個のコメント', (string)$response->getBody());
         $this->assertContains('秒前', (string)$response->getBody());
-    }
-
-    public function testソート順の記憶()
-    {
-        $this->postReply();
-
-        $response = $this->runApp('GET', '/thread?thread_id=1');
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains('<option value="desc" selected>', (string)$response->getBody());
-
-        $response = $this->runApp('GET', '/thread?thread_id=1&sort=asc');
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains('<option value="asc" selected>', (string)$response->getBody());
-    }
-
-    public function testソート後もコメント欄の表示()
-    {
-        $response = $this->runApp('GET', '/thread?thread_id=1&sort=desc');
-        $this->assertContains('<form action="/thread" method="post" id="comment_form" enctype="multipart/form-data">', (string)$response->getBody());
-
-        $response = $this->runApp('GET', '/thread?thread_id=1&sort=asc');
-        $this->assertContains('<form action="/thread" method="post" id="comment_form" enctype="multipart/form-data">', (string)$response->getBody());
     }
 
     public function testタイトルの切り詰め()
@@ -173,8 +150,6 @@ EXPECT;
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('コメントを保存しました。', (string)$response->getBody());
-        $this->assertContains('<img src="https://s3-ap-northeast-1.amazonaws.com/slimbbs2/', (string)$response->getBody());
-        $this->assertContains('alt="file_upload_test"', (string)$response->getBody());
     }
 
     public function test投稿の削除()
@@ -238,7 +213,6 @@ EXPECT;
 
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains('comment_test', (string)$response->getBody());
         $this->assertNotContains('コメントを削除しました。', (string)$response->getBody());
     }
 
@@ -253,7 +227,6 @@ EXPECT;
 
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains('comment_test', (string)$response->getBody());
         $this->assertContains('削除に失敗しました。', (string)$response->getBody());
     }
 
@@ -302,7 +275,6 @@ EXPECT;
 
         $response = $this->runApp('GET', '/thread?thread_id=1');
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains('data-like="1"', (string)$response->getBody());
     }
 
     public function test匿名でそうだねが出ない()
