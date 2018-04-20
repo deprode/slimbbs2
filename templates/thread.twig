@@ -44,9 +44,9 @@
                             <a href="{{ path_for('comment', {'comment_id': comment.comment_id}) }}">{{ comment.createdAtStr }}</a>
                         </div>
                     </header>
-                    <main class="comment__main" v-cloak>
-                        <div id="{{ comment.comment_id }}" v-show="!editing"
-                             v-html="comment_computed">
+                    <main class="comment__main">
+                        <div id="top_comment" data-comment="{{ comment.comment }}">
+                            {{ comment.comment }}
                         </div>
                         {% if comment.photo_url %}
                             <div class="comment_main__photo">
@@ -77,113 +77,107 @@
         'value': value,
         'user': user
     } %}
-    <div class="row">
+    <div class="row" id="js-comments">
         <article class="comments column">
             {% if comments %}
-                {% for comment in comments %}
-                    <section class="comment js-comment" id="c{{ comment.comment_id }}"
-                             data-comment="{{- comment.comment | trim }}">
-                        <header class="comment__header">
-                            {% set isSigned = comment.user_name and comment.user_image_url %}
-                            <div>
-                                <div class="comment__header__wrap">
-                                    {% if isSigned %}
-                                        <img class="comment__header__wrap__icon" src="{{ comment.user_image_url }}" width="48" height="48" alt="{{ comment.user_name }}">
-                                    {% else %}
-                                        <img class="comment__header__wrap__icon" src="/assets/img/anonymous-user.svg" width="48" height="48" alt="匿名ユーザー">
-                                    {% endif %}
-                                </div>
-                                <div class="comment__header__username">
-                                    {% if isSigned %}
-                                        @{{ comment.user_name }}
-                                    {% else %}
-                                        匿名ユーザー
-                                    {% endif %}
-                                </div>
+                <section v-for="comment in comments" class="comment js-comment" :id="comment.id">
+                    <header class="comment__header">
+                        <div>
+                            <div class="comment__header__wrap">
+                                <img v-if="comment._comment.user_name" class="comment__header__wrap__icon" :src="comment._comment.user_image_url" width="48" height="48" alt="comment._comment.user_name">
+                                <img v-else class="comment__header__wrap__icon" src="/assets/img/anonymous-user.svg" width="48" height="48" alt="匿名ユーザー">
                             </div>
-                            <div class="comment__header__createdat">
-                                <a href="{{ path_for('comment', {'comment_id': comment.comment_id}) }}">{{ comment.createdAtStr }}</a>
+                            <div v-if="comment._comment.user_name" class="comment__header__username">
+                                @${ comment._comment.user_name }
                             </div>
-                        </header>
-                        <main class="comment__main" v-cloak>
-                            <div v-show="has_error"
-                                 class="message message--error content content--thin">
-                                ${error_msg}
+                            <div v-else class="comment__header__username">
+                                匿名ユーザー
                             </div>
-                            <div id="{{ comment.comment_id }}" v-show="!editing"
-                                 v-html="comment_computed">
-                            </div>
-                            {% if comment.photo_url %}
-                                <div class="comment_main__photo">
-                                    <img src="https://s3-{{ region }}.amazonaws.com/{{ bucket }}/{{ comment.photo_url }}"
-                                         alt="{{ comment.comment }}">
-                                </div>
-                            {% endif %}
-                            {% if (isSigned and comment.user_id == user_id) %}
-                                <div v-if="editing">
-                                    <form action="{{ path_for('update_comment') }}" method="post"
-                                          class="js-edit-form">
-                                        <label for="comment">
+                        </div>
+                        <div class="comment__header__createdat">
+                            <a :href="'{{ path_for('comment') }}/' + comment.comment_id">
+                                ${ comment._comment.created_at }
+                            </a>
+                        </div>
+                    </header>
+                    <main class="comment__main" v-cloak>
+                        <div v-show="has_error(comment)"
+                             class="message message--error content content--thin">
+                            ${error_msg}
+                        </div>
+                        <div :id="comment._comment.comment_id" v-show="!editing(comment)"
+                             v-html="comment_computed(comment.comment)">
+                        </div>
+                        <div v-if="comment._comment.photo_url" class="comment_main__photo">
+                            <img :src="'https://s3-{{ region }}.amazonaws.com/{{ bucket }}/' + comment._comment.photo_url"
+                                 :alt="comment.comment">
+                        </div>
+                        <div v-if="editing(comment) && isOwned(comment.user_id)">
+                            <form action="{{ path_for('update_comment') }}" method="post"
+                                  class="js-edit-form">
+                                <label for="comment">
                                             <textarea name="comment" class="comment_form__comment"
-                                                      v-model="comment" maxlength="400" required></textarea>
-                                        </label>
-                                        <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
-                                        <input type="hidden" name="thread_id" value="{{ thread_id }}">
-                                        <input type="hidden" name="_METHOD" value="PUT">
-                                        <input type="submit" value="変更" class="button--small js-update"
-                                               data-comment="{{ comment.comment_id }}"
-                                               id="update-{{ comment.comment_id }}"
-                                               @click="editEnd">
-                                        <button class="comment__cancel button--small"
-                                                @click="editCancel">キャンセル
-                                        </button>
-                                    </form>
-                                </div>
-                            {% endif %}
-                        </main>
-                        <footer class="comment__footer">
-                            <div class="comment__footer_delete">
-                                {% if is_admin or (isSigned and comment.user_id == user_id) %}
-                                    <form action="{{ path_for('delete_comment') }}" method="post">
-                                        <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
-                                        <input type="hidden" name="thread_id" value="{{ thread_id }}">
-                                        <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
-                                        <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
-                                        <input type="hidden" name="_METHOD" value="DELETE">
-                                        <input type="submit" value="削除" class="comment_delete button--small"
-                                               @click="deleteConfirm">
-                                    </form>
-                                {% else %}
-                                    &nbsp;
-                                {% endif %}
-                            </div>
-                            {% if (isSigned and comment.user_id == user_id) %}
-                                <button class="button--small"
-                                        @click="editStart" v-if="!editing">編集
+                                                      v-model="comment.comment" maxlength="400" required></textarea>
+                                </label>
+                                <input type="hidden" name="comment_id" :value="comment.comment_id">
+                                <input type="hidden" name="thread_id" value="{{ thread_id }}">
+                                <input type="hidden" name="_METHOD" value="PUT">
+                                <input type="submit" value="変更" class="button--small js-update"
+                                       :id="'update-' + comment.comment_id"
+                                       @click="editEnd(comment, $event)">
+                                <button class="comment__cancel button--small"
+                                        @click="editCancel(comment, $event)">キャンセル
                                 </button>
-                            {% endif %}
-                            {% if loggedIn %}
-                                <div>
-                                    <form action="javascript: void(0);" method="post" id="like-{{ comment.comment_id }}"
-                                          class="js-like" data-like="{{ comment.like_count }}">
-                                        <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
-                                        <input type="hidden" name="thread_id" value="{{ thread_id }}">
-                                        <input type="submit" :value="soudane"
-                                               class="button--small button--like"
-                                               id="like-{{ comment.comment_id }}--submit"
-                                               @click="addLike"
-                                               :disabled="unsent">
-                                    </form>
-                                </div>
+                            </form>
+                        </div>
+                    </main>
+                    <footer class="comment__footer">
+                        <div class="comment__footer_delete">
+                            {% if is_admin %}
+                                <form action="{{ path_for('delete_comment') }}" method="post">
+                                    <input type="hidden" name="comment_id" :value="comment.comment_id">
+                                    <input type="hidden" name="thread_id" :value="comment._comment.thread_id">
+                                    <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
+                                    <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
+                                    <input type="hidden" name="_METHOD" value="DELETE">
+                                    <input type="submit" value="削除" class="comment_delete button--small"
+                                           @click="deleteConfirm">
+                                </form>
                             {% else %}
-                                <div>
-                                    そうだね&#215;<span
-                                            id="like-{{ comment.comment_id }}_like">{{ comment.like_count }}</span>
-                                </div>
+                                <form v-if="isOwned(comment.user_id)" action="{{ path_for('delete_comment') }}" method="post">
+                                    <input type="hidden" name="comment_id" :value="comment.comment_id">
+                                    <input type="hidden" name="thread_id" :value="comment._comment.thread_id">
+                                    <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
+                                    <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
+                                    <input type="hidden" name="_METHOD" value="DELETE">
+                                    <input type="submit" value="削除" class="comment_delete button--small"
+                                           @click="deleteConfirm">
+                                </form>
                             {% endif %}
-                        </footer>
-                    </section>
-                {% endfor %}
+                        </div>
+                        <button class="button--small"
+                                @click="editStart(comment)" v-if="!editing(comment) && isOwned(comment.user_id)">編集
+                        </button>
+                        {% if loggedIn %}
+                            <div>
+                                <form action="javascript: void(0);" method="post" :id="comment.like_form_id">
+                                    <input type="hidden" name="comment_id" :value="comment.comment_id">
+                                    <input type="hidden" name="thread_id" :value="comment._comment.thread_id">
+                                    <input type="submit" :value="soudane(comment)"
+                                           class="button--small button--like"
+                                           :id="'like-' + comment.comment_id + '--submit'"
+                                           @click="addLike(comment)"
+                                           :disabled="comment.unsent">
+                                </form>
+                            </div>
+                        {% else %}
+                            <div>
+                                そうだね&#215;<span
+                                        :id="'like-' + comment.comment_id + '_like'">${ comment.count }</span>
+                            </div>
+                        {% endif %}
+                    </footer>
+                </section>
             {% else %}
                 コメントがありません。
             {% endif %}
@@ -191,11 +185,12 @@
     </div>
 {% endblock %}
 {% block scripts %}
-    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
     <script>
-        const add_like_path = '' + '{{ path_for('add_like') }}';
-        const update_path = '' + '{{ path_for('update_comment') }}';
+        const add_like_path = '{{ path_for('add_like') }}';
+        const update_path = '{{ path_for('update_comment') }}';
+        const fetch_path = '/comments/{{ thread_id }}/';
+        const user_id = '' + '{{ user_id }}';
     </script>
     <script src="{{ base_url() }}/assets/js/bundle.js"></script>
 {% endblock %}

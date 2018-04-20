@@ -80,9 +80,28 @@ class CommentTest extends TestCase
 
         $this->driver->findElement(WebDriverBy::xpath('//*[@id="allow"]'))->click();
 
+
         $this->driver->wait()->until(
-            WebDriverExpectedCondition::titleContains('Slimbbs')
+            function () {
+                return WebDriverExpectedCondition::titleContains('Slimbbs')
+                    || WebDriverExpectedCondition::visibilityOfElementLocated(WebDriverBy::xpath('//*[@id="challenge_response"]'));
+            }
         );
+
+        if (mb_strstr($this->driver->getCurrentURL(), 'twitter.com')) {
+            $this->driver->findElement(WebDriverBy::xpath('//*[@id="challenge_response"]'))
+                ->sendKeys(getenv('TWITTER_CELLPHONE'));
+            $this->driver->findElement(WebDriverBy::xpath('//*[@id="email_challenge_submit"]'))->click();
+
+            $this->driver->wait()->until(
+                WebDriverExpectedCondition::titleContains('Twitter')
+            );
+            $this->driver->findElement(WebDriverBy::xpath('//*[@id="allow"]'))->click();
+
+            $this->driver->wait()->until(
+                WebDriverExpectedCondition::titleContains('Slimbbs')
+            );
+        }
     }
 
     /**
@@ -135,11 +154,17 @@ class CommentTest extends TestCase
         } catch (TimeOutException $e) {
             return;
         }
+        $this->driver->wait()->until(
+            WebDriverExpectedCondition::visibilityOfElementLocated(WebDriverBy::xpath('//*[@id="c1"]/footer/button'))
+        );
 
         $element = $this->driver->findElement(WebDriverBy::xpath('//*[@id="c1"]/footer/button'));
         $this->driver->executeScript('arguments[0].scrollIntoView(true);', [$element]);
         $element->click();
-        $this->driver->wait(1);
+
+        $this->driver->wait()->until(
+            WebDriverExpectedCondition::visibilityOfElementLocated(WebDriverBy::xpath('//*[@id="c1"]/main/div[3]/form/label/textarea'))
+        );
 
         $this->driver->findElement(WebDriverBy::xpath('//*[@id="c1"]/main/div[3]/form/label/textarea'))
             ->clear()->sendKeys('コメントの更新');
@@ -148,7 +173,7 @@ class CommentTest extends TestCase
 
         $this->driver->navigate()->refresh();
         $this->driver->wait()->until(
-            WebDriverExpectedCondition::titleContains('Slimbbs')
+            WebDriverExpectedCondition::visibilityOfElementLocated(WebDriverBy::xpath('//*[@id="1"]'))
         );
 
         $element = $this->driver->findElement(WebDriverBy::xpath('//*[@id="1"]'));
@@ -170,6 +195,10 @@ class CommentTest extends TestCase
         } catch (TimeOutException $e) {
             return;
         }
+
+        $this->driver->wait()->until(
+            WebDriverExpectedCondition::visibilityOfElementLocated(WebDriverBy::xpath('//*[@id="like-1--submit"]'))
+        );
 
         $element = $this->driver->findElement(WebDriverBy::xpath('//*[@id="like-1--submit"]'));
         $this->driver->executeScript('arguments[0].scrollIntoView(true);', [$element]);
@@ -203,7 +232,7 @@ class CommentTest extends TestCase
         $this->driver->findElement(WebDriverBy::xpath('//*[@id="comment_form"]/input[5]'))->click();
 
         $this->driver->wait()->until(
-            WebDriverExpectedCondition::titleContains('Slimbbs')
+            WebDriverExpectedCondition::visibilityOfElementLocated(WebDriverBy::xpath('//*[@id="2"]/a'))
         );
 
         $element = $this->driver->findElement(WebDriverBy::xpath('//*[@id="2"]/a'));

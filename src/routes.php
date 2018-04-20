@@ -40,6 +40,10 @@ $app->post('/like', 'App\Action\LikeAction:add')
     ->setName('add_like')
     ->add($container->get('App\Validation\CommentLikeValidation'));
 
+$app->get('/comments/{thread_id}/{comment_id}', 'App\Action\CommentsAction:fetch')
+    ->setName('comments')
+    ->add($container->get('App\Validation\CommentsValidation'));
+
 $app->get('/comment[/{comment_id}]', 'App\Action\CommentAction:index')
     ->setName('comment');
 

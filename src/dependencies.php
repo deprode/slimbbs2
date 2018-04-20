@@ -134,6 +134,10 @@ $container['App\Action\LikeAction'] = function (ContainerInterface $c) {
     return new App\Action\LikeAction($c->get('logger'), $c->get('LikeFilter'));
 };
 
+$container['App\Action\CommentsAction'] = function (ContainerInterface $c) {
+    return new App\Action\CommentsAction($c->get('CommentsFilter'), $c->get('CommentsResponder'));
+};
+
 $container['App\Action\CommentAction'] = function (ContainerInterface $c) {
     return new \App\Action\CommentAction($c->get('CommentFilter'), $c->get('CommentResponder'));
 };
@@ -186,6 +190,10 @@ $container['CommentDeleteFilter'] = function (ContainerInterface $c) {
 
 $container['LikeFilter'] = function (ContainerInterface $c) {
     return new \App\Domain\LikeFilter($c->get('CommentService'));
+};
+
+$container['CommentsFilter'] = function (ContainerInterface $c) {
+    return new \App\Domain\CommentsFilter($c->get('CommentService'));
 };
 
 $container['CommentFilter'] = function (ContainerInterface $c) {
@@ -280,6 +288,10 @@ $container['QuitedResponder'] = function (ContainerInterface $c) {
 $container['UserResponder'] = function (ContainerInterface $c) {
     return new App\Responder\UserResponder($c->get('view'), $c->get('MessageService'));
 };
+
+$container['CommentsResponder'] = function () {
+    return new \App\Responder\CommentsResponder();
+};
 // -----------------------------------------------------------------------------
 // Validation factories
 // -----------------------------------------------------------------------------
@@ -343,6 +355,15 @@ $container['App\Validation\CommentDeleteValidation'] = function (ContainerInterf
         'comment_id' => \Respect\Validation\Validator::intVal()->digit()->notEmpty()->setName('コメントID'),
     ];
     return new \DavidePastore\Slim\Validation\Validation($deleteValidators, $translator);
+};
+
+$container['App\Validation\CommentsValidation'] = function (ContainerInterface $c) {
+    $translator = $c->get('App\Validation\Translator');
+    $likeValidators = [
+        'thread_id'  => \Respect\Validation\Validator::intVal()->digit()->notEmpty()->setName('スレッドID'),
+        'comment_id' => \Respect\Validation\Validator::intVal()->digit()->notEmpty()->setName('コメントID'),
+    ];
+    return new \DavidePastore\Slim\Validation\Validation($likeValidators, $translator);
 };
 
 $container['App\Validation\CommentLikeValidation'] = function (ContainerInterface $c) {

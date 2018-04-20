@@ -60,24 +60,53 @@ class CommentService
     }
 
     /**
-     * @param int|null $thread_id
+     * @param int $thread_id
+     * @param int $comment_id
      * @return array
      * @throws FetchFailedException
      */
-    public function getComments(int $thread_id = null): array
+    public function getComments(int $thread_id, int $comment_id = PHP_INT_MAX): array
     {
         $select = $this->query->newSelect();
         $select
             ->from('comments')
-            ->cols(['comments.comment_id', 'comments.user_id', 'comments.like_count', 'comments.comment', 'comments.photo_url', 'comments.created_at', 'users.user_name', 'users.user_image_url'])
+            ->cols(['comments.comment_id', 'comments.thread_id', 'comments.user_id', 'comments.like_count', 'comments.comment', 'comments.photo_url', 'comments.created_at', 'users.user_name', 'users.user_image_url'])
             ->join('left', 'users', 'comments.user_id = users.user_id')
             ->where('thread_id = :thread_id')
+            ->where('comment_id < :comment_id')
+            ->limit($this->comment_limit)
             ->orderBy(['comments.comment_id DESC']);
 
         try {
             return $this->db->fetchAll($select->getStatement(), [
-                ':thread_id' => ['value' => $thread_id, 'type' => \PDO::PARAM_INT]
+                ':thread_id'  => ['value' => $thread_id, 'type' => \PDO::PARAM_INT],
+                ':comment_id' => ['value' => $comment_id, 'type' => \PDO::PARAM_INT]
             ], CommentRead::class);
+        } catch (\PDOException $e) {
+            throw new FetchFailedException();
+        }
+    }
+
+    /**
+     * @param int $thread_id
+     * @return CommentRead
+     * @throws FetchFailedException
+     */
+    public function getTopComment(int $thread_id): CommentRead
+    {
+        $select = $this->query->newSelect();
+        $select
+            ->from('comments')
+            ->cols(['comments.comment_id', 'comments.thread_id', 'comments.user_id', 'comments.like_count', 'comments.comment', 'comments.photo_url', 'comments.created_at', 'users.user_name', 'users.user_image_url'])
+            ->join('left', 'users', 'comments.user_id = users.user_id')
+            ->where('thread_id = :thread_id')
+            ->limit(1)
+            ->orderBy(['comments.comment_id ASC']);
+
+        try {
+            return $this->db->fetchAll($select->getStatement(), [
+                ':thread_id' => ['value' => $thread_id, 'type' => \PDO::PARAM_INT],
+            ], CommentRead::class)[0];
         } catch (\PDOException $e) {
             throw new FetchFailedException();
         }

@@ -50,7 +50,7 @@ class ThreadFilter
         if (empty($data['comments'])) {
             throw new \UnexpectedValueException();
         }
-        $data['comment_top'] = $data['comments'][0];
+        $data['comment_top'] = $this->comment->getTopComment((int)$thread_id);
 
         if (!empty($attributes['isLoggedIn'])) {
             $data['user'] = $this->user->getUser($attributes['username']);

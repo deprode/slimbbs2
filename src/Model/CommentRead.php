@@ -25,6 +25,11 @@ class CommentRead extends Model
         return $this->timeToString(new \DateTime($this->created_at));
     }
 
+    public function toArray(): array
+    {
+        return get_object_vars($this);
+    }
+
     public function __toString()
     {
         return <<<TO_STRING

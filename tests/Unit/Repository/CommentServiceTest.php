@@ -4,7 +4,6 @@ namespace Test\Unit;
 
 use App\Model\Comment;
 use App\Model\CommentRead;
-use App\Model\Sort;
 use App\Repository\CommentService;
 use App\Service\DatabaseService;
 use Aura\SqlQuery\QueryFactory;
@@ -62,10 +61,21 @@ class CommentServiceTest extends TestCase
      */
     public function testGetComments()
     {
-        $comments = $this->comment->getComments(1, new Sort('desc'));
+        $comments = $this->comment->getComments(1, 1);
         $this->assertEquals($this->data, $comments);
 
-        $this->error_comment->getComments(1, new Sort('desc'));
+        $this->error_comment->getComments(1, 1);
+    }
+
+    /**
+     * @expectedException \App\Exception\FetchFailedException
+     */
+    public function testGetTopComment()
+    {
+        $comment = $this->comment->getTopComment(1);
+        $this->assertEquals($this->data[0], $comment);
+
+        $this->error_comment->getTopComment(1);
     }
 
     /**
