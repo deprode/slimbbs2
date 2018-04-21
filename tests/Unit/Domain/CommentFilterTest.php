@@ -38,7 +38,12 @@ class CommentFilterTest extends \PHPUnit_Framework_TestCase
                 'isAdmin'    => '1',
             ]);
 
-        $this->filter = new CommentFilter($comment);
+        $setting = [
+            'region' => 'aws_s3_region',
+            'bucket' => 'aws_s3_bucket'
+        ];
+
+        $this->filter = new CommentFilter($comment, $setting);
     }
 
     public function testFiltering()
@@ -49,5 +54,8 @@ class CommentFilterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('1', $data['is_admin']);
         $this->assertEquals('1', $data['loggedIn']);
+
+        $this->assertEquals('aws_s3_region', $data['region']);
+        $this->assertEquals('aws_s3_bucket', $data['bucket']);
     }
 }
