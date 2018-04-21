@@ -8,10 +8,12 @@ use Slim\Http\Request;
 class CommentFilter
 {
     private $comment;
+    private $s3_settings;
 
-    public function __construct(CommentService $comment)
+    public function __construct(CommentService $comment, array $s3_settings)
     {
         $this->comment = $comment;
+        $this->s3_settings = $s3_settings;
     }
 
     /**
@@ -36,6 +38,10 @@ class CommentFilter
         // auth
         $data['is_admin'] = $attributes['isAdmin'] ?? '';
         $data['loggedIn'] = $attributes['isLoggedIn'] ?? '';
+
+        // s3
+        $data['region'] = $this->s3_settings['region'];
+        $data['bucket'] = $this->s3_settings['bucket'];
 
         return $data;
     }

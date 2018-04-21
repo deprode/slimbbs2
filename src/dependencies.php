@@ -197,7 +197,7 @@ $container['CommentsFilter'] = function (ContainerInterface $c) {
 };
 
 $container['CommentFilter'] = function (ContainerInterface $c) {
-    return new \App\Domain\CommentFilter($c->get('CommentService'));
+    return new \App\Domain\CommentFilter($c->get('CommentService'), $c->get('settings')['s3']);
 };
 
 $container['QuitFilter'] = function (ContainerInterface $c) {
