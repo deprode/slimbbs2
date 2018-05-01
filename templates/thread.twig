@@ -191,6 +191,7 @@
         const update_path = '{{ path_for('update_comment') }}';
         const fetch_path = '/comments/{{ thread_id }}/';
         const user_id = '' + '{{ user_id }}';
+        const comments = JSON.parse('{{ comments | raw }}');
     </script>
     <script src="{{ base_url() }}/assets/js/bundle.js"></script>
 {% endblock %}

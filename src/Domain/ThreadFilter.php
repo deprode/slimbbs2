@@ -3,6 +3,7 @@
 namespace App\Domain;
 
 
+use App\Model\CommentRead;
 use App\Repository\CommentService;
 use App\Repository\UserService;
 use App\Service\MessageService;
@@ -27,6 +28,22 @@ class ThreadFilter
     }
 
     /**
+     * @param CommentRead[] $comments
+     * @return string
+     */
+    private function convertComment(array $comments)
+    {
+        $convert_comments = [];
+        foreach ($comments as $comment) {
+            $comment_array = $comment->toArray();
+            $comment_array['created_at'] = $comment->createdAtStr();
+            $convert_comments['c' . $comment->comment_id] = $comment_array;
+        }
+
+        return str_replace('\\', '\\\\', json_encode($convert_comments, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT));
+    }
+
+    /**
      * @param Request $request
      * @return array
      * @throws \InvalidArgumentException
@@ -46,10 +63,12 @@ class ThreadFilter
 
         $data['thread_id'] = $thread_id;
 
-        $data['comments'] = $this->comment->getComments((int)$thread_id);
-        if (empty($data['comments'])) {
+        $comments = $this->comment->getComments((int)$thread_id);
+        if (empty($comments)) {
             throw new \UnexpectedValueException();
         }
+        $data['comments'] = $this->convertComment($comments);
+
         $data['comment_top'] = $this->comment->getTopComment((int)$thread_id);
 
         if (!empty($attributes['isLoggedIn'])) {

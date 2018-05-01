@@ -22,27 +22,32 @@ class ThreadFilterTest extends TestCase
     {
         parent::setUp();
 
+        $comment1 = new CommentRead();
+        $comment1->comment_id = 1;
+        $comment1->thread_id = 1;
+        $comment1->user_id = 1;
+        $comment1->comment = 'sample comment test';
+        $comment1->like_count = 100;
+        $comment1->photo_url = 'http://via.placeholder.com/32x32';
+        $comment1->created_at = '2017-12-06 13:42:28';
+        $comment1->user_name = 'testuser';
+        $comment1->user_image_url = 'http://via.placeholder.com/48x48';
+
+        $comment2 = new CommentRead();
+        $comment2->comment_id = 2;
+        $comment2->thread_id = 1;
+        $comment2->user_id = 10;
+        $comment2->comment = 'sample comment reply';
+        $comment2->like_count = 100;
+        $comment2->photo_url = 'http://via.placeholder.com/32x32';
+        $comment2->created_at = '2017-12-10 15:40:59';
+        $comment2->user_name = 'sample_user';
+        $comment2->user_image_url = 'http://via.placeholder.com/48x48';
+
         $csrf = new Guard();
         $comment = $this->createMock(CommentService::class);
         $comment->method('getComments')->willReturn([
-            [
-                'comment_id'     => 1,
-                'user_id'        => 1,
-                'created_at'     => '2017-12-06 13:42:28',
-                'comment'        => 'sample comment test',
-                'photo_url'      => 'http://via.placeholder.com/32x32',
-                'user_name'      => 'testuser',
-                'user_image_url' => 'http://via.placeholder.com/48x48'
-            ],
-            [
-                'comment_id'     => 2,
-                'user_id'        => 10,
-                'created_at'     => '2017-12-10 15:40:59',
-                'comment'        => 'sample comment reply',
-                'photo_url'      => 'http://via.placeholder.com/32x32',
-                'user_name'      => 'sample_user',
-                'user_image_url' => 'http://via.placeholder.com/48x48'
-            ]
+            $comment1, $comment2
         ]);
         $top_comment = new CommentRead();
         $top_comment->comment_id = 1;
@@ -93,6 +98,32 @@ class ThreadFilterTest extends TestCase
             ]);
     }
 
+    public function testConvertComment()
+    {
+        $comment = new CommentRead();
+        $comment->comment_id = 1;
+        $comment->thread_id = 1;
+        $comment->user_id = 10;
+        $comment->comment = 'sample& "comment" <\'test\'>';
+        $comment->like_count = 100;
+        $comment->photo_url = '';
+        $comment->created_at = '2018-10-10 10:10:10';
+        $comment->user_name = 'testuser';
+        $comment->user_image_url = 'http://example.com/icon';
+
+        $method = new \ReflectionMethod(ThreadFilter::class, 'convertComment');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->filter, [[$comment]]);
+
+        $this->assertInternalType('string', $result);
+
+        $data = json_decode($result);
+        $this->assertEquals(1, $data->c1->{'comment_id'});
+        $this->assertEquals('10月10日', $data->c1->{'created_at'});
+        $this->assertEquals('sample\u0026 \u0022comment\u0022 \u003C\u0027test\u0027\u003E', $data->c1->{'comment'});
+    }
+
     public function testFilteringSort()
     {
         $request = $this->createMock(Request::class);
@@ -119,6 +150,8 @@ class ThreadFilterTest extends TestCase
         $this->assertEquals('1', $data['loggedIn']);
 
         $this->assertEquals($this->user_data, $data['user']);
+
+        $this->assertInternalType('string', $data['comments']);
 
         $this->assertEquals('TestMessage', $data['info']);
         $this->assertEquals('ErrorMessage', $data['error']);

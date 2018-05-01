@@ -56,17 +56,24 @@ function build_comment(comment) {
 
 document.getElementById('top_comment').innerHTML = build_comment(document.getElementById('top_comment').dataset.comment);
 
+const initial_comment = Object.keys(comments || []).map((key, index) => {
+    return new Comment(key, comments[key]);
+});
+const last_id = initial_comment[initial_comment.length - 1] && initial_comment[initial_comment.length - 1].comment_id || Number.MAX_SAFE_INTEGER;
+
 const vm = new Vue({
     delimiters: ['${', '}'],
     el: '#js-comments',
     data: {
-        comments: [],
+        comments: initial_comment,
         error_msg: '',
-        last_id: Number.MAX_SAFE_INTEGER,
+        last_id: last_id,
         loading: false
     },
     created: function () {
-        this.fetchComment();
+        if (this.comments.length === 0) {
+            this.fetchComment();
+        }
     },
     updated: function () {
         this.comments.map((comment, index) => {
