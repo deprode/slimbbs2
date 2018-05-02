@@ -173,7 +173,13 @@ input.button--like {
 
     &__title {
       font-size: 1.8rem;
+
+      &:hover {
+        color: #2b9e2b;
+        text-decoration: underline;
+      }
     }
+
   }
 
   &__subtitles {
@@ -184,9 +190,17 @@ input.button--like {
       font-size: 1.5rem;
     }
 
-    &__updated,
+    &__updated {
+      font-size: 1.4rem;
+    }
     &__count {
       font-size: 1.4rem;
+      text-decoration: none;
+
+      &:hover {
+        color: #2b9e2b;
+        text-decoration: underline;
+      }
     }
   }
 
@@ -250,6 +264,14 @@ input.button--like {
   &__header__createdat {
     display: inline-block;
     font-size: 1.4rem;
+
+    a {
+      text-decoration: none;
+    }
+    a:hover {
+      color: #2b9e2b;
+      text-decoration: underline;
+    }
   }
 
   &__footer form {

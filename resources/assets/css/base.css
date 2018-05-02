@@ -4,6 +4,11 @@ body {
 
 a {
   color: darkgreen;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #2b9e2b;
 }
 
 img {
