@@ -19,7 +19,7 @@
     <div class="create-thread">
         <h2>スレッドを作る</h2>
         <form action="{{ path_for('home') }}" method="post" class="create-thread__form">
-            <label>コメント：<textarea name="comment" maxlength="400" required></textarea></label>
+            <label>タイトル：<textarea name="comment" maxlength="400" required></textarea></label>
             <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
             <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
             <input type="hidden" name="user_id" value="{{ user_id }}">
@@ -31,7 +31,7 @@
             <h2 class="search__title">コメントを探す</h2>
             <form action="{{ path_for('search') }}" method="get" class="form--inline">
                 <label for="query" class="hidden">検索するコメント</label>
-                <input type="text" name="query" required maxlength="400" class="search__query">
+                <input type="text" name="query" required maxlength="400" placeholder="キーワードを入力" class="search__query">
                 <input type="submit" value="検索" class="button search__button">
             </form>
         </div>
