@@ -34,7 +34,9 @@
                             </div>
                             <div class="comment__header__username">
                                 {% if isSigned %}
-                                    @{{ comment.user_name }}
+                                    <a href="{{ path_for('user', { name: comment.user_name }) }}">
+                                        @{{ comment.user_name }}
+                                    </a>
                                 {% else %}
                                     匿名ユーザー
                                 {% endif %}
@@ -91,7 +93,9 @@
                             <img v-else class="comment__header__wrap__icon" src="/assets/img/anonymous-user.svg" width="48" height="48" alt="匿名ユーザー">
                         </div>
                         <div v-if="comment._comment.user_name" class="comment__header__username">
-                            @${ comment._comment.user_name }
+                            <a :href="'{{ path_for('user') }}/' + comment._comment.user_name">
+                                @${ comment._comment.user_name }
+                            </a>
                         </div>
                         <div v-else class="comment__header__username">
                             匿名ユーザー

@@ -195,6 +195,13 @@ input.button--like {
 
     &__username {
       font-size: 1.5rem;
+      
+      a {
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
     }
 
     &__updated {
@@ -266,6 +273,13 @@ input.button--like {
     margin-top: -4.1rem;
     font-size: 1.6rem;
     font-weight: bold;
+
+    a {
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
   }
 
   &__header__createdat {
