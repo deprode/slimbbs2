@@ -195,7 +195,7 @@ input.button--like {
 
     &__username {
       font-size: 1.5rem;
-      
+
       a {
         text-decoration: none;
       }
@@ -227,8 +227,7 @@ input.button--like {
   }
 }
 
-.comment,
-.comment_form {
+.comment {
   padding: 1rem 1.5rem;
   border: 1px solid #e0e0e0;
   background: #fefefe;
@@ -315,6 +314,36 @@ input.button--like {
     border: 1px solid #d43f3a;
     color: #fff;
     font-weight: 400;
+  }
+}
+
+.comment_form {
+  padding: 1rem 1.5rem;
+  border: 1px solid #e0e0e0;
+  background: #fefefe;
+
+  &__header {
+    padding: .8rem 0;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  &__header__wrap {
+    display: inline-block;
+  }
+
+  &__header__wrap__icon {
+    border-radius: 50%;
+    border: 1px solid #d1d1d1;
+  }
+
+  &__header__username {
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 2rem;
+    margin-top: 1rem;
+    font-size: 1.6rem;
+    font-weight: bold;
   }
 }
 

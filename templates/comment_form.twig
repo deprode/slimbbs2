@@ -1,19 +1,21 @@
 <div class="content comment_form">
-    {% if not user %}
-        <div class="comment_form__header__wrap">
-            <img class="comment_form__header__wrap__icon" src="/assets/img/anonymous-user.svg" width="48" height="48" alt="匿名ユーザー">
-        </div>
-        <div class="comment_form__header__username">
-            匿名ユーザー
-        </div>
-    {% else %}
-        <div class="comment_form__header__wrap">
-            <img class="comment_form__header__wrap__icon" src="{{ user.user_image_url }}" width="48" height="48" alt="{{ user.user_name }}">
-        </div>
-        <div class="comment_form__header__username">
-            @{{ user.user_name }}
-        </div>
-    {% endif %}
+    <div class="comment_form__header">
+        {% if not user %}
+            <div class="comment_form__header__wrap">
+                <img class="comment_form__header__wrap__icon" src="/assets/img/anonymous-user.svg" width="48" height="48" alt="匿名ユーザー">
+            </div>
+            <div class="comment_form__header__username">
+                匿名ユーザー
+            </div>
+        {% else %}
+            <div class="comment_form__header__wrap">
+                <img class="comment_form__header__wrap__icon" src="{{ user.user_image_url }}" width="48" height="48" alt="{{ user.user_name }}">
+            </div>
+            <div class="comment_form__header__username">
+                @{{ user.user_name }}
+            </div>
+        {% endif %}
+    </div>
     <form action="{{ path_for('thread_save') }}" method="post" id="comment_form" enctype="multipart/form-data">
         <label for="comment">コメント:
             <textarea class="comment_form__comment" name="comment" maxlength="400" required></textarea></label>
