@@ -283,9 +283,9 @@ input.button--like {
   }
 
   &_delete[type=submit] {
-    background-color: #d9534f;
-    border: 1px solid #d43f3a;
-    color: #fff;
+    background-color: inherit;
+    border: 1px solid #d9534f;
+    color: inherit;
     font-weight: 400;
   }
 
