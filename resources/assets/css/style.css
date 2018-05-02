@@ -56,6 +56,13 @@
     vertical-align: bottom;
     margin-bottom: 0;
   }
+
+  &__button[type='submit']:hover,
+  &__button[type='submit']:focus {
+    color: #006400;
+    background: #fefefe;
+    border: 1px solid #d1d1d1;
+  }
 }
 
 button.button--small,
