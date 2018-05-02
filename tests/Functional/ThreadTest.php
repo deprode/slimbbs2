@@ -312,14 +312,14 @@ EXPECT;
     {
         $anony_user = <<<ANONY_USER
 <div class="comment_form__header__username">
-            匿名ユーザー
-        </div>
+                匿名ユーザー
+            </div>
 ANONY_USER;
 
         $test_user = <<<TEST_USER
 <div class="comment_form__header__username">
-            @testuser
-        </div>
+                @testuser
+            </div>
 TEST_USER;
 
         $response = $this->runApp('GET', '/thread?thread_id=1');
