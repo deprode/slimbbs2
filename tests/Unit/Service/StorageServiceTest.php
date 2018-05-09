@@ -10,24 +10,6 @@ use Slim\Http\UploadedFile;
 
 class StorageServiceTest extends TestCase
 {
-
-    public function testValid()
-    {
-        $storage = new StorageService(new S3Client([
-            'version' => 'latest',
-            'region'  => 'ap-northeast-1'
-        ]), 'sample');
-
-        $file = new UploadedFile('', 'test.jpg', 'image/jpg', 0, UPLOAD_ERR_NO_FILE);
-        $this->assertFalse($storage->valid($file));
-
-        $file = new UploadedFile('', 'test.jpg', 'image/jpg', 0, UPLOAD_ERR_FORM_SIZE);
-        $this->assertFalse($storage->valid($file));
-
-        $file = new UploadedFile('', 'test.jpg', 'image/jpg', 0, UPLOAD_ERR_OK);
-        $this->assertTrue($storage->valid($file));
-    }
-
     /**
      * @expectedException \App\Exception\UploadFailedException
      */

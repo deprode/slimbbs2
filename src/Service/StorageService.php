@@ -5,7 +5,6 @@ namespace App\Service;
 use App\Exception\UploadFailedException;
 use Aws\S3\Exception\S3Exception;
 use Aws\S3\S3Client;
-use Slim\Http\UploadedFile;
 
 class StorageService
 {
@@ -18,22 +17,14 @@ class StorageService
         $this->bucket = $bucket;
     }
 
-    public function valid(UploadedFile $file): bool
-    {
-        if ($file->getError() !== UPLOAD_ERR_OK) {
-            return false;
-        }
-        return true;
-    }
-
     /**
-     * @param UploadedFile $file
+     * @param resource $file
      * @return string
      * @throws UploadFailedException
      */
-    public function upload(UploadedFile $file): string
+    public function upload($file): string
     {
-        if (!$this->valid($file)) {
+        if (!is_resource($file)) {
             throw new UploadFailedException();
         }
 
@@ -43,7 +34,7 @@ class StorageService
             $this->storage->upload(
                 $this->bucket,
                 $filename,
-                $file->getStream()->detach(),
+                $file,
                 'public-read');
         } catch (S3Exception $e) {
             throw new UploadFailedException();

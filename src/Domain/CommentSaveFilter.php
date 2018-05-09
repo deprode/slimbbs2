@@ -5,12 +5,14 @@ namespace App\Domain;
 
 
 use App\Exception\CsrfException;
+use App\Exception\UploadFailedException;
 use App\Exception\ValidationException;
 use App\Model\Comment;
 use App\Model\Sort;
 use App\Repository\CommentService;
 use App\Service\StorageService;
 use Slim\Http\Request;
+use Slim\Http\UploadedFile;
 
 class CommentSaveFilter
 {
@@ -21,6 +23,18 @@ class CommentSaveFilter
     {
         $this->storage = $storage;
         $this->comment = $comment;
+    }
+
+    /**
+     * @param UploadedFile $file
+     * @return bool
+     */
+    private function invalidUploadFile(UploadedFile $file)
+    {
+        if ($file->getError() !== UPLOAD_ERR_OK) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -48,8 +62,14 @@ class CommentSaveFilter
 
         // upload file
         $files = $request->getUploadedFiles();
-        if (!empty($files['picture']->file)) {
-            $filename = $this->storage->upload($files['picture']);
+
+        /** @var UploadedFile $upload_file */
+        $upload_file = $files['picture'] ?? new UploadedFile(null);
+        if (!empty($upload_file->file)) {
+            if ($this->invalidUploadFile($upload_file)) {
+                throw new UploadFailedException();
+            }
+            $filename = $this->storage->upload($upload_file->getStream()->detach());
         }
 
         // save comment
