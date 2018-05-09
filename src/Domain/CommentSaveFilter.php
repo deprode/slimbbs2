@@ -38,6 +38,15 @@ class CommentSaveFilter
     }
 
     /**
+     * @param string $mime_type
+     * @return bool
+     */
+    private function validFileType(string $mime_type)
+    {
+        return in_array($mime_type, ['image/jpeg', 'image/gif', 'image/png']);
+    }
+
+    /**
      * @param Request $request
      * @return int
      * @throws CsrfException
@@ -69,7 +78,11 @@ class CommentSaveFilter
             if ($this->invalidUploadFile($upload_file)) {
                 throw new UploadFailedException();
             }
-            $filename = $this->storage->upload($upload_file->getStream()->detach());
+            $mime_type = mime_content_type($upload_file->file);
+            if ($this->validFileType($mime_type)) {
+                $file_data = $upload_file->getStream()->detach();
+                $filename = $this->storage->upload($file_data, $mime_type);
+            }
         }
 
         // save comment

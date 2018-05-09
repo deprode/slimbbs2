@@ -19,10 +19,11 @@ class StorageService
 
     /**
      * @param resource $file
+     * @param string $mime_type
      * @return string
      * @throws UploadFailedException
      */
-    public function upload($file): string
+    public function upload($file, string $mime_type = 'application/octet-stream'): string
     {
         if (!is_resource($file)) {
             throw new UploadFailedException();
@@ -31,11 +32,15 @@ class StorageService
         $filename = bin2hex(openssl_random_pseudo_bytes(32));
 
         try {
-            $this->storage->upload(
-                $this->bucket,
-                $filename,
-                $file,
-                'public-read');
+            $this->storage->putObject(
+                [
+                    'Bucket'      => $this->bucket,
+                    'Key'         => $filename,
+                    'Body'        => $file,
+                    'ACL'         => 'public-read',
+                    'ContentType' => $mime_type
+                ]
+            );
         } catch (S3Exception $e) {
             throw new UploadFailedException();
         }

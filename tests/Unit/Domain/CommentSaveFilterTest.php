@@ -124,4 +124,18 @@ class CommentSaveFilterTest extends TestCase
         $file = new UploadedFile('', 'test.jpg', 'image/jpg', 0, UPLOAD_ERR_OK);
         $this->assertFalse($method->invokeArgs($filter, [$file]));
     }
+
+    public function testValidFileType()
+    {
+        $method = new \ReflectionMethod(CommentSaveFilter::class, 'validFileType');
+        $method->setAccessible(true);
+
+        $filter = new CommentSaveFilter($this->storage, $this->comment);
+        $this->assertTrue($method->invokeArgs($filter, ['image/jpeg']));
+        $this->assertTrue($method->invokeArgs($filter, ['image/png']));
+        $this->assertTrue($method->invokeArgs($filter, ['image/gif']));
+
+        $filter = new CommentSaveFilter($this->storage, $this->comment);
+        $this->assertFalse($method->invokeArgs($filter, ['text/plain']));
+    }
 }
