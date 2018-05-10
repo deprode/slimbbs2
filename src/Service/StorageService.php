@@ -17,15 +17,21 @@ class StorageService
         $this->bucket = $bucket;
     }
 
+    public function getFullPath($filename)
+    {
+        return "https://s3-" . $this->storage->getRegion() . ".amazonaws.com/" . $this->bucket . "/" . $filename;
+    }
+
     /**
-     * @param resource $file
+     * @param resource|string $file
      * @param string $mime_type
+     * @param string $prefix
      * @return string
      * @throws UploadFailedException
      */
-    public function upload($file, string $mime_type = 'application/octet-stream'): string
+    public function upload($file, string $mime_type = 'application/octet-stream', string $prefix = ''): string
     {
-        if (!is_resource($file)) {
+        if (!is_resource($file) && !is_string($file)) {
             throw new UploadFailedException();
         }
 
@@ -35,7 +41,7 @@ class StorageService
             $this->storage->putObject(
                 [
                     'Bucket'      => $this->bucket,
-                    'Key'         => $filename,
+                    'Key'         => $prefix . $filename,
                     'Body'        => $file,
                     'ACL'         => 'public-read',
                     'ContentType' => $mime_type
@@ -45,6 +51,6 @@ class StorageService
             throw new UploadFailedException();
         }
 
-        return $filename;
+        return $prefix . $filename;
     }
 }

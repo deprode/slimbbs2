@@ -165,7 +165,7 @@ $container['SaveFilter'] = function (ContainerInterface $c) {
 };
 
 $container['LoginFilter'] = function (ContainerInterface $c) {
-    return new \App\Domain\LoginFilter($c->get('UserService'), $c->get('OAuthService'));
+    return new \App\Domain\LoginFilter($c->get('UserService'), $c->get('OAuthService'), $c->get('StorageService'));
 };
 
 $container['SearchFilter'] = function (ContainerInterface $c) {
