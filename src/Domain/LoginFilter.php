@@ -38,7 +38,7 @@ class LoginFilter
         $this->oauth->oAuth($oauth_verifier);
 
         // ユーザー情報の取得
-        $user_info = $this->oauth->getUserInfo();
+        $user_info = (array)$this->oauth->getUserInfo();
         $access_token = $this->oauth->getToken();
 
         $user = $this->user->convertUser($user_info, $access_token);

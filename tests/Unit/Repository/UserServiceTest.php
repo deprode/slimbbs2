@@ -60,7 +60,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
             'secret' => 'secret'
         ];
 
-        $this->assertEquals($this->data, $this->user->convertUser((object)$user_info, $access_token));
+        $this->assertEquals($this->data, $this->user->convertUser($user_info, $access_token));
     }
 
     /**

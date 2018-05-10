@@ -63,9 +63,9 @@ class UserService
     {
         $user = new User();
 
-        $user->user_id = $user_info->id_str;
-        $user->user_name = $user_info->screen_name;
-        $user->user_image_url = $user_info->profile_image_url_https;
+        $user->user_id = $user_info['id_str'];
+        $user->user_name = $user_info['screen_name'];
+        $user->user_image_url = $user_info['profile_image_url_https'];
         $user->access_token = $access_token['token'];
         $user->access_secret = $access_token['secret'];
 
