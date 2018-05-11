@@ -5,23 +5,6 @@ const link_html = `<a href="{url}" target="_new">{url}</a>`;
 const reg = /^https?:\/\/twitter.com\/(.*)\/(status|statuses)\/(\d+)$/;
 const reg_link = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,})/;
 
-window.twttr = (function (d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0],
-        t = window.twttr || {};
-    if (d.getElementById(id)) return t;
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "https://platform.twitter.com/widgets.js";
-    fjs.parentNode.insertBefore(js, fjs);
-
-    t._e = [];
-    t.ready = function (f) {
-        t._e.push(f);
-    };
-
-    return t;
-}(document, "script", "twitter-wjs"));
-
 class Comment {
     constructor(id, comment) {
         this._comment = comment;
