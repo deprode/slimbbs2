@@ -1,6 +1,9 @@
 {
     "presets": [
         [
+            "flow"
+        ],
+        [
             "env",
             {
                 "targets": {

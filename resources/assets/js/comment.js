@@ -1,5 +1,7 @@
 "use strict";
 
+// @flow
+
 const twitter_embed = `<blockquote class="twitter-tweet"><a href="$url"></a></blockquote>`;
 const link_html = `<a href="{url}" target="_new">{url}</a>`;
 const reg = /^https?:\/\/twitter.com\/(.*)\/(status|statuses)\/(\d+)$/;
