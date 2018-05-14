@@ -1,28 +1,33 @@
 "use strict";
 
+// @flow
+
+declare var add_like_path;
+declare var update_path;
+declare var fetch_path;
+declare var user_id;
+declare var comments;
+declare var twttr;
+declare var Vue;
+
 const twitter_embed = `<blockquote class="twitter-tweet"><a href="$url"></a></blockquote>`;
 const link_html = `<a href="{url}" target="_new">{url}</a>`;
 const reg = /^https?:\/\/twitter.com\/(.*)\/(status|statuses)\/(\d+)$/;
 const reg_link = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,})/;
 
-window.twttr = (function (d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0],
-        t = window.twttr || {};
-    if (d.getElementById(id)) return t;
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "https://platform.twitter.com/widgets.js";
-    fjs.parentNode.insertBefore(js, fjs);
-
-    t._e = [];
-    t.ready = function (f) {
-        t._e.push(f);
-    };
-
-    return t;
-}(document, "script", "twitter-wjs"));
-
 class Comment {
+    _comment: any;
+    id: number;
+    user_id: string;
+    comment_id: number;
+    comment: string;
+    pre_comment: string;
+    like_form_id: string;
+    count: number;
+    edit: boolean;
+    unsent: boolean;
+    error_msg: string;
+
     constructor(id, comment) {
         this._comment = comment;
         this.id = id;
@@ -54,7 +59,10 @@ function build_comment(comment) {
     return comment_str.join('<br/>');
 }
 
-document.getElementById('top_comment').innerHTML = build_comment(document.getElementById('top_comment').dataset.comment);
+let top_comment = document.getElementById('top_comment');
+if (top_comment && top_comment.dataset) {
+    top_comment.innerHTML = build_comment(top_comment.dataset.comment);
+}
 
 const initial_comment = Object.keys(comments || []).map((key, index) => {
     return new Comment(key, comments[key]);
@@ -138,12 +146,19 @@ const vm = new Vue({
             comment.edit = false;
             comment.error_msg = '';
 
-            const form = document.getElementById(event.target.id).parentElement;
+            const edit_dom = document.getElementById(event.target.id);
+            if (!edit_dom) {
+                return;
+            }
+            const edit_form = edit_dom.parentElement;
+            if (!(edit_form instanceof HTMLFormElement)) {
+                return;
+            }
 
             fetch(update_path, {
                 method: 'POST',
                 headers: {'X-Requested-With': 'XMLHttpRequest'},
-                body: new FormData(form)
+                body: new FormData(edit_form)
             })
                 .then((response) => {
                     if (!response.ok) {
@@ -165,7 +180,12 @@ const vm = new Vue({
             if (comment.unsent) {
                 return;
             }
-            const form = new FormData(document.getElementById(comment.like_form_id));
+            const like_dom = document.getElementById(comment.like_form_id);
+            if (!like_dom) {
+                return;
+            }
+
+            const form = new FormData();
             this.plus1(form, comment);
             comment.error_msg = '';
         },
@@ -207,6 +227,9 @@ const vm = new Vue({
         scrolling: function (event) {
             const body = document.body;
             const html = document.documentElement;
+            if (!body || !html) {
+                return;
+            }
             const scrollTop = body.scrollTop || html.scrollTop;
             const scrollBottom = html.scrollHeight - scrollTop - html.clientHeight;
             if (scrollBottom <= 0 && !this.loading) {

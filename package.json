@@ -8,7 +8,12 @@
     "dependencies": {},
     "devDependencies": {
         "autoprefixer": "^8.2.0",
+        "babel-cli": "^6.26.0",
+        "babel-preset-env": "^1.7.0",
+        "babel-preset-flow": "^6.23.0",
+        "babelify": "^8.0.0",
         "cssnano": "^3.10.0",
+        "flow-bin": "^0.72.0",
         "postcss-cli": "^5.0.0",
         "postcss-import": "^11.1.0",
         "postcss-nested": "^3.0.0",
@@ -16,11 +21,12 @@
         "watchify": "^3.11.0"
     },
     "scripts": {
-        "js": "uglifyjs resources/assets/js/*.js -cm --source-map -o public/assets/js/bundle.js",
-        "js:watch": "watchify resources/assets/js/*.js -o 'uglifyjs resources/assets/js/*.js -cm --source-map -o public/assets/js/bundle.js'",
+        "js": "browserify -d -e resources/assets/js/*.js -t [ babelify --comments false ] | uglifyjs -cm --source-map  -o public/assets/js/bundle.js",
+        "js:watch": "watchify resources/assets/js/*.js -o 'browserify -d -e resources/assets/js/*.js -t [ babelify --comments false ] | uglifyjs -cm --source-map  -o public/assets/js/bundle.js'",
         "css": "postcss resources/assets/css/style.css -c postcss.config.js -o public/assets/css/style.css",
         "css:watch": "postcss resources/assets/css/style.css -c postcss.config.js -o public/assets/css/style.css -w",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "flow": "$(npm bin)/flow"
     },
     "repository": {
         "type": "git",
