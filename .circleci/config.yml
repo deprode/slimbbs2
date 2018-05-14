@@ -26,6 +26,7 @@ jobs:
       - run: sudo git clone --branch php7 https://github.com/php-memcached-dev/php-memcached /usr/src/php/ext/memcached/
       - run: sudo docker-php-ext-install memcached
       - run: sudo composer self-update
+      - run: sudo npm install -g npm@latest
 
       - run: echo 127.0.0.1 localhost | sudo tee -a /etc/hosts
 
@@ -42,6 +43,16 @@ jobs:
           paths:
             - ./vendor
           key: v1-dependencies-{{ checksum "composer.json" }}
+
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+
+      - run: npm run flow
 
       - run:
           command: php -S 127.0.0.1:8080 -t public public/index.php
