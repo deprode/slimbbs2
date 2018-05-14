@@ -21,8 +21,8 @@
         "watchify": "^3.11.0"
     },
     "scripts": {
-        "js": "browserify -d -e resources/assets/js/*.js -t [ babelify --comments false ] | uglifyjs -cm --source-map  -o public/assets/js/bundle.js",
-        "js:watch": "watchify resources/assets/js/*.js -o 'browserify -d -e resources/assets/js/*.js -t [ babelify --comments false ] | uglifyjs -cm --source-map  -o public/assets/js/bundle.js'",
+        "js:build": "browserify -d -e resources/assets/js/*.js -t [ babelify --comments false ] | uglifyjs -cm --source-map -o public/assets/js/bundle.js",
+        "js:watch": "watchify -d -e resources/assets/js/*.js -t [ babelify --comments false ] -o public/assets/js/bundle.js",
         "css": "postcss resources/assets/css/style.css -c postcss.config.js -o public/assets/css/style.css",
         "css:watch": "postcss resources/assets/css/style.css -c postcss.config.js -o public/assets/css/style.css -w",
         "test": "echo \"Error: no test specified\" && exit 1",
