@@ -184,7 +184,7 @@ const vm = new Vue({
                 return;
             }
             const like_dom = document.getElementById(comment.like_form_id);
-            if (!like_dom) {
+            if (!(like_dom instanceof HTMLFormElement)) {
                 return;
             }
 
