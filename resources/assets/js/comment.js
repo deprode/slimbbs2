@@ -118,6 +118,9 @@ const vm = new Vue({
             });
         },
         isOwned: function (id) {
+            if (user_id === "0") {
+                return false;
+            }
             return id === user_id;
         },
         editing: function (comment) {
