@@ -188,7 +188,7 @@ const vm = new Vue({
                 return;
             }
 
-            const form = new FormData();
+            const form = new FormData(like_dom);
             this.plus1(form, comment);
             comment.error_msg = '';
         },
