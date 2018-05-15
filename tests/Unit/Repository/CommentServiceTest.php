@@ -133,8 +133,8 @@ class CommentServiceTest extends TestCase
      */
     public function testUpdateComment()
     {
-        $this->assertEquals(1, $this->comment->updateComment(1, 1, 'hoge'));
-        $this->error_comment->updateComment(1, 1, 'hoge');
+        $this->assertEquals(1, $this->comment->updateComment(1, 1, '1', 'hoge'));
+        $this->error_comment->updateComment(1, 1, '1', 'hoge');
     }
 
     /**

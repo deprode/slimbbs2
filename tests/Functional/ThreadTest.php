@@ -288,7 +288,7 @@ EXPECT;
 
     public function testコメントの編集()
     {
-        $response = $this->runApp('PUT', '/thread', ['thread_id' => "1", 'comment_id' => "1", 'comment' => 'comment_test2'], true);
+        $response = $this->runApp('PUT', '/thread', ['thread_id' => "1", 'comment_id' => "1", 'user_id' => '1', 'comment' => 'comment_test2'], true);
         $this->assertEquals(204, $response->getStatusCode());
 
         $response = $this->runApp('GET', '/thread?thread_id=1');

@@ -5,6 +5,7 @@ namespace App\Domain;
 
 
 use App\Exception\NotAllowedException;
+use App\Exception\SaveFailedException;
 use App\Exception\ValidationException;
 use App\Repository\CommentService;
 use Slim\Http\Request;
@@ -38,8 +39,12 @@ class CommentUpdateFilter
         $params = $request->getParsedBody();
         $thread_id = $params['thread_id'] ?? 0;
         $comment_id = $params['comment_id'] ?? 0;
+        $user_id = $params['user_id'] ?? null;
         $comment = $params['comment'] ?? null;
 
-        $this->comment->updateComment($thread_id, $comment_id, $comment);
+        $count = $this->comment->updateComment($thread_id, $comment_id, $user_id, $comment);
+        if ($count !== 1) {
+            throw new SaveFailedException();
+        }
     }
 }

@@ -380,7 +380,8 @@ $container['App\Validation\CommentUpdateValidation'] = function (ContainerInterf
     $updateValidators = [
         'thread_id'  => \Respect\Validation\Validator::intVal()->digit()->notEmpty()->setName('スレッドID'),
         'comment_id' => \Respect\Validation\Validator::intVal()->digit()->notEmpty()->setName('コメントID'),
-        'comment'    => \Respect\Validation\Validator::stringType()->notEmpty()->length(null, 400)->setName('本文')
+        'comment'    => \Respect\Validation\Validator::stringType()->notEmpty()->length(null, 400)->setName('本文'),
+        'user_id'    => \Respect\Validation\Validator::stringType()->digit()->min(1)->notEmpty()->setName('ユーザーID')
     ];
     return new \DavidePastore\Slim\Validation\Validation($updateValidators, $translator);
 };

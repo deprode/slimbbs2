@@ -55,9 +55,30 @@ class CommentUpdateFilterTest extends TestCase
         $request->method('getParsedBody')->willReturn([
             'thread_id'  => 1,
             'comment_id' => 1,
+            'user_id'    => '1',
             'comment'    => 'testComment'
         ]);
         $this->comment->method('updateComment')->willThrowException(new SaveFailedException());
+
+        $this->filter = new CommentUpdateFilter($this->comment);
+        $this->filter->update($request);
+    }
+
+    /**
+     * 何らかの原因でSQLが条件に一致せず、コメントの更新がない場合
+     * @expectedException \App\Exception\SaveFailedException
+     */
+    public function testUpdateFailed()
+    {
+        $request = $this->createMock(Request::class);
+        $request->method('isXhr')->willReturn(true);
+        $request->method('getParsedBody')->willReturn([
+            'thread_id'  => 1,
+            'comment_id' => 1,
+            'user_id'    => '1',
+            'comment'    => 'testComment'
+        ]);
+        $this->comment->method('updateComment')->willReturn(0);
 
         $this->filter = new CommentUpdateFilter($this->comment);
         $this->filter->update($request);
@@ -70,8 +91,10 @@ class CommentUpdateFilterTest extends TestCase
         $request->method('getParsedBody')->willReturn([
             'thread_id'  => 1,
             'comment_id' => 1,
+            'user_id'    => '1',
             'comment'    => 'testComment'
         ]);
+        $this->comment->method('updateComment')->willReturn(1);
 
         $this->filter = new CommentUpdateFilter($this->comment);
         $this->filter->update($request);

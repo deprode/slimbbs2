@@ -268,11 +268,12 @@ class CommentService
     /**
      * @param int $thread_id
      * @param int $comment_id
+     * @param int $user_id
      * @param string $comment
      * @return int
      * @throws SaveFailedException
      */
-    public function updateComment(int $thread_id, int $comment_id, string $comment): int
+    public function updateComment(int $thread_id, int $comment_id, string $user_id, string $comment): int
     {
         $update = $this->query->newUpdate();
         $update
@@ -280,12 +281,14 @@ class CommentService
             ->set('comment', ':comment')
             ->set('updated_at', ':updated_at')
             ->where('thread_id = :thread_id')
-            ->where('comment_id = :comment_id');
+            ->where('comment_id = :comment_id')
+            ->where('user_id = :user_id');
 
         $values = [
             ':thread_id'  => ['value' => $thread_id, 'type' => \PDO::PARAM_INT],
             ':comment_id' => ['value' => $comment_id, 'type' => \PDO::PARAM_INT],
             ':comment'    => ['value' => $comment, 'type' => \PDO::PARAM_STR],
+            ':user_id'    => ['value' => $user_id, 'type' => \PDO::PARAM_STR],
             ':updated_at' => ['value' => date_create()->format('Y-m-d H:i:s'), 'type' => \PDO::PARAM_STR],
         ];
 
