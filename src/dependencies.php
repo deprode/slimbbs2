@@ -181,7 +181,7 @@ $container['CommentSaveFilter'] = function (ContainerInterface $c) {
 };
 
 $container['CommentUpdateFilter'] = function (ContainerInterface $c) {
-    return new \App\Domain\CommentUpdateFilter($c->get('CommentService'));
+    return new \App\Domain\CommentUpdateFilter($c->get('CommentService'), $c->get('AuthService'), $c->get('UserService'));
 };
 
 $container['CommentDeleteFilter'] = function (ContainerInterface $c) {

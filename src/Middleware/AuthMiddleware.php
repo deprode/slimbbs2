@@ -23,6 +23,7 @@ class AuthMiddleware
         $request = $request->withAttribute('isAdmin', (int)$this->auth->isAdmin());
         $request = $request->withAttribute('isLoggedIn', (int)$this->auth->isLoggedIn());
         $request = $request->withAttribute('username', $this->auth->getUsername());
+        $request = $request->withAttribute('userHash', $this->auth->getUserHash());
 
         return $request;
     }

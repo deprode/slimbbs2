@@ -80,6 +80,7 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
             $request = $request->withAttribute('isAdmin', (int)($_SESSION['user_id'] == $_SESSION['admin_id']));
             $request = $request->withAttribute('isLoggedIn', (int)($_SESSION['user_id'] !== null));
             $request = $request->withAttribute('username', $_SESSION['user_name'] ?? '');
+            $request = $request->withAttribute('userHash', $_SESSION['user_hash'] ?? '');
         }
 
         // Register routes

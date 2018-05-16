@@ -94,7 +94,8 @@ class ThreadFilterTest extends TestCase
                 'isLoggedIn' => '1',
                 'isAdmin'    => '1',
                 'userId'     => '100',
-                'username'   => 'testuser'
+                'username'   => 'testuser',
+                'userHash'   => 'user_hash'
             ]);
     }
 
@@ -150,6 +151,7 @@ class ThreadFilterTest extends TestCase
         $this->assertEquals('1', $data['loggedIn']);
 
         $this->assertEquals($this->user_data, $data['user']);
+        $this->assertEquals('user_hash', $data['hash']);
 
         $this->assertInternalType('string', $data['comments']);
 

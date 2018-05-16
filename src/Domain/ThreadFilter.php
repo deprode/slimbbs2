@@ -73,6 +73,7 @@ class ThreadFilter
 
         if (!empty($attributes['isLoggedIn'])) {
             $data['user'] = $this->user->getUser($attributes['username']);
+            $data['hash'] = $attributes['userHash'];
         }
 
         // csrf

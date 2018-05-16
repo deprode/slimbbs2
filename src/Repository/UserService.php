@@ -55,6 +55,34 @@ class UserService
     }
 
     /**
+     * @param string $user_id
+     * @return string
+     * @throws FetchFailedException
+     */
+    public function getUserToken(string $user_id): string
+    {
+        $select = $this->query->newSelect();
+        $select
+            ->cols(['access_token'])
+            ->from('users')
+            ->where('user_id = :user_id');
+
+        $values = [
+            ':user_id' => ['value' => $user_id, 'type' => \PDO::PARAM_STR],
+        ];
+
+        try {
+            $data = $this->db->fetchAll($select->getStatement(), $values);
+            if (count($data) !== 1) {
+                throw new \PDOException();
+            }
+            return $data[0]['access_token'];
+        } catch (\PDOException $e) {
+            throw new FetchFailedException();
+        }
+    }
+
+    /**
      * @param array $user_info
      * @param array $access_token
      * @return User

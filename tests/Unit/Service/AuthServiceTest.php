@@ -7,6 +7,9 @@ use App\Model\User;
 
 class AuthServiceTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \App\Service\AuthService $auth
+     */
     private $auth;
 
     public function setUp()
@@ -104,5 +107,26 @@ class AuthServiceTest extends \PHPUnit_Framework_TestCase
         $_SESSION = ['user_id' => 1];
         @$this->auth->logout();
         $this->assertEquals([], $_SESSION);
+    }
+
+    public function testGetUserHash()
+    {
+        $token = 'password-12345';
+
+        $hash = $this->auth->getUserhash($token);
+        $this->assertTrue(password_verify($token, $hash));
+
+        $_SESSION = ['oauth_token' => $token];
+
+        $hash = $this->auth->getUserhash();
+        $this->assertTrue(password_verify($token, $hash));
+    }
+
+    public function testVerifyUserHash()
+    {
+        $token = 'password-12345';
+        $hash = $this->auth->getUserhash($token);
+
+        $this->assertTrue($this->auth->verifyUserHash($token, $hash));
     }
 }

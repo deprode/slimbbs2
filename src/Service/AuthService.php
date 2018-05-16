@@ -82,4 +82,18 @@ class AuthService
     {
         $this->session->destroy();
     }
+
+    public function getUserHash(string $token = ''): string
+    {
+        if (!$token) {
+            $token = $this->session->get('oauth_token');
+        }
+
+        return password_hash($token, PASSWORD_DEFAULT);
+    }
+
+    public function verifyUserHash(string $token, string $user_hash): bool
+    {
+        return password_verify($token, $user_hash);
+    }
 }

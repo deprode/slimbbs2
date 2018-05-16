@@ -42,6 +42,32 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(User::class, $this->user->getUser('user_name'));
     }
 
+    /**
+     * @expectedException \App\Exception\FetchFailedException
+     */
+    public function testGetUserHash()
+    {
+        $access_token = 'access_token';
+        $user_data = [];
+        $user_data['access_token'] = $access_token;
+        $data = [$user_data];
+
+        $dbs = $this->createMock(DatabaseService::class);
+        $dbs->expects($this->any())->method('fetchAll')->willReturn($data);
+
+        $query = new QueryFactory('common');
+        $this->user = new UserService($dbs, $query);
+
+        $this->assertEquals($access_token, $this->user->getUserToken('1234567'));
+
+
+        $error_dbs = $this->createMock(DatabaseService::class);
+        $error_dbs->expects($this->any())->method('execute')->will($this->throwException(new \PDOException()));
+        $this->user = new UserService($error_dbs, $query);
+
+        $this->user->getUserToken('1234567');
+    }
+
     public function testConvertUser()
     {
         $dbs = $this->createMock(DatabaseService::class);
