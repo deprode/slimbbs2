@@ -171,6 +171,8 @@ class CommentTest extends TestCase
         $this->driver->findElement(WebDriverBy::xpath('//*[@id="update-1"]'))
             ->click();
 
+        sleep(1);
+
         $this->driver->navigate()->refresh();
         $this->driver->wait()->until(
             WebDriverExpectedCondition::visibilityOfElementLocated(WebDriverBy::xpath('//*[@id="1"]'))
