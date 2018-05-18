@@ -80,7 +80,7 @@
         'user': user
     } %}
     <div class="row" id="js-comments">
-        <article class="comments column">
+        <article class="comments column" v-cloak>
             <div v-show="error_msg !== ''"
                  class="message message--error content content--thin">
                 ${error_msg}
@@ -107,7 +107,7 @@
                         </a>
                     </div>
                 </header>
-                <main class="comment__main" v-cloak>
+                <main class="comment__main">
                     <div v-show="has_error(comment)"
                          class="message message--error content content--thin">
                         ${comment.error_msg}
