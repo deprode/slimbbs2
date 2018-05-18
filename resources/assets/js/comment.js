@@ -51,7 +51,10 @@ function build_comment(comment) {
         if (reg.test(value)) {
             return twitter_embed.replace('$url', value);
         } else if (reg_link.test(value)) {
-            return link_html.replace(/{url}/g, value);
+            const urls = value.match(reg_link);
+            if (urls && urls.length > 0) {
+                return value.replace(urls[0], link_html.replace(/{url}/g, urls[0]));
+            }
         }
         return value;
     });
