@@ -2,20 +2,6 @@
 
 {% block title %}{{ comment_top.comment|length > 16 ? comment_top.comment|slice(0, 16) ~ '…' : comment_top.comment }}{% endblock %}
 {% block contents %}
-    {% if info %}
-        <div class="message content">
-            <ul class="message__lists">
-                <li>{{ info }}</li>
-            </ul>
-        </div>
-    {% endif %}
-    {% if error %}
-        <div class="message message--error content">
-            <ul class="message__lists">
-                <li>{{ error }}</li>
-            </ul>
-        </div>
-    {% endif %}
     {% if comment_top %}
         <div class="row">
             <article class="comments column">
@@ -68,6 +54,24 @@
                     </footer>
                 </section>
             </article>
+        </div>
+    {% endif %}
+    {% if info or error %}
+        <div id="m" class="global_messages">
+            {% if info %}
+                <div class="message content">
+                    <ul class="message__lists">
+                        <li>{{ info }}</li>
+                    </ul>
+                </div>
+            {% endif %}
+            {% if error %}
+                <div class="message message--error content">
+                    <ul class="message__lists">
+                        <li>{{ error }}</li>
+                    </ul>
+                </div>
+            {% endif %}
         </div>
     {% endif %}
     {% include "comment_form.twig" with {

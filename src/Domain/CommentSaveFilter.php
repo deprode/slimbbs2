@@ -101,7 +101,7 @@ class CommentSaveFilter
             $url = $base_path;
             $url .= '?thread_id=' . $thread_id;
             $url .= ($sort->value() == 'desc') ? '' : '&sort=' . $sort->value();
-            $url .= '#c' . $comment_id;
+            $url .= '#m';
         } else {
             $url = $base_path;
         }

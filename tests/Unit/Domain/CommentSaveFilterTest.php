@@ -102,10 +102,10 @@ class CommentSaveFilterTest extends TestCase
         $this->assertEquals('/base', $failed);
 
         $success = $filter->generateUrl('/base', new Sort('desc'), 5, 10);
-        $this->assertEquals('/base?thread_id=5#c10', $success);
+        $this->assertEquals('/base?thread_id=5#m', $success);
 
         $success = $filter->generateUrl('/base', new Sort('asc'), 5, 10);
-        $this->assertEquals('/base?thread_id=5&sort=asc#c10', $success);
+        $this->assertEquals('/base?thread_id=5&sort=asc#m', $success);
     }
 
     public function testInvalidUploadFile()
