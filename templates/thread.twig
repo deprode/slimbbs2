@@ -90,6 +90,15 @@
                 ${error_msg}
             </div>
             <section v-for="comment in comments" class="comment js-comment" :id="comment.id">
+
+                <div v-show="has_error(comment)"
+                     class="message message--error content content--thin">
+                    ${comment.error_msg}
+                </div>
+                <div v-show="has_message(comment)"
+                     class="message content content--thin">
+                    ${comment.success_msg}
+                </div>
                 <header class="comment__header">
                     <div>
                         <div class="comment__header__wrap">
@@ -112,10 +121,6 @@
                     </div>
                 </header>
                 <main class="comment__main">
-                    <div v-show="has_error(comment)"
-                         class="message message--error content content--thin">
-                        ${comment.error_msg}
-                    </div>
                     <div :id="comment._comment.comment_id" v-show="!editing(comment)"
                          v-html="comment_computed(comment.comment)">
                     </div>
@@ -129,18 +134,20 @@
                             <label for="comment">
                                             <textarea name="comment" class="comment_form__comment"
                                                       v-model="comment.comment" maxlength="400"
-                                                      placeholder="編集後のコメント" required></textarea>
+                                                      placeholder="編集後のコメント" required :readonly="saving(comment)"></textarea>
                             </label>
                             <input type="hidden" name="comment_id" :value="comment.comment_id">
                             <input type="hidden" name="thread_id" value="{{ thread_id }}">
                             <input type="hidden" name="user_id" :value="comment.user_id">
                             <input type="hidden" name="user_hash" value="{{ hash }}">
                             <input type="hidden" name="_METHOD" value="PUT">
-                            <input type="submit" value="変更" class="button--small js-update"
+                            <input type="submit" :value="saving(comment) ? '変更中' : '変更'" class="button--small js-update"
                                    :id="'update-' + comment.comment_id"
-                                   @click="editEnd(comment, $event)">
+                                   @click="editEnd(comment, $event)"
+                                   :disabled="saving(comment)">
                             <button class="comment__cancel button--small"
-                                    @click="editCancel(comment, $event)">キャンセル
+                                    @click="editCancel(comment, $event)"
+                                    :disabled="saving(comment)">キャンセル
                             </button>
                         </form>
                     </div>

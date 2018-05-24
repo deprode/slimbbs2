@@ -26,6 +26,8 @@ class Comment {
     count: number;
     edit: boolean;
     unsent: boolean;
+    saving: boolean;
+    success_msg: string;
     error_msg: string;
 
     constructor(id, comment) {
@@ -39,6 +41,8 @@ class Comment {
         this.count = comment.like_count;
         this.edit = false;
         this.unsent = false;
+        this.saving = false;
+        this.success_msg = '';
         this.error_msg = '';
     }
 }
@@ -129,17 +133,24 @@ const vm = new Vue({
         editing: function (comment) {
             return comment.edit;
         },
+        saving: function (comment) {
+            return comment.saving;
+        },
         soudane: function (comment) {
             return 'そうだね ×' + comment.count;
         },
         has_error: function (comment) {
             return comment.error_msg !== '';
         },
+        has_message: function (comment) {
+            return comment.success_msg !== '';
+        },
         comment_computed: build_comment,
         // edit
         editStart: function (comment) {
             comment.edit = true;
             comment.pre_comment = comment.comment;
+            comment.success_msg = '';
         },
         editCancel: function (comment, event) {
             event.preventDefault();
@@ -149,7 +160,7 @@ const vm = new Vue({
         },
         editEnd: function (comment, event) {
             event.preventDefault();
-            comment.edit = false;
+            comment.saving = true;
             comment.error_msg = '';
 
             const edit_dom = document.getElementById(event.target.id);
@@ -171,14 +182,16 @@ const vm = new Vue({
                         throw Error(response.statusText);
                     }
                     comment.error_msg = '';
+                    comment.success_msg = 'コメントを保存しました。';
+                    comment.edit = false;
                 })
                 .catch((e) => {
                     comment.edit = true;
-                    comment.comment = comment.pre_comment;
                     comment.error_msg = '保存できませんでした。';
+                })
+                .finally((e) => {
+                    comment.saving = false;
                 });
-
-            comment.pre_comment = comment.comment;
         },
         //---------
         // like

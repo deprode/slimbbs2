@@ -163,10 +163,10 @@ class CommentTest extends TestCase
         $element->click();
 
         $this->driver->wait()->until(
-            WebDriverExpectedCondition::visibilityOfElementLocated(WebDriverBy::xpath('//*[@id="c1"]/main/div[3]/form/label/textarea'))
+            WebDriverExpectedCondition::visibilityOfElementLocated(WebDriverBy::xpath('//*[@id="c1"]/main/div[2]/form/label/textarea'))
         );
 
-        $this->driver->findElement(WebDriverBy::xpath('//*[@id="c1"]/main/div[3]/form/label/textarea'))
+        $this->driver->findElement(WebDriverBy::xpath('//*[@id="c1"]/main/div[2]/form/label/textarea'))
             ->clear()->sendKeys('コメントの更新');
         $this->driver->findElement(WebDriverBy::xpath('//*[@id="update-1"]'))
             ->click();
