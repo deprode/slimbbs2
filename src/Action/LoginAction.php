@@ -38,7 +38,7 @@ class LoginAction
 
         $scheme = $request->getUri()->getScheme() . '://';
         $host = $request->getUri()->getHost();
-        $port = $request->getUri()->getPort() != 80 ? ':' . $request->getUri()->getPort() : '';
+        $port = ($request->getUri()->getPort() && $request->getUri()->getPort() != 80) ? ':' . $request->getUri()->getPort() : '';
         $url = $this->oauth->getLoginUrl($scheme . $host . $port);
 
         return $response->withRedirect($url, 303);
