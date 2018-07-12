@@ -25,6 +25,7 @@ class CommentReadTest extends TestCase
         $comment->like_count = 100;
         $comment->photo_url = '';
         $comment->created_at = '2018-10-10 10:10:10';
+        $comment->updated_at = '2018-11-11 11:11:11';
         $comment->user_name = 'testuser';
         $comment->user_image_url = 'http://example.com/icon';
         $array = $comment->toArray();
@@ -38,6 +39,7 @@ class CommentReadTest extends TestCase
             'comment'        => null,
             'photo_url'      => '',
             'created_at'     => '2018-10-10 10:10:10',
+            'updated_at'     => '2018-11-11 11:11:11',
             'user_name'      => 'testuser',
             'user_image_url' => 'http://example.com/icon',
         ], $array);
@@ -53,6 +55,7 @@ class CommentReadTest extends TestCase
         $comment->comment = 'sample comment';
         $comment->photo_url = 'http://example.com';
         $comment->created_at = '2017-12-31';
+        $comment->updated_at = '2018-01-01';
         $comment->user_name = 'testuser';
         $comment->user_image_url = 'http://example.com/icon';
 
@@ -64,6 +67,7 @@ like_count: 123
 comment: sample comment
 photo_url: http://example.com
 created_at: 2017-12-31
+updated_at: 2018-01-01
 user_name: testuser
 user_image_url: http://example.com/icon
 TOSTRING;

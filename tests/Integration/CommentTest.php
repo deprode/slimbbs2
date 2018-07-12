@@ -245,4 +245,57 @@ class CommentTest extends TestCase
         $element = $this->driver->findElement(WebDriverBy::xpath('//*[@id="2"]'));
         $this->assertEquals("テストテスト" . PHP_EOL . "https://www.example.com/foo/?bar=baz&inga=42&quux", $element->getText());
     }
+
+
+    /**
+     * 投稿に更新日が含まれるかのテスト
+     * @throws TimeOutException
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     */
+    public function testUpdated()
+    {
+
+        try {
+            $this->login();
+            $this->makeThread();
+            $this->moveThread();
+        } catch (TimeOutException $e) {
+            return;
+        }
+        $this->driver->wait()->until(
+            WebDriverExpectedCondition::visibilityOfElementLocated(WebDriverBy::xpath('//*[@id="c1"]/footer/button'))
+        );
+
+        $element = $this->driver->findElement(WebDriverBy::xpath('//*[@id="c1"]/footer/button'));
+        $this->driver->executeScript('arguments[0].scrollIntoView(true);', [$element]);
+        $element->click();
+
+        $this->driver->wait()->until(
+            WebDriverExpectedCondition::visibilityOfElementLocated(WebDriverBy::xpath('//*[@id="c1"]/main/div[2]/form/label/textarea'))
+        );
+
+        $this->driver->findElement(WebDriverBy::xpath('//*[@id="c1"]/main/div[2]/form/label/textarea'))
+            ->clear()->sendKeys('コメントの更新');
+        $this->driver->findElement(WebDriverBy::xpath('//*[@id="update-1"]'))
+            ->click();
+
+        sleep(1);
+
+        $this->driver->navigate()->refresh();
+        $this->driver->wait()->until(
+            WebDriverExpectedCondition::visibilityOfElementLocated(WebDriverBy::xpath('//*[@id="1"]'))
+        );
+
+        $element = $this->driver->findElement(WebDriverBy::xpath('//*[@id="c1"]/header/div[2]/span'));
+
+        $this->assertEquals("[編集済み]", $element->getText());
+
+        $this->driver->get('http://127.0.0.1:8080/comment/1');
+        $this->driver->wait()->until(
+            WebDriverExpectedCondition::visibilityOfElementLocated(WebDriverBy::xpath('//*[@id="top"]'))
+        );
+        
+        $element = $this->driver->findElement(WebDriverBy::xpath('//*[@id="top"]/header/div[2]/span'));
+        $this->assertEquals("[編集済み]", $element->getText());
+    }
 }

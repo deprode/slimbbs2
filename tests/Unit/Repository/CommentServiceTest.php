@@ -23,6 +23,7 @@ class CommentServiceTest extends TestCase
         $comment_data->comment_id = 1;
         $comment_data->user_id = 1;
         $comment_data->created_at = '2017-12-06 13:42:28';
+        $comment_data->updated_at = '2018-01-12 10:32:40';
         $comment_data->comment = 'sample comment test';
         $comment_data->photo_url = 'http://via.placeholder.com/32x32';
         $comment_data->user_name = 'testuser';

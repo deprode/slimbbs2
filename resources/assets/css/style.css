@@ -292,6 +292,12 @@ input.button--like {
       color: #2b9e2b;
       text-decoration: underline;
     }
+
+    &__edited {
+      font-size: 1.0rem;
+      color: #606c76;
+      vertical-align: text-bottom;
+    }
   }
 
   &__footer form {

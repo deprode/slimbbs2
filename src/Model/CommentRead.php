@@ -17,6 +17,7 @@ class CommentRead extends Model
     protected $comment;
     protected $photo_url;
     protected $created_at;
+    protected $updated_at;
     protected $user_name;
     protected $user_image_url;
 
@@ -40,6 +41,7 @@ like_count: $this->like_count
 comment: $this->comment
 photo_url: $this->photo_url
 created_at: $this->created_at
+updated_at: $this->updated_at
 user_name: $this->user_name
 user_image_url: $this->user_image_url
 TO_STRING;

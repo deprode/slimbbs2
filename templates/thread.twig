@@ -115,6 +115,7 @@
                         </div>
                     </div>
                     <div class="comment__header__createdat">
+                        <span v-if="comment._comment.updated_at" class="comment__header__createdat__edited">[編集済み]</span>
                         <a :href="'{{ path_for('comment') }}/' + comment.comment_id">
                             ${ comment._comment.created_at }
                         </a>

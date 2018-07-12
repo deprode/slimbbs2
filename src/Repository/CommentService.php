@@ -42,7 +42,7 @@ class CommentService
         $select = $this->query->newSelect();
         $select
             ->from('comments')
-            ->cols(['comments.comment_id', 'comments.thread_id', 'comments.user_id', 'comments.like_count', 'comments.comment', 'comments.photo_url', 'comments.created_at', 'users.user_name', 'users.user_image_url'])
+            ->cols(['comments.comment_id', 'comments.thread_id', 'comments.user_id', 'comments.like_count', 'comments.comment', 'comments.photo_url', 'comments.created_at', 'comments.updated_at', 'users.user_name', 'users.user_image_url'])
             ->join('left', 'users', 'comments.user_id = users.user_id')
             ->where('comment_id = :comment_id');
 
@@ -70,7 +70,7 @@ class CommentService
         $select = $this->query->newSelect();
         $select
             ->from('comments')
-            ->cols(['comments.comment_id', 'comments.thread_id', 'comments.user_id', 'comments.like_count', 'comments.comment', 'comments.photo_url', 'comments.created_at', 'users.user_name', 'users.user_image_url'])
+            ->cols(['comments.comment_id', 'comments.thread_id', 'comments.user_id', 'comments.like_count', 'comments.comment', 'comments.photo_url', 'comments.created_at', 'comments.updated_at', 'users.user_name', 'users.user_image_url'])
             ->join('left', 'users', 'comments.user_id = users.user_id')
             ->where('thread_id = :thread_id')
             ->where('comment_id < :comment_id')

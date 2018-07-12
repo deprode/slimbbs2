@@ -25,6 +25,9 @@
                             </div>
                         </div>
                         <div class="comment__header__createdat">
+                            {% if comment.updated_at %}
+                                <span class="comment__header__createdat__edited">[編集済み]</span>
+                            {% endif %}
                             <a href="{{ path_for('comment', {'comment_id': comment.comment_id}) }}">{{ comment.createdAtStr }}</a>
                         </div>
                     </header>
