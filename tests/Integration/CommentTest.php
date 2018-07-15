@@ -288,14 +288,14 @@ class CommentTest extends TestCase
 
         $element = $this->driver->findElement(WebDriverBy::xpath('//*[@id="c1"]/header/div[2]/span'));
 
-        $this->assertEquals("[編集済み]", $element->getText());
+        $this->assertEquals("編集済み", $element->getText());
 
         $this->driver->get('http://127.0.0.1:8080/comment/1');
         $this->driver->wait()->until(
             WebDriverExpectedCondition::visibilityOfElementLocated(WebDriverBy::xpath('//*[@id="top"]'))
         );
-        
+
         $element = $this->driver->findElement(WebDriverBy::xpath('//*[@id="top"]/header/div[2]/span'));
-        $this->assertEquals("[編集済み]", $element->getText());
+        $this->assertEquals("編集済み", $element->getText());
     }
 }

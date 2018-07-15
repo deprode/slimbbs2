@@ -106,17 +106,17 @@ input.button--like {
 }
 
 .container {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+  padding: 2rem 0 2rem 0;
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 426px) {
   .container {
-    max-width: 60%;
+    max-width: 85%;
+    padding: 2rem;
   }
 }
 
-@media screen and (min-width: 1080px) {
+@media screen and (min-width: 768px) {
   .container {
     max-width: 60rem;
   }
@@ -236,10 +236,10 @@ input.button--like {
     margin-bottom: 3rem;
   }
 
-  &__main {
+  main&__main {
     background: #ffffff;
-    margin: 0.2rem 0 1.5rem 0;
-    padding: 0.5rem 0;
+    margin: -1.5rem 0 1.5rem 7.2rem;
+    padding: 0 0 .5rem 0;
   }
 
   &_main__photo {
@@ -253,7 +253,7 @@ input.button--like {
   }
 
   &__header {
-    padding: .8rem 0;
+    padding: .8rem 0 0 0;
   }
 
   &__header__wrap {
@@ -267,11 +267,10 @@ input.button--like {
 
   &__header__username {
     display: inline-block;
-    vertical-align: middle;
+    vertical-align: top;
     padding-left: 2rem;
-    margin-top: -4.1rem;
     font-size: 1.6rem;
-    font-weight: bold;
+    font-weight: 500;
 
     a {
       text-decoration: none;
@@ -287,21 +286,26 @@ input.button--like {
 
     a {
       text-decoration: none;
+      vertical-align: text-top;
     }
     a:hover {
       color: #2b9e2b;
-      text-decoration: underline;
+      vertical-align: text-top;
     }
 
     &__edited {
       font-size: 1.0rem;
       color: #606c76;
-      vertical-align: text-bottom;
+      vertical-align: baseline;
     }
   }
 
-  &__footer form {
-    margin-bottom: 0;
+  &__footer {
+    margin-left: 7.1rem;
+
+    & form {
+      margin-bottom: 0;
+    }
   }
 
   &__cancel {
@@ -349,7 +353,7 @@ input.button--like {
     padding-left: 2rem;
     margin-top: 1rem;
     font-size: 1.6rem;
-    font-weight: bold;
+    font-weight: 500;
   }
 }
 
