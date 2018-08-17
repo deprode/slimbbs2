@@ -401,6 +401,7 @@ input.button--like {
   margin-top: 2rem;
 }
 
-[v-cloak] {
+[v-cloak],
+.comments[v-cloak] {
   display: none;
 }
