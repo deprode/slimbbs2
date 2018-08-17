@@ -12,7 +12,7 @@ declare var Vue;
 
 const twitter_embed = `<blockquote class="twitter-tweet"><a href="$url"></a></blockquote>`;
 const link_html = `<a href="{url}" target="_new">{url}</a>`;
-const reg = /^https?:\/\/twitter.com\/(.*)\/(status|statuses)\/(\d+)$/;
+const reg = /^https?:\/\/twitter.com\/(.*)\/(status|statuses)\/(\d+)(\?s=\d+)*$/;
 const reg_link = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,})/;
 
 class Comment {
