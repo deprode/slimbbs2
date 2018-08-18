@@ -177,7 +177,7 @@
                             </form>
                         {% endif %}
                     </div>
-                    <button class="button--small"
+                    <button class="button--small comment_edit"
                             @click="editStart(comment)" v-if="!editing(comment) && isOwned(comment.user_id)">編集
                     </button>
                     {% if loggedIn %}

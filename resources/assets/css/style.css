@@ -327,6 +327,25 @@ input.button--like {
   }
 }
 
+@media screen and (max-width: 374px) {
+  .comment {
+    &__footer {
+      flex-direction: column;
+      justify-content: center;
+
+      & .comment_delete,
+      & .comment_edit,
+      & .button--like {
+        width: 70%;
+      }
+
+      & .comment_edit {
+        margin-bottom: 1.5rem;
+      }
+    }
+  }
+}
+
 .comment_form {
   padding: 1rem 1.5rem;
   border: 1px solid #e0e0e0;
