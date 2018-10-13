@@ -108,7 +108,7 @@ class ThreadFilterTest extends TestCase
         $comment->comment = 'sample& "comment" <\'test\'>';
         $comment->like_count = 100;
         $comment->photo_url = '';
-        $comment->created_at = '2018-10-10 10:10:10';
+        $comment->created_at = '2017-10-10 10:10:10';
         $comment->user_name = 'testuser';
         $comment->user_image_url = 'http://example.com/icon';
 
@@ -121,7 +121,7 @@ class ThreadFilterTest extends TestCase
 
         $data = json_decode($result);
         $this->assertEquals(1, $data->c1->{'comment_id'});
-        $this->assertEquals('10月10日', $data->c1->{'created_at'});
+        $this->assertEquals('2017年10月10日', $data->c1->{'created_at'});
         $this->assertEquals('sample\u0026 \u0022comment\u0022 \u003C\u0027test\u0027\u003E', $data->c1->{'comment'});
     }
 

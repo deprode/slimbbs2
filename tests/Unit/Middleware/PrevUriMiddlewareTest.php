@@ -44,8 +44,7 @@ class PrevUriMiddlewareTest extends \PHPUnit_Framework_TestCase
             [
                 'REQUEST_METHOD' => 'GET',
                 'HTTPS'          => '',
-                'HTTP_HOST'      => 'example.com',
-                'SERVER_PORT'    => '8080',
+                'HTTP_HOST'      => 'example.com:8080',
                 'REQUEST_URI'    => '/script_name',
                 'QUERY_STRING'   => 'query=string',
             ]

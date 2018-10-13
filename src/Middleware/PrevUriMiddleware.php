@@ -30,7 +30,7 @@ class PrevUriMiddleware
     {
         $scheme = $request->getUri()->getScheme() . '://';
         $host = $request->getUri()->getHost();
-        $port = $request->getUri()->getPort() != 80 ? ':' . $request->getUri()->getPort() : '';
+        $port = ($request->getUri()->getPort() && $request->getUri()->getPort() != 80) ? ':' . $request->getUri()->getPort() : '';
         $path = $request->getUri()->getPath();
         $query = $request->getUri()->getQuery() ? '?' . $request->getUri()->getQuery() : '';
 
