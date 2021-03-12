@@ -1,58 +1,62 @@
-# PHP CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-php/ for more details
-#
 version: 2
 jobs:
   build:
     docker:
-      # Specify the version you desire here
-      - image: circleci/php:7.1-node-browsers
+      - image: circleci/php:7.1-fpm-node
+      - image: circleci/mysql:5.7
+      - image: selenium/standalone-chrome:3.7
+        environment:
+          HUB_PORT_4444_TCP_ADDR: 127.0.0.1
+          HUB_PORT_4444_TCP_PORT: 4444
 
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # Using the RAM variation mitigates I/O contention
-      # for database intensive operations.
-      # - image: circleci/mysql:5.7-ram
-      #
-      # - image: redis:2.8.19
+    working_directory: ~/slimbbs2
+
+    environment:
+      TZ: "/usr/share/zoneinfo/Asia/Toyko"
 
     steps:
       - checkout
 
-      - run: sudo apt update # PHP CircleCI 2.0 Configuration File# PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev
+      - run: sudo apt install -y zlib1g-dev
       - run: sudo docker-php-ext-install zip
+      - run: sudo docker-php-ext-install pdo_mysql
+      - run: sudo docker-php-ext-enable pdo_mysql
+      - run: sudo apt-get install libmemcached-dev
+      - run: sudo docker-php-source extract
+      - run: sudo git clone --branch php7 https://github.com/php-memcached-dev/php-memcached /usr/src/php/ext/memcached/
+      - run: sudo docker-php-ext-install memcached
+      - run: sudo composer self-update
+      - run: sudo npm install -g npm@latest
+
+      - run: echo 127.0.0.1 localhost | sudo tee -a /etc/hosts
 
       # Download and cache dependencies
       - restore_cache:
           keys:
-            # "composer.lock" can be used if it is committed to the repo
-            - v1-dependencies-{{ checksum "composer.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+          - v1-dependencies-{{ checksum "composer.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
 
       - run: composer install -n --prefer-dist
 
       - save_cache:
-          key: v1-dependencies-{{ checksum "composer.json" }}
           paths:
             - ./vendor
+          key: v1-dependencies-{{ checksum "composer.json" }}
+
       - restore_cache:
-          keys:
-            - node-v1-{{ checksum "package.json" }}
-            - node-v1-
-      - run: yarn install
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run: npm install
       - save_cache:
-          key: node-v1-{{ checksum "package.json" }}
+          key: dependency-cache-{{ checksum "package.json" }}
           paths:
-            - node_modules
+            - ./node_modules
 
-      # prepare the database
-      - run: touch storage/testing.sqlite
-      - run: php artisan migrate --env=testing --database=sqlite_testing --force
+      - run: npm run flow
 
-      # run tests with phpunit or codecept
-      #- run: ./vendor/bin/phpunit
-      - run: ./vendor/bin/codecept build
-      - run: ./vendor/bin/codecept run
+      - run:
+          command: php -S 127.0.0.1:8080 -t public public/index.php
+          background: true
+
+      - run: ./vendor/bin/phpmig migrate
+      - run: ./vendor/bin/phpunit
