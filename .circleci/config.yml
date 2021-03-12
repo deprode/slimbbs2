@@ -17,6 +17,7 @@ jobs:
     steps:
       - checkout
 
+      - run: sudo apt-get update 
       - run: sudo apt install -y zlib1g-dev
       - run: sudo apt-get install -y libmemcached-dev
       - run: sudo docker-php-ext-install zip
