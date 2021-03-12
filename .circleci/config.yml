@@ -18,10 +18,10 @@ jobs:
       - checkout
 
       - run: sudo apt install -y zlib1g-dev
+      - run: sudo apt-get install -y libmemcached-dev
       - run: sudo docker-php-ext-install zip
       - run: sudo docker-php-ext-install pdo_mysql
       - run: sudo docker-php-ext-enable pdo_mysql
-      - run: sudo apt install -y libmemcached-dev
       - run: sudo docker-php-source extract
       - run: sudo git clone --branch php7 https://github.com/php-memcached-dev/php-memcached /usr/src/php/ext/memcached/
       - run: sudo docker-php-ext-install memcached
